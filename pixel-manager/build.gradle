@@ -16,6 +16,8 @@ dependencies {
     compile group: 'com.google.inject', name: 'guice', version: '4.2.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.+'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.+'
+    compileOnly 'org.projectlombok:lombok:1.18.+'
+    annotationProcessor 'org.projectlombok:lombok:1.18.+'
 }
 
 javafx {
