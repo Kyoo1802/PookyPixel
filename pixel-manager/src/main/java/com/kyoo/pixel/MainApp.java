@@ -11,28 +11,29 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class MainApp extends Application {
-    private final Injector injector = Guice.createInjector(new SceneModule());
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+  private final Injector injector = Guice.createInjector(new SceneModule());
 
-    @Override
-    public void start(Stage stage) {
-        log.debug("Starting your application0.");
-        log.warn("Starting your application1.");
-        log.info("Starting your application2.");
+  public static void main(String[] args) {
+    launch(args);
+  }
 
-        GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
+  @Override
+  public void start(Stage stage) {
+    log.debug("Starting your application0.");
+    log.warn("Starting your application1.");
+    log.info("Starting your application2.");
 
-        Parent root = loader.load(getClass().getResource("views/scene.fxml"));
+    GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
 
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
+    Parent root = loader.load(getClass().getResource("views/scene.fxml"));
 
-        stage.setTitle("JavaFX and Gradle");
-        stage.setScene(scene);
-        stage.show();
-    }
+    Scene scene = new Scene(root);
+    scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
+
+    stage.setTitle("JavaFX and Gradle");
+    stage.setScene(scene);
+    stage.show();
+  }
 
 }

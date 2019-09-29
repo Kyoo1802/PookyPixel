@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class SceneData {
 
-    private String title = "Kyoo Pixel";
+  private String title = "Kyoo Pixel";
 }
