@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'com.google.inject', name: 'guice', version: '4.2.2'
 }
 
 javafx {
@@ -21,3 +22,6 @@ javafx {
 }
 
 mainClassName = 'com.kyoo.pixel.MainApp'
+
+// Avoids the Guice warning https://github.com/google/guice/issues/1133
+applicationDefaultJvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
