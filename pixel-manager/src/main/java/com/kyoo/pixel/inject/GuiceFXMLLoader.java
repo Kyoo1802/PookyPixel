@@ -26,14 +26,14 @@ public class GuiceFXMLLoader {
     // instance of the initialized controller...?
     public Parent load(URL url) {
         FXMLLoader loader = new FXMLLoader(url);
-        loader.setControllerFactory(controllerClass ->{
-            if(controllerClass == null){
+        loader.setControllerFactory(controllerClass -> {
+            if (controllerClass == null) {
                 return null;
             }
             Object instance = this.injector.getInstance(controllerClass);
             loader.getNamespace().put("controller", instance);
             return instance;
-        } );
+        });
         try {
             return (Parent) loader.load();
         } catch (IOException e) {

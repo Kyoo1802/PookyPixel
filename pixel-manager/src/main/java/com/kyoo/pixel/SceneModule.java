@@ -3,7 +3,6 @@ import com.google.inject.AbstractModule;
 
 /**
  *
- * @author Richard
  */
 public class SceneModule extends AbstractModule {
     @Override

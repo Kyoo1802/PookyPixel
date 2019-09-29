@@ -7,10 +7,11 @@ import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MainApp extends Application {
-
+    private static final Logger LOGGER = LogManager.getLogger(MainApp.class);
     private final Injector injector = Guice.createInjector(new SceneModule());
 
     public static void main(String[] args) {
@@ -19,6 +20,10 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        LOGGER.debug("Starting your application0.");
+        LOGGER.warn("Starting your application1.");
+        LOGGER.info("Starting your application2.");
+
         GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
 
         Parent root = loader.load(getClass().getResource("views/scene.fxml"));
