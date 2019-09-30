@@ -32,6 +32,11 @@ public final class ScreenCapturer implements Capturer {
     return grabber.capture(rectangle);
   }
 
+  @Override
+  public void stop() {
+    grabber.stopGrabber();
+  }
+
   public void updateRectangle(Rectangle rectangle) {
     this.rectangle = rectangle;
   }

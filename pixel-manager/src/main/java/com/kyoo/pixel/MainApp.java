@@ -13,7 +13,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MainApp extends Application {
 
-  private final Injector injector = Guice.createInjector(new SceneModule(), new VisualizerModule());
+  public static final Injector injector = Guice.createInjector(new SceneModule(),
+      new VisualizerModule());
 
   public static void main(String[] args) {
     launch(args);
@@ -22,7 +23,6 @@ public class MainApp extends Application {
   @Override
   public void start(Stage stage) {
     log.info("Starting your application.");
-    Capturer capturer = injector.getInstance(Capturer.class);
 
     GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
 
@@ -35,5 +35,4 @@ public class MainApp extends Application {
     stage.setScene(scene);
     stage.show();
   }
-
 }
