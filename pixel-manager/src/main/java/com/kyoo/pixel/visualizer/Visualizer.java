@@ -8,6 +8,8 @@ import com.kyoo.pixel.visualizer.components.EditDecorator;
 import com.kyoo.pixel.visualizer.data.PixelFrame;
 import com.kyoo.pixel.visualizer.pubsub.FramePublisher;
 import com.kyoo.pixel.visualizer.pubsub.WifiSubscriber;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 public final class Visualizer {
 
@@ -31,9 +33,10 @@ public final class Visualizer {
   }
 
   public void capture() {
-    PixelFrame frame = capturer.getFrame();
-    frame = editDecorator.edit(frame);
-    frame = connectionParser.parse(frame);
+    Optional<BufferedImage> img = capturer.getFrame();
+    img = editDecorator.edit(img);
+
+    Optional<PixelFrame> frame = connectionParser.parse(img);
     frame = controllerSlicer.slice(frame);
     framePublisher.publish(frame);
   }

@@ -1,8 +1,9 @@
 package com.kyoo.pixel.visualizer.components;
 
-import com.kyoo.pixel.visualizer.data.PixelFrame;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 public interface EditDecorator {
 
-  PixelFrame edit(PixelFrame frame);
+  Optional<BufferedImage> edit(Optional<BufferedImage> frame);
 }

@@ -3,6 +3,7 @@ package com.kyoo.pixel;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.kyoo.pixel.inject.GuiceFXMLLoader;
+import com.kyoo.pixel.visualizer.components.Capturer;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MainApp extends Application {
 
-  private final Injector injector = Guice.createInjector(new SceneModule());
+  private final Injector injector = Guice.createInjector(new SceneModule(), new VisualizerModule());
 
   public static void main(String[] args) {
     launch(args);
@@ -20,9 +21,8 @@ public class MainApp extends Application {
 
   @Override
   public void start(Stage stage) {
-    log.debug("Starting your application0.");
-    log.warn("Starting your application1.");
-    log.info("Starting your application2.");
+    log.info("Starting your application.");
+    Capturer capturer = injector.getInstance(Capturer.class);
 
     GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
 

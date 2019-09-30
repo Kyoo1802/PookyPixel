@@ -16,6 +16,10 @@ dependencies {
     compile group: 'com.google.inject', name: 'guice', version: '4.2.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.+'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.+'
+    compile group: 'org.bytedeco.javacpp-presets', name: 'opencv',          version: '3.4.2-1.4.2'
+    compile group: 'org.bytedeco.javacpp-presets', name: 'ffmpeg-platform', version: '4.0.1-1.4.2'
+    compile group: 'org.bytedeco.javacpp-presets', name: 'opencv-platform', version: '3.4.2-1.4.2'
+    compile group: 'org.bytedeco',                 name: 'javacv-platform', version: '1.4.2'
     compileOnly 'org.projectlombok:lombok:1.18.+'
     annotationProcessor 'org.projectlombok:lombok:1.18.+'
 }
