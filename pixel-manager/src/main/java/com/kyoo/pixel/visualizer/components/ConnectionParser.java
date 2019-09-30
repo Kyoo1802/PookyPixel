@@ -4,19 +4,9 @@ import com.kyoo.pixel.visualizer.PixelConnection;
 import com.kyoo.pixel.visualizer.data.PixelFrame;
 import javax.inject.Inject;
 
-public final class ConnectionParser {
-  private PixelConnection connection;
+public interface ConnectionParser {
 
-  @Inject
-  public ConnectionParser(PixelConnection connection){
-    this.connection = connection;
-  }
+  PixelFrame parse(PixelFrame frame);
 
-  public PixelFrame parse(PixelFrame frame) {
-    return null;
-  }
-
-  public void update(PixelConnection connection) {
-    this.connection = connection;
-  }
+  void update(PixelConnection connection);
 }

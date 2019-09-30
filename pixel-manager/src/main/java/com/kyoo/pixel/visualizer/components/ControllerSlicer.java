@@ -4,19 +4,9 @@ import com.google.inject.Inject;
 import com.kyoo.pixel.visualizer.PixelController;
 import com.kyoo.pixel.visualizer.data.PixelFrame;
 
-public final class ControllerSlicer {
-  private PixelController controller;
+public interface ControllerSlicer {
 
-  @Inject
-  public ControllerSlicer(PixelController controller){
-    this.controller = controller;
-  }
+  PixelFrame slice(PixelFrame frame);
 
-  public PixelFrame slice(PixelFrame frame) {
-    return null;
-  }
-
-  public void update(PixelController controller) {
-    this.controller = controller;
-  }
+  void update(PixelController controller);
 }
