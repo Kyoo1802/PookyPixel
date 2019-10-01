@@ -5,7 +5,7 @@ import com.kyoo.pixel.visualizer.components.Capturer;
 import com.kyoo.pixel.visualizer.components.ConnectionParser;
 import com.kyoo.pixel.visualizer.components.ControllerSlicer;
 import com.kyoo.pixel.visualizer.components.FrameDecoratorIntegrator;
-import com.kyoo.pixel.visualizer.data.PixelFrame;
+import com.kyoo.pixel.visualizer.data.RgbLedStrips;
 import com.kyoo.pixel.visualizer.pubsub.FramePublisher;
 import com.kyoo.pixel.visualizer.pubsub.WifiSubscriber;
 import java.awt.image.BufferedImage;
@@ -36,7 +36,7 @@ public final class Visualizer {
     Optional<BufferedImage> img = capturer.getFrame();
     img = frameDecoratorIntegrator.decorate(img);
 
-    Optional<PixelFrame> frame = connectionParser.parse(img);
+    Optional<RgbLedStrips> frame = connectionParser.parse(img);
     frame = controllerSlicer.slice(frame);
     framePublisher.publish(frame);
   }

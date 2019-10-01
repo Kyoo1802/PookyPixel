@@ -1,13 +1,12 @@
 package com.kyoo.pixel.visualizer.components;
 
-import com.google.inject.Inject;
 import com.kyoo.pixel.visualizer.PixelController;
-import com.kyoo.pixel.visualizer.data.PixelFrame;
+import com.kyoo.pixel.visualizer.data.RgbLedStrips;
 import java.util.Optional;
 
 public interface ControllerSlicer {
 
-  Optional<PixelFrame> slice(Optional<PixelFrame> frame);
+  Optional<RgbLedStrips> slice(Optional<RgbLedStrips> frame);
 
   void update(PixelController controller);
 }
