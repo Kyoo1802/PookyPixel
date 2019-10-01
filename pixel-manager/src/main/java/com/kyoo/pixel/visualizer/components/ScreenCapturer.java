@@ -2,6 +2,8 @@ package com.kyoo.pixel.visualizer.components;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -21,10 +23,11 @@ public final class ScreenCapturer implements Capturer {
   private Rectangle rectangle;
 
   @Inject
-  public ScreenCapturer() {
+  public ScreenCapturer(@Named("capturer.frame.width") int frameWidth,
+      @Named("capturer.frame.height") int frameHeight) {
     rectangle = new Rectangle(0, 0, 100, 100);
     grabber = new Grabber();
-    grabber.startGrabber();
+    grabber.startGrabber(frameWidth, frameHeight);
   }
 
   @Override
@@ -42,13 +45,10 @@ public final class ScreenCapturer implements Capturer {
   }
 
   final class Grabber {
-
-    private static final int DEFAULT_WINDOW_WIDTH = 800;
-    private static final int DEFAULT_WINDOW_HEIGHT = 600;
     private FFmpegFrameGrabber grabber;
     private boolean active;
 
-    protected void startGrabber() {
+    protected void startGrabber(int frameWidth, int frameHeight) {
       log.debug("Starting Grabber");
       if (active) {
         log.debug("Grabber already started");
@@ -58,8 +58,8 @@ public final class ScreenCapturer implements Capturer {
         if (grabber == null) {
           grabber = new FFmpegFrameGrabber("Capture screen 0");
           grabber.setFormat("avfoundation");
-          grabber.setImageWidth(DEFAULT_WINDOW_WIDTH);
-          grabber.setImageHeight(DEFAULT_WINDOW_HEIGHT);
+          grabber.setImageWidth(frameWidth);
+          grabber.setImageHeight(frameHeight);
         }
         grabber.start();
         log.info("Grabber started");
