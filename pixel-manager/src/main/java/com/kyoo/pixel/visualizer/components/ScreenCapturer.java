@@ -3,7 +3,6 @@ package com.kyoo.pixel.visualizer.components;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.google.inject.name.Names;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -45,6 +44,7 @@ public final class ScreenCapturer implements Capturer {
   }
 
   final class Grabber {
+
     private FFmpegFrameGrabber grabber;
     private boolean active;
 
@@ -86,7 +86,7 @@ public final class ScreenCapturer implements Capturer {
         log.warn("Grabber hasn't been initiated");
         return Optional.empty();
       }
-      if(rectangle.getWidth() == 0 || rectangle.getHeight()==0){
+      if (rectangle.getWidth() == 0 || rectangle.getHeight() == 0) {
         log.warn("Rectangle can't be negative or zero width or height");
         return Optional.empty();
       }

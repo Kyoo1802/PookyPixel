@@ -1,8 +1,12 @@
 package com.kyoo.pixel;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.kyoo.pixel.visualizer.components.Capturer;
+import com.kyoo.pixel.visualizer.components.FrameDecorator;
+import com.kyoo.pixel.visualizer.components.FrameDecoratorIntegrator;
+import com.kyoo.pixel.visualizer.components.ResizeFrameDecorator;
 import com.kyoo.pixel.visualizer.components.ScreenCapturer;
 import java.io.IOException;
 import java.util.Properties;
@@ -15,6 +19,11 @@ final class VisualizerModule extends AbstractModule {
   protected void configure() {
     bind(Capturer.class).to(ScreenCapturer.class);
     Names.bindProperties(binder(), loadProperties());
+
+    bind(FrameDecoratorIntegrator.class);
+    Multibinder<FrameDecorator> uriBinder = Multibinder
+        .newSetBinder(binder(), FrameDecorator.class);
+    uriBinder.addBinding().to(ResizeFrameDecorator.class);
   }
 
   private Properties loadProperties() {

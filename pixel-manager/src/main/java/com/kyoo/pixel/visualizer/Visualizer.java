@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.kyoo.pixel.visualizer.components.Capturer;
 import com.kyoo.pixel.visualizer.components.ConnectionParser;
 import com.kyoo.pixel.visualizer.components.ControllerSlicer;
-import com.kyoo.pixel.visualizer.components.EditDecorator;
+import com.kyoo.pixel.visualizer.components.FrameDecoratorIntegrator;
 import com.kyoo.pixel.visualizer.data.PixelFrame;
 import com.kyoo.pixel.visualizer.pubsub.FramePublisher;
 import com.kyoo.pixel.visualizer.pubsub.WifiSubscriber;
@@ -14,18 +14,18 @@ import java.util.Optional;
 public final class Visualizer {
 
   private Capturer capturer;
-  private EditDecorator editDecorator;
+  private FrameDecoratorIntegrator frameDecoratorIntegrator;
   private ConnectionParser connectionParser;
   private ControllerSlicer controllerSlicer;
   private FramePublisher framePublisher;
   private WifiSubscriber wifiSubscriber;
 
   @Inject
-  public Visualizer(Capturer capturer, EditDecorator editDecorator,
+  public Visualizer(Capturer capturer, FrameDecoratorIntegrator frameDecoratorIntegrator,
       ConnectionParser connectionParser, ControllerSlicer controllerSlicer,
       FramePublisher framePublisher, WifiSubscriber wifiSubscriber) {
     this.capturer = capturer;
-    this.editDecorator = editDecorator;
+    this.frameDecoratorIntegrator = frameDecoratorIntegrator;
     this.connectionParser = connectionParser;
     this.controllerSlicer = controllerSlicer;
     this.framePublisher = framePublisher;
@@ -34,7 +34,7 @@ public final class Visualizer {
 
   public void capture() {
     Optional<BufferedImage> img = capturer.getFrame();
-    img = editDecorator.edit(img);
+    img = frameDecoratorIntegrator.decorate(img);
 
     Optional<PixelFrame> frame = connectionParser.parse(img);
     frame = controllerSlicer.slice(frame);
@@ -43,6 +43,7 @@ public final class Visualizer {
 
   public void updateConnection(PixelConnection connection) {
     connectionParser.update(connection);
+    frameDecoratorIntegrator.update(connection);
 
   }
 
