@@ -5,8 +5,10 @@ import com.kyoo.pixel.visualizer.components.Capturer;
 import com.kyoo.pixel.visualizer.components.ConnectionParser;
 import com.kyoo.pixel.visualizer.components.ControllerSlicer;
 import com.kyoo.pixel.visualizer.components.FrameDecoratorIntegrator;
+import com.kyoo.pixel.visualizer.data.FrameData;
+import com.kyoo.pixel.visualizer.data.PixelFrame;
 import com.kyoo.pixel.visualizer.data.RgbLedStrips;
-import com.kyoo.pixel.visualizer.pubsub.FramePublisher;
+import com.kyoo.pixel.visualizer.pubsub.FrameOutPublisher;
 import com.kyoo.pixel.visualizer.pubsub.WifiSubscriber;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
@@ -16,29 +18,37 @@ public final class Visualizer {
   private Capturer capturer;
   private FrameDecoratorIntegrator frameDecoratorIntegrator;
   private ConnectionParser connectionParser;
-  private ControllerSlicer controllerSlicer;
-  private FramePublisher framePublisher;
+  private ControllerSlicer controllerSerializer;
+  private FrameOutPublisher frameOutPublisher;
   private WifiSubscriber wifiSubscriber;
 
   @Inject
   public Visualizer(Capturer capturer, FrameDecoratorIntegrator frameDecoratorIntegrator,
-      ConnectionParser connectionParser, ControllerSlicer controllerSlicer,
-      FramePublisher framePublisher, WifiSubscriber wifiSubscriber) {
+      ConnectionParser connectionParser, ControllerSlicer controllerSerializer,
+      FrameOutPublisher frameOutPublisher, WifiSubscriber wifiSubscriber) {
     this.capturer = capturer;
     this.frameDecoratorIntegrator = frameDecoratorIntegrator;
     this.connectionParser = connectionParser;
-    this.controllerSlicer = controllerSlicer;
-    this.framePublisher = framePublisher;
+    this.controllerSerializer = controllerSerializer;
+    this.frameOutPublisher = frameOutPublisher;
     this.wifiSubscriber = wifiSubscriber;
   }
 
   public void capture() {
-    Optional<BufferedImage> img = capturer.getFrame();
-    img = frameDecoratorIntegrator.decorate(img);
+    Optional<PixelFrame> optionalFrameImage = capturer.getFrame();
+    if(optionalFrameImage.isEmpty()){
+      return;
+    }
 
-    Optional<RgbLedStrips> frame = connectionParser.parse(img);
-    frame = controllerSlicer.slice(frame);
-    framePublisher.publish(frame);
+    PixelFrame pixelFrame = optionalFrameImage.get();
+    BufferedImage newframeImage =
+        frameDecoratorIntegrator.decorate(pixelFrame.getBufferedImage());
+    pixelFrame.setBufferedImage(newframeImage);
+
+    RgbLedStrips ledStrips = connectionParser.parse(pixelFrame);
+    FrameData frameData = controllerSerializer.serialize(ledStrips);
+
+    frameOutPublisher.publish(frameData);
   }
 
   public void updateConnection(PixelConnection connection) {
@@ -48,7 +58,7 @@ public final class Visualizer {
   }
 
   public void updateController(PixelController controller) {
-    controllerSlicer.update(controller);
+    controllerSerializer.update(controller);
     wifiSubscriber.update(controller);
   }
 }

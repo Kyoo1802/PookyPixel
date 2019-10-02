@@ -3,6 +3,11 @@ package com.kyoo.pixel.visualizer;
 import lombok.Data;
 
 @Data
-public class PixelController {
-
+public final class PixelController {
+  private int sliceSize;
+  private int channelSize;
+  private int ledStripLength;
+  public int ledTotalCapacity(){
+    return channelSize * ledStripLength;
+  }
 }

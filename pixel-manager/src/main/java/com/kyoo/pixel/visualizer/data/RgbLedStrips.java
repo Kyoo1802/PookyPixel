@@ -3,6 +3,7 @@ package com.kyoo.pixel.visualizer.data;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import lombok.Data;
 
 @Data
@@ -19,6 +20,15 @@ public final class RgbLedStrips {
       stripsByChannelId.put(channelIdx, new LinkedList<>());
     }
     stripsByChannelId.get(channelIdx).addLast(new RgbLed(rgb));
+  }
+
+  public int rgbLedCount(){
+    int count = 0;
+    for (Entry<Integer, LinkedList<RgbLed>> entryStrip:
+        stripsByChannelId.entrySet()) {
+      count+=entryStrip.getValue().size();
+    }
+    return count;
   }
 
   @Data

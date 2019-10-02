@@ -1,11 +1,11 @@
 package com.kyoo.pixel.visualizer.components;
 
-import java.awt.image.BufferedImage;
+import com.kyoo.pixel.visualizer.data.PixelFrame;
 import java.util.Optional;
 
 public interface Capturer {
 
-  Optional<BufferedImage> getFrame();
+  Optional<PixelFrame> getFrame();
 
   void stop();
 }

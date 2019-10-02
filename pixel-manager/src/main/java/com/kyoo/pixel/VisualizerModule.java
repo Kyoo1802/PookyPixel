@@ -4,6 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.kyoo.pixel.visualizer.components.Capturer;
+import com.kyoo.pixel.visualizer.components.ConnectionParser;
+import com.kyoo.pixel.visualizer.components.ControllerSlicer;
 import com.kyoo.pixel.visualizer.components.FrameDecorator;
 import com.kyoo.pixel.visualizer.components.FrameDecoratorIntegrator;
 import com.kyoo.pixel.visualizer.components.ResizeFrameDecorator;
@@ -24,6 +26,8 @@ final class VisualizerModule extends AbstractModule {
     Multibinder<FrameDecorator> uriBinder = Multibinder
         .newSetBinder(binder(), FrameDecorator.class);
     uriBinder.addBinding().to(ResizeFrameDecorator.class);
+    bind(ConnectionParser.class);
+    bind(ControllerSlicer.class);
   }
 
   private Properties loadProperties() {

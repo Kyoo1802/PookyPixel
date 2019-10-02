@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface FrameDecorator {
 
-  Optional<BufferedImage> decorate(Optional<BufferedImage> frame, PixelConnection pixelConnection);
+  BufferedImage decorate(BufferedImage image, PixelConnection pixelConnection);
 }

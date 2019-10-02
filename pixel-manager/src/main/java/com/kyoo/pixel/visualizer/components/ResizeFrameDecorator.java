@@ -20,12 +20,9 @@ public class ResizeFrameDecorator implements FrameDecorator {
   }
 
   @Override
-  public Optional<BufferedImage> decorate(Optional<BufferedImage> frame,
+  public BufferedImage decorate(BufferedImage frameImage,
       PixelConnection pixelConnection) {
-    if (frame.isPresent()) {
-      frame = Optional.of(resize(frame.get(), pixelConnection.getWidth(),
-          pixelConnection.getHeight()));
-    }
-    return frame;
+      return resize(frameImage, pixelConnection.getWidth(),
+          pixelConnection.getHeight());
   }
 }
