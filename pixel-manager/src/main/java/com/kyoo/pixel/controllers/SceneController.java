@@ -2,6 +2,7 @@ package com.kyoo.pixel.controllers;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.data.SceneData;
+import com.kyoo.pixel.visualizer.Visualizer;
 import com.kyoo.pixel.visualizer.components.capturer.ScreenCapturer;
 import com.kyoo.pixel.visualizer.data.ImageFrame;
 import java.awt.Rectangle;
@@ -27,9 +28,11 @@ import lombok.extern.log4j.Log4j2;
 
   private SceneData data;
   private ScreenCapturer capturer;
+  private Visualizer visualizer;
 
   @Inject
-  public SceneController(SceneData data, ScreenCapturer capturer) {
+  public SceneController(Visualizer visualizer, SceneData data, ScreenCapturer capturer) {
+    this.visualizer = visualizer;
     this.data = data;
     this.capturer = capturer;
   }
@@ -43,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(long now) {
-        capturer.updateRectangle(new Rectangle((int)canvas.getWidth(), (int)canvas.getHeight()));
+        capturer.updateImageSize(new Rectangle((int)canvas.getWidth(), (int)canvas.getHeight()));
         Optional<ImageFrame> frame = capturer.getImageFrame();
         if (frame.isPresent()) {
           canvas.getGraphicsContext2D()

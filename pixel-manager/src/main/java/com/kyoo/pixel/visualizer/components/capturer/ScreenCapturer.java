@@ -2,6 +2,7 @@ package com.kyoo.pixel.visualizer.components.capturer;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.kyoo.pixel.visualizer.data.ImageFrame;
 import java.awt.Dimension;
@@ -20,24 +21,47 @@ import org.bytedeco.javacv.Java2DFrameUtils;
 public final class ScreenCapturer implements Capturer {
 
   private Grabber grabber;
-  private Rectangle rectangle;
+  private Rectangle imageSize;
+  private FrameStats frameStats;
 
   @Inject
-  public ScreenCapturer(@Named("capturer.frame.width") int frameWidth,
-      @Named("capturer.frame.height") int frameHeight) {
-    rectangle = new Rectangle(0, 0, 100, 100);
-    grabber = new Grabber();
-    grabber.startGrabber(frameWidth, frameHeight);
+  public ScreenCapturer(Provider<FrameStats> frameStats,
+      @Named("capturer.frame.width") int frameWidth,
+      @Named("capturer.frame.height") int frameHeight,
+      @Named("capturer.image.width") int imageWidth,
+      @Named("capturer.image.height") int imageHeight) {
+    this.imageSize = new Rectangle(0, 0, imageWidth, imageHeight);
+    this.grabber = new Grabber();
+    this.grabber.startGrabber(frameWidth, frameHeight);
+    this.frameStats = frameStats.get();
+  }
+
+  private static BufferedImage resize(Rectangle newSize, BufferedImage image) {
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    double widthRatio = (double) image.getWidth() / screenSize.width;
+    double heightRatio = (double) image.getHeight() / screenSize.height;
+    int x = (int) (
+        Math.min(Math.max(newSize.getX(), 0), screenSize.width - (int) newSize.getWidth())
+            * widthRatio);
+    int y = (int) (
+        Math.min(Math.max(newSize.getY(), 0), screenSize.height - (int) newSize.getHeight())
+            * heightRatio);
+    int width = (int) (newSize.getWidth() * widthRatio);
+    int height = (int) (newSize.getHeight() * heightRatio);
+    return image.getSubimage(x, y, width, height);
   }
 
   @Override
   public Optional<ImageFrame> getImageFrame() {
-    Optional<BufferedImage> image = grabber.capture(rectangle);
-    if(image.isEmpty()){
+    Optional<BufferedImage> image = grabber.capture(imageSize);
+    if (image.isEmpty()) {
       return Optional.empty();
     }
+    frameStats.captureStats();
     ImageFrame imageFrame = new ImageFrame();
     imageFrame.setBufferedImage(image.get());
+    imageFrame.setFrameNumber(frameStats.getFrameNumber());
+    imageFrame.setFrameRate(frameStats.getFrameRate());
     return Optional.of(imageFrame);
   }
 
@@ -46,8 +70,8 @@ public final class ScreenCapturer implements Capturer {
     grabber.stopGrabber();
   }
 
-  public void updateRectangle(Rectangle rectangle) {
-    this.rectangle = rectangle;
+  public void updateImageSize(Rectangle imageSize) {
+    this.imageSize = imageSize;
   }
 
   final class Grabber {
@@ -87,37 +111,22 @@ public final class ScreenCapturer implements Capturer {
       }
     }
 
-    protected Optional<BufferedImage> capture(Rectangle rectangle) {
-      Preconditions.checkNotNull(rectangle);
+    protected Optional<BufferedImage> capture(Rectangle imageSize) {
+      Preconditions.checkNotNull(imageSize);
       if (grabber == null || !active) {
         log.warn("Grabber hasn't been initiated");
         return Optional.empty();
       }
-      if (rectangle.getWidth() == 0 || rectangle.getHeight() == 0) {
-        log.warn("Rectangle can't be negative or zero width or height");
+      if (imageSize.getWidth() == 0 || imageSize.getHeight() == 0) {
+        log.warn("Size can't be negative or zero");
         return Optional.empty();
       }
       try {
         Frame frame = grabber.grabImage();
-        return Optional.of(resize(rectangle, Java2DFrameUtils.toBufferedImage(frame)));
+        return Optional.of(resize(imageSize, Java2DFrameUtils.toBufferedImage(frame)));
       } catch (FrameGrabber.Exception e) {
         return Optional.empty();
       }
-    }
-
-    private BufferedImage resize(Rectangle rectangle, BufferedImage image) {
-      Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      double widthRatio = (double) image.getWidth() / screenSize.width;
-      double heightRatio = (double) image.getHeight() / screenSize.height;
-      int x = (int) (
-          Math.min(Math.max(rectangle.getX(), 0), screenSize.width - (int) rectangle.getWidth())
-              * widthRatio);
-      int y = (int) (
-          Math.min(Math.max(rectangle.getY(), 0), screenSize.height - (int) rectangle.getHeight())
-              * heightRatio);
-      int width = (int) (rectangle.getWidth() * widthRatio);
-      int height = (int) (rectangle.getHeight() * heightRatio);
-      return image.getSubimage(x, y, width, height);
     }
   }
 }

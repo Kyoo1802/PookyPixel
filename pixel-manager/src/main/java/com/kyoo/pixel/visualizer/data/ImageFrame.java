@@ -7,4 +7,6 @@ import lombok.Data;
 public final class ImageFrame {
 
   private BufferedImage bufferedImage;
+  private int frameNumber;
+  private int frameRate;
 }

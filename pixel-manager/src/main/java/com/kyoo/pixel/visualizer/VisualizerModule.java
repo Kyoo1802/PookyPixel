@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.kyoo.pixel.visualizer.components.capturer.Capturer;
+import com.kyoo.pixel.visualizer.components.capturer.FrameStats;
 import com.kyoo.pixel.visualizer.components.capturer.ScreenCapturer;
 import com.kyoo.pixel.visualizer.components.decorator.FrameDecorator;
 import com.kyoo.pixel.visualizer.components.decorator.FrameDecoratorIntegrator;
@@ -24,6 +25,7 @@ public final class VisualizerModule extends AbstractModule {
 
   @Override
   protected void configure() {
+    bind(FrameStats.class);
     bind(Capturer.class).to(ScreenCapturer.class);
     Names.bindProperties(binder(), loadProperties());
 
