@@ -6,19 +6,19 @@ import com.kyoo.pixel.data.PixelConnection;
 import java.awt.image.BufferedImage;
 import java.util.Set;
 
-public final class FrameDecoratorIntegrator {
+public final class ImageDecoratorIntegrator {
 
-  private final Set<FrameDecorator> editDecorators;
+  private final Set<ImageDecorator> imageDecorators;
   private PixelConnection pixelConnection;
 
   @Inject
-  public FrameDecoratorIntegrator(Set<FrameDecorator> editDecorators) {
-    this.editDecorators = editDecorators;
+  public ImageDecoratorIntegrator(Set<ImageDecorator> imageDecorators) {
+    this.imageDecorators = imageDecorators;
   }
 
   public BufferedImage decorate(BufferedImage image) {
     Preconditions.checkNotNull(pixelConnection);
-    for (FrameDecorator decorator : editDecorators) {
+    for (ImageDecorator decorator : imageDecorators) {
       image = decorator.decorate(image, pixelConnection);
     }
     return image;

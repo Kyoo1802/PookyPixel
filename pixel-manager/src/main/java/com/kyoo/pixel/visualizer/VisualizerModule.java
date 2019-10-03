@@ -6,9 +6,9 @@ import com.google.inject.name.Names;
 import com.kyoo.pixel.visualizer.components.capturer.Capturer;
 import com.kyoo.pixel.visualizer.components.capturer.FrameStats;
 import com.kyoo.pixel.visualizer.components.capturer.ScreenCapturer;
-import com.kyoo.pixel.visualizer.components.decorator.FrameDecorator;
-import com.kyoo.pixel.visualizer.components.decorator.FrameDecoratorIntegrator;
-import com.kyoo.pixel.visualizer.components.decorator.ResizeFrameDecorator;
+import com.kyoo.pixel.visualizer.components.decorator.ImageDecorator;
+import com.kyoo.pixel.visualizer.components.decorator.ImageDecoratorIntegrator;
+import com.kyoo.pixel.visualizer.components.decorator.ResizeImageDecorator;
 import com.kyoo.pixel.visualizer.components.out.CanvasSubscriber;
 import com.kyoo.pixel.visualizer.components.out.ConsoleSubscriber;
 import com.kyoo.pixel.visualizer.components.out.FrameOutPublisher;
@@ -29,10 +29,10 @@ public final class VisualizerModule extends AbstractModule {
     bind(Capturer.class).to(ScreenCapturer.class);
     Names.bindProperties(binder(), loadProperties());
 
-    bind(FrameDecoratorIntegrator.class);
-    Multibinder<FrameDecorator> frameDecoratorBinder = Multibinder
-        .newSetBinder(binder(), FrameDecorator.class);
-    frameDecoratorBinder.addBinding().to(ResizeFrameDecorator.class);
+    bind(ImageDecoratorIntegrator.class);
+    Multibinder<ImageDecorator> frameDecoratorBinder = Multibinder
+        .newSetBinder(binder(), ImageDecorator.class);
+    frameDecoratorBinder.addBinding().to(ResizeImageDecorator.class);
     bind(ConnectionParser.class);
     bind(ControllerSerializer.class);
 

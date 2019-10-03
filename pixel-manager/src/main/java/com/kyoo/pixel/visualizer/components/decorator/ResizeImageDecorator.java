@@ -3,7 +3,7 @@ package com.kyoo.pixel.visualizer.components.decorator;
 import com.kyoo.pixel.data.PixelConnection;
 import java.awt.image.BufferedImage;
 
-public class ResizeFrameDecorator implements FrameDecorator {
+public final class ResizeImageDecorator implements ImageDecorator {
 
   private static BufferedImage resize(BufferedImage image, int width, int height) {
     BufferedImage newImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

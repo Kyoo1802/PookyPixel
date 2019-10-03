@@ -6,7 +6,7 @@ import com.kyoo.pixel.data.PixelController;
 import com.kyoo.pixel.visualizer.components.capturer.Capturer;
 import com.kyoo.pixel.visualizer.components.parser.ConnectionParser;
 import com.kyoo.pixel.visualizer.components.serializer.ControllerSerializer;
-import com.kyoo.pixel.visualizer.components.decorator.FrameDecoratorIntegrator;
+import com.kyoo.pixel.visualizer.components.decorator.ImageDecoratorIntegrator;
 import com.kyoo.pixel.visualizer.data.SerializedFrame;
 import com.kyoo.pixel.visualizer.data.ImageFrame;
 import com.kyoo.pixel.visualizer.data.ControllerLedStrips;
@@ -18,18 +18,18 @@ import java.util.Optional;
 public final class Visualizer {
 
   private Capturer capturer;
-  private FrameDecoratorIntegrator frameDecoratorIntegrator;
+  private ImageDecoratorIntegrator imageDecoratorIntegrator;
   private ConnectionParser connectionParser;
   private ControllerSerializer controllerSerializer;
   private FrameOutPublisher frameOutPublisher;
   private WifiSubscriber wifiSubscriber;
 
   @Inject
-  public Visualizer(Capturer capturer, FrameDecoratorIntegrator frameDecoratorIntegrator,
+  public Visualizer(Capturer capturer, ImageDecoratorIntegrator imageDecoratorIntegrator,
       ConnectionParser connectionParser, ControllerSerializer controllerSerializer,
       FrameOutPublisher frameOutPublisher, WifiSubscriber wifiSubscriber) {
     this.capturer = capturer;
-    this.frameDecoratorIntegrator = frameDecoratorIntegrator;
+    this.imageDecoratorIntegrator = imageDecoratorIntegrator;
     this.connectionParser = connectionParser;
     this.controllerSerializer = controllerSerializer;
     this.frameOutPublisher = frameOutPublisher;
@@ -44,7 +44,7 @@ public final class Visualizer {
 
     ImageFrame imageFrame = optionalImageFrame.get();
     BufferedImage newImage =
-        frameDecoratorIntegrator.decorate(imageFrame.getBufferedImage());
+        imageDecoratorIntegrator.decorate(imageFrame.getBufferedImage());
     imageFrame.setBufferedImage(newImage);
 
     ControllerLedStrips ledStrips = connectionParser.parse(imageFrame);
@@ -55,7 +55,7 @@ public final class Visualizer {
 
   public void updateConnection(PixelConnection connection) {
     connectionParser.update(connection);
-    frameDecoratorIntegrator.update(connection);
+    imageDecoratorIntegrator.update(connection);
 
   }
 

@@ -42,11 +42,11 @@ import lombok.extern.log4j.Log4j2;
     String javaVersion = System.getProperty("java.version");
     String javafxVersion = System.getProperty("javafx.version");
     label.setText("Hello, JavaFX " + javafxVersion + "\nRunning on Java " + javaVersion);
+    capturer.updateCaptureWindow(new Rectangle((int)canvas.getWidth(), (int)canvas.getHeight()));
 
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(long now) {
-        capturer.updateImageSize(new Rectangle((int)canvas.getWidth(), (int)canvas.getHeight()));
         Optional<ImageFrame> frame = capturer.getImageFrame();
         if (frame.isPresent()) {
           canvas.getGraphicsContext2D()

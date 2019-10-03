@@ -21,7 +21,7 @@ import org.bytedeco.javacv.Java2DFrameUtils;
 public final class ScreenCapturer implements Capturer {
 
   private Grabber grabber;
-  private Rectangle imageSize;
+  private Rectangle captureWindow;
   private FrameStats frameStats;
 
   @Inject
@@ -30,30 +30,30 @@ public final class ScreenCapturer implements Capturer {
       @Named("capturer.frame.height") int frameHeight,
       @Named("capturer.image.width") int imageWidth,
       @Named("capturer.image.height") int imageHeight) {
-    this.imageSize = new Rectangle(0, 0, imageWidth, imageHeight);
+    this.captureWindow = new Rectangle(0, 0, imageWidth, imageHeight);
     this.grabber = new Grabber();
     this.grabber.startGrabber(frameWidth, frameHeight);
     this.frameStats = frameStats.get();
   }
 
-  private static BufferedImage resize(Rectangle newSize, BufferedImage image) {
+  private static BufferedImage resize(Rectangle captureWindow, BufferedImage image) {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     double widthRatio = (double) image.getWidth() / screenSize.width;
     double heightRatio = (double) image.getHeight() / screenSize.height;
     int x = (int) (
-        Math.min(Math.max(newSize.getX(), 0), screenSize.width - (int) newSize.getWidth())
+        Math.min(Math.max(captureWindow.getX(), 0), screenSize.width - (int) captureWindow.getWidth())
             * widthRatio);
     int y = (int) (
-        Math.min(Math.max(newSize.getY(), 0), screenSize.height - (int) newSize.getHeight())
+        Math.min(Math.max(captureWindow.getY(), 0), screenSize.height - (int) captureWindow.getHeight())
             * heightRatio);
-    int width = (int) (newSize.getWidth() * widthRatio);
-    int height = (int) (newSize.getHeight() * heightRatio);
+    int width = (int) (captureWindow.getWidth() * widthRatio);
+    int height = (int) (captureWindow.getHeight() * heightRatio);
     return image.getSubimage(x, y, width, height);
   }
 
   @Override
   public Optional<ImageFrame> getImageFrame() {
-    Optional<BufferedImage> image = grabber.capture(imageSize);
+    Optional<BufferedImage> image = grabber.capture(captureWindow);
     if (image.isEmpty()) {
       return Optional.empty();
     }
@@ -70,8 +70,8 @@ public final class ScreenCapturer implements Capturer {
     grabber.stopGrabber();
   }
 
-  public void updateImageSize(Rectangle imageSize) {
-    this.imageSize = imageSize;
+  public void updateCaptureWindow(Rectangle captureWindow) {
+    this.captureWindow = captureWindow;
   }
 
   final class Grabber {
@@ -111,19 +111,19 @@ public final class ScreenCapturer implements Capturer {
       }
     }
 
-    protected Optional<BufferedImage> capture(Rectangle imageSize) {
-      Preconditions.checkNotNull(imageSize);
+    protected Optional<BufferedImage> capture(Rectangle captureWindow) {
+      Preconditions.checkNotNull(captureWindow);
       if (grabber == null || !active) {
         log.warn("Grabber hasn't been initiated");
         return Optional.empty();
       }
-      if (imageSize.getWidth() == 0 || imageSize.getHeight() == 0) {
+      if (captureWindow.getWidth() == 0 || captureWindow.getHeight() == 0) {
         log.warn("Size can't be negative or zero");
         return Optional.empty();
       }
       try {
         Frame frame = grabber.grabImage();
-        return Optional.of(resize(imageSize, Java2DFrameUtils.toBufferedImage(frame)));
+        return Optional.of(resize(captureWindow, Java2DFrameUtils.toBufferedImage(frame)));
       } catch (FrameGrabber.Exception e) {
         return Optional.empty();
       }
