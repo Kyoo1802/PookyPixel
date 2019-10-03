@@ -7,9 +7,9 @@ import java.util.Map;
 import lombok.Data;
 
 @Data
-public class FrameData {
+public final class FrameData {
 
-  private final Map<SliceMetadata, LinkedList<RgbLed>> slicedData;
+  private final Map<SlicedMetadata, LinkedList<RgbLed>> slicedData;
   private int frameNumber;
 
   public FrameData() {
@@ -17,7 +17,7 @@ public class FrameData {
   }
 
   public void add(Integer channelId, int startIdx, RgbLed rgbLed) {
-    SliceMetadata meta = new SliceMetadata();
+    SlicedMetadata meta = new SlicedMetadata();
     meta.setChannelId(channelId);
     meta.setStartIdx(startIdx);
     if (!slicedData.containsKey(meta)) {
@@ -27,7 +27,7 @@ public class FrameData {
   }
 
   @Data
-  final class SliceMetadata {
+  public final class SlicedMetadata {
 
     private int channelId;
     private int startIdx;
