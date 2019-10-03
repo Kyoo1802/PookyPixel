@@ -1,18 +1,18 @@
 package com.kyoo.pixel.visualizer.data;
 
-import com.kyoo.pixel.visualizer.data.RgbLedStrips.RgbLed;
+import com.kyoo.pixel.visualizer.data.ControllerLedStrips.RgbLed;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import lombok.Data;
 
 @Data
-public final class FrameData {
+public final class SerializedFrame {
 
   private final Map<SerializedMetadata, LinkedList<RgbLed>> serializedData;
   private int frameNumber;
 
-  public FrameData() {
+  public SerializedFrame() {
     this.serializedData = new HashMap<>();
   }
 

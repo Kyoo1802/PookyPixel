@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import lombok.Data;
 
 @Data
-public final class PixelFrame {
+public final class ImageFrame {
 
   private BufferedImage bufferedImage;
 }

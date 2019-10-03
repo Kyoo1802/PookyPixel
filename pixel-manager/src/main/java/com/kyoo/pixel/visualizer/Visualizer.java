@@ -7,9 +7,9 @@ import com.kyoo.pixel.visualizer.components.capturer.Capturer;
 import com.kyoo.pixel.visualizer.components.parser.ConnectionParser;
 import com.kyoo.pixel.visualizer.components.serializer.ControllerSerializer;
 import com.kyoo.pixel.visualizer.components.decorator.FrameDecoratorIntegrator;
-import com.kyoo.pixel.visualizer.data.FrameData;
-import com.kyoo.pixel.visualizer.data.PixelFrame;
-import com.kyoo.pixel.visualizer.data.RgbLedStrips;
+import com.kyoo.pixel.visualizer.data.SerializedFrame;
+import com.kyoo.pixel.visualizer.data.ImageFrame;
+import com.kyoo.pixel.visualizer.data.ControllerLedStrips;
 import com.kyoo.pixel.visualizer.components.out.FrameOutPublisher;
 import com.kyoo.pixel.visualizer.components.out.WifiSubscriber;
 import java.awt.image.BufferedImage;
@@ -37,20 +37,20 @@ public final class Visualizer {
   }
 
   public void capture() {
-    Optional<PixelFrame> optionalFrameImage = capturer.getFrame();
-    if(optionalFrameImage.isEmpty()){
+    Optional<ImageFrame> optionalImageFrame = capturer.getImageFrame();
+    if(optionalImageFrame.isEmpty()){
       return;
     }
 
-    PixelFrame pixelFrame = optionalFrameImage.get();
-    BufferedImage newframeImage =
-        frameDecoratorIntegrator.decorate(pixelFrame.getBufferedImage());
-    pixelFrame.setBufferedImage(newframeImage);
+    ImageFrame imageFrame = optionalImageFrame.get();
+    BufferedImage newImage =
+        frameDecoratorIntegrator.decorate(imageFrame.getBufferedImage());
+    imageFrame.setBufferedImage(newImage);
 
-    RgbLedStrips ledStrips = connectionParser.parse(pixelFrame);
-    FrameData frameData = controllerSerializer.serialize(ledStrips);
+    ControllerLedStrips ledStrips = connectionParser.parse(imageFrame);
+    SerializedFrame serializedFrame = controllerSerializer.serialize(ledStrips);
 
-    frameOutPublisher.publish(frameData);
+    frameOutPublisher.publish(serializedFrame);
   }
 
   public void updateConnection(PixelConnection connection) {

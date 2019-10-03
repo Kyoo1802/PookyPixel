@@ -7,11 +7,11 @@ import java.util.Map.Entry;
 import lombok.Data;
 
 @Data
-public final class RgbLedStrips {
+public final class ControllerLedStrips {
 
   private Map<Integer, LinkedList<RgbLed>> stripsByChannelId;
 
-  public RgbLedStrips() {
+  public ControllerLedStrips() {
     stripsByChannelId = new HashMap<>();
   }
 

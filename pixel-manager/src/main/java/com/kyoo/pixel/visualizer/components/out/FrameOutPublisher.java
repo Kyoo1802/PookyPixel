@@ -1,7 +1,7 @@
 package com.kyoo.pixel.visualizer.components.out;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.visualizer.data.FrameData;
+import com.kyoo.pixel.visualizer.data.SerializedFrame;
 import java.util.Set;
 
 public class FrameOutPublisher {
@@ -13,9 +13,9 @@ public class FrameOutPublisher {
     this.subscribers = subscribers;
   }
 
-  public void publish(FrameData frameData) {
+  public void publish(SerializedFrame serializedFrame) {
     for (FrameOutSubscriber subscriber : subscribers) {
-      subscriber.receive(frameData);
+      subscriber.receive(serializedFrame);
     }
   }
 }

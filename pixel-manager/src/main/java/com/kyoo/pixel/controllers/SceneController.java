@@ -3,7 +3,7 @@ package com.kyoo.pixel.controllers;
 import com.google.inject.Inject;
 import com.kyoo.pixel.data.SceneData;
 import com.kyoo.pixel.visualizer.components.capturer.ScreenCapturer;
-import com.kyoo.pixel.visualizer.data.PixelFrame;
+import com.kyoo.pixel.visualizer.data.ImageFrame;
 import java.awt.Rectangle;
 import java.net.URL;
 import java.util.Optional;
@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
       @Override
       public void handle(long now) {
         capturer.updateRectangle(new Rectangle((int)canvas.getWidth(), (int)canvas.getHeight()));
-        Optional<PixelFrame> frame = capturer.getFrame();
+        Optional<ImageFrame> frame = capturer.getImageFrame();
         if (frame.isPresent()) {
           canvas.getGraphicsContext2D()
               .drawImage(SwingFXUtils.toFXImage(frame.get().getBufferedImage(), null), 0, 0);

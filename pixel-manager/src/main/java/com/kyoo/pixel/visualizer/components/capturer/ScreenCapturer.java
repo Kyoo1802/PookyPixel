@@ -3,7 +3,7 @@ package com.kyoo.pixel.visualizer.components.capturer;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.kyoo.pixel.visualizer.data.PixelFrame;
+import com.kyoo.pixel.visualizer.data.ImageFrame;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -31,14 +31,14 @@ public final class ScreenCapturer implements Capturer {
   }
 
   @Override
-  public Optional<PixelFrame> getFrame() {
+  public Optional<ImageFrame> getImageFrame() {
     Optional<BufferedImage> image = grabber.capture(rectangle);
     if(image.isEmpty()){
       return Optional.empty();
     }
-    PixelFrame pixelFrame = new PixelFrame();
-    pixelFrame.setBufferedImage(image.get());
-    return Optional.of(pixelFrame);
+    ImageFrame imageFrame = new ImageFrame();
+    imageFrame.setBufferedImage(image.get());
+    return Optional.of(imageFrame);
   }
 
   @Override
