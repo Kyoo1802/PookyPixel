@@ -1,4 +1,4 @@
-package com.kyoo.pixel;
+package com.kyoo.pixel.data;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.kyoo.pixel.visualizer.components;
+package com.kyoo.pixel.visualizer.components.capturer;
 
 import com.kyoo.pixel.visualizer.data.PixelFrame;
 import java.util.Optional;

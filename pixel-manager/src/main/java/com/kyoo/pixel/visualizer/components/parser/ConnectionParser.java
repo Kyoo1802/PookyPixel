@@ -1,7 +1,7 @@
-package com.kyoo.pixel.visualizer.components;
+package com.kyoo.pixel.visualizer.components.parser;
 
-import com.kyoo.pixel.visualizer.PixelConnection;
-import com.kyoo.pixel.visualizer.PixelConnectionChannel;
+import com.kyoo.pixel.data.PixelConnection;
+import com.kyoo.pixel.data.PixelConnectionChannel;
 import com.kyoo.pixel.visualizer.data.PixelFrame;
 import com.kyoo.pixel.visualizer.data.RgbLedStrips;
 import java.awt.Point;

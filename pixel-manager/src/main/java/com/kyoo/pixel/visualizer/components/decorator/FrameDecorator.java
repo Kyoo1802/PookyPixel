@@ -1,8 +1,7 @@
-package com.kyoo.pixel.visualizer.components;
+package com.kyoo.pixel.visualizer.components.decorator;
 
-import com.kyoo.pixel.visualizer.PixelConnection;
+import com.kyoo.pixel.data.PixelConnection;
 import java.awt.image.BufferedImage;
-import java.util.Optional;
 
 public interface FrameDecorator {
 

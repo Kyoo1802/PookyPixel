@@ -1,7 +1,8 @@
-package com.kyoo.pixel;
+package com.kyoo.pixel.controllers;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.visualizer.components.ScreenCapturer;
+import com.kyoo.pixel.data.SceneData;
+import com.kyoo.pixel.visualizer.components.capturer.ScreenCapturer;
 import com.kyoo.pixel.visualizer.data.PixelFrame;
 import java.awt.Rectangle;
 import java.net.URL;

@@ -1,6 +1,6 @@
-package com.kyoo.pixel.visualizer.pubsub;
+package com.kyoo.pixel.visualizer.components.out;
 
-import com.kyoo.pixel.visualizer.PixelController;
+import com.kyoo.pixel.data.PixelController;
 import com.kyoo.pixel.visualizer.data.FrameData;
 
 public class WifiSubscriber implements FrameOutSubscriber {

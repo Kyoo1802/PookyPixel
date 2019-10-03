@@ -1,14 +1,13 @@
-package com.kyoo.pixel.visualizer.components;
+package com.kyoo.pixel.visualizer.components.serializer;
 
-import com.kyoo.pixel.visualizer.PixelController;
+import com.kyoo.pixel.data.PixelController;
 import com.kyoo.pixel.visualizer.data.FrameData;
 import com.kyoo.pixel.visualizer.data.RgbLedStrips;
 import com.kyoo.pixel.visualizer.data.RgbLedStrips.RgbLed;
 import java.util.LinkedList;
 import java.util.Map.Entry;
-import java.util.Optional;
 
-public final class ControllerSlicer {
+public final class ControllerSerializer {
 
   private PixelController pixelController;
 
@@ -18,7 +17,7 @@ public final class ControllerSlicer {
         ledStrips.getStripsByChannelId().entrySet()) {
       int countLed = 0;
       for(RgbLed led : entryStrip.getValue()){
-        frameData.add(entryStrip.getKey(), countLed/pixelController.getSliceSize(), led);
+        frameData.add(entryStrip.getKey(), countLed/pixelController.getSerialSlicedSize(), led);
         countLed++;
       }
     }

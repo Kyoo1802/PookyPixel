@@ -1,4 +1,4 @@
-package com.kyoo.pixel;
+package com.kyoo.pixel.controllers;
 
 import com.google.inject.AbstractModule;
 

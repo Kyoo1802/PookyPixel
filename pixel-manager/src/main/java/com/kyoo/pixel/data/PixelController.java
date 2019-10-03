@@ -1,13 +1,15 @@
-package com.kyoo.pixel.visualizer;
+package com.kyoo.pixel.data;
 
 import lombok.Data;
 
 @Data
 public final class PixelController {
-  private int sliceSize;
+
+  private int serialSlicedSize;
   private int channelSize;
   private int ledStripLength;
-  public int ledTotalCapacity(){
+
+  public int ledTotalCapacity() {
     return channelSize * ledStripLength;
   }
 }

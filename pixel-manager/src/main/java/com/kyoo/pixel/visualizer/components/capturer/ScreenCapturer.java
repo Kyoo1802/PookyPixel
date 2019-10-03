@@ -1,4 +1,4 @@
-package com.kyoo.pixel.visualizer.components;
+package com.kyoo.pixel.visualizer.components.capturer;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

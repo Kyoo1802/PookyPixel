@@ -1,4 +1,4 @@
-package com.kyoo.pixel.visualizer.pubsub;
+package com.kyoo.pixel.visualizer.components.out;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.visualizer.data.FrameData;

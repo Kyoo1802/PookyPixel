@@ -1,4 +1,4 @@
-package com.kyoo.pixel.visualizer;
+package com.kyoo.pixel.data;
 
 import java.awt.Point;
 import java.util.Set;

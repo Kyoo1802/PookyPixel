@@ -9,25 +9,25 @@ import lombok.Data;
 @Data
 public final class FrameData {
 
-  private final Map<SlicedMetadata, LinkedList<RgbLed>> slicedData;
+  private final Map<SerializedMetadata, LinkedList<RgbLed>> serializedData;
   private int frameNumber;
 
   public FrameData() {
-    this.slicedData = new HashMap<>();
+    this.serializedData = new HashMap<>();
   }
 
   public void add(Integer channelId, int startIdx, RgbLed rgbLed) {
-    SlicedMetadata meta = new SlicedMetadata();
+    SerializedMetadata meta = new SerializedMetadata();
     meta.setChannelId(channelId);
     meta.setStartIdx(startIdx);
-    if (!slicedData.containsKey(meta)) {
-      slicedData.put(meta, new LinkedList<>());
+    if (!serializedData.containsKey(meta)) {
+      serializedData.put(meta, new LinkedList<>());
     }
-    slicedData.get(meta).add(rgbLed);
+    serializedData.get(meta).add(rgbLed);
   }
 
   @Data
-  public final class SlicedMetadata {
+  public final class SerializedMetadata {
 
     private int channelId;
     private int startIdx;
