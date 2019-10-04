@@ -12,9 +12,10 @@ public final class ConnectionParser {
 
   public ControllerLedStrips parse(ImageFrame imageFrame) {
     ControllerLedStrips controllerLedStrips = new ControllerLedStrips();
+    Point startPosition = pixelConnection.getStartPosition();
     for (PixelConnectionChannel channel : pixelConnection.getChannels()) {
-      for (Point ledPosition : channel.getLedPositions()) {
-        Point framePosition = pixelConnection.toFramePosition(ledPosition);
+      for (Point connectionPosition : channel.getConnectionPositions()) {
+        Point framePosition = toAbsolutePosition(startPosition, connectionPosition);
         int ledRgb = imageFrame.getBufferedImage().getRGB(framePosition.x, framePosition.y);
         controllerLedStrips.addLedRgb(channel.getId(), ledRgb);
       }
@@ -22,7 +23,11 @@ public final class ConnectionParser {
     return controllerLedStrips;
   }
 
-  public void update(PixelConnection connection) {
+  private Point toAbsolutePosition(Point startPosition, Point relativePosition) {
+    return new Point(relativePosition.x- startPosition.x, relativePosition.y-startPosition.y);
+  }
+
+  public void update(PixelConnection pixelConnection) {
     this.pixelConnection = pixelConnection;
   }
 }
