@@ -21,7 +21,7 @@ public final class ResizeImageDecorator implements ImageDecorator {
   @Override
   public BufferedImage decorate(BufferedImage frameImage,
       PixelConnection pixelConnection) {
-      return resize(frameImage, pixelConnection.getWidth(),
-          pixelConnection.getHeight());
+    return resize(frameImage, pixelConnection.getWidth(),
+        pixelConnection.getHeight());
   }
 }

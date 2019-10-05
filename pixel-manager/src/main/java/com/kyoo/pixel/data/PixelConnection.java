@@ -10,13 +10,14 @@ public final class PixelConnection {
 
   private List<PixelConnectionChannel> channels;
 
-  public PixelConnection(){
+  public PixelConnection() {
     channels = new LinkedList<>();
   }
 
   public Point getStartPosition() {
     return new Point(getMinX(), getMinY());
   }
+
   private int getMinY() {
     int minY = Integer.MAX_VALUE;
     for (PixelConnectionChannel channel : channels) {
@@ -37,7 +38,7 @@ public final class PixelConnection {
     return minX == Integer.MAX_VALUE ? 0 : minX;
   }
 
-  private int getMaxX(){
+  private int getMaxX() {
     int maxX = 0;
     for (PixelConnectionChannel channel : channels) {
       for (Point point : channel.getConnectionPositions()) {
@@ -46,7 +47,8 @@ public final class PixelConnection {
     }
     return maxX;
   }
-  private int getMaxY(){
+
+  private int getMaxY() {
     int maxY = 0;
     for (PixelConnectionChannel channel : channels) {
       for (Point point : channel.getConnectionPositions()) {
@@ -56,10 +58,11 @@ public final class PixelConnection {
     return maxY;
   }
 
-  public int getWidth(){
-    return getMaxX()- getMinX()+1;
+  public int getWidth() {
+    return getMaxX() - getMinX() + 1;
   }
-  public int getHeight(){
-    return getMaxY() - getMinY()+1;
+
+  public int getHeight() {
+    return getMaxY() - getMinY() + 1;
   }
 }

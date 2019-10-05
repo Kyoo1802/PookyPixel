@@ -4,14 +4,14 @@ import com.google.inject.Inject;
 import com.kyoo.pixel.data.PixelConnection;
 import com.kyoo.pixel.data.PixelController;
 import com.kyoo.pixel.visualizer.components.capturer.Capturer;
-import com.kyoo.pixel.visualizer.components.parser.ConnectionParser;
-import com.kyoo.pixel.visualizer.components.serializer.ControllerSerializer;
 import com.kyoo.pixel.visualizer.components.decorator.ImageDecoratorIntegrator;
-import com.kyoo.pixel.visualizer.data.SerializedFrame;
-import com.kyoo.pixel.visualizer.data.ImageFrame;
-import com.kyoo.pixel.visualizer.data.ControllerLedStrips;
 import com.kyoo.pixel.visualizer.components.out.FrameOutPublisher;
 import com.kyoo.pixel.visualizer.components.out.WifiSubscriber;
+import com.kyoo.pixel.visualizer.components.parser.ConnectionParser;
+import com.kyoo.pixel.visualizer.components.serializer.ControllerSerializer;
+import com.kyoo.pixel.visualizer.data.ControllerLedStrips;
+import com.kyoo.pixel.visualizer.data.ImageFrame;
+import com.kyoo.pixel.visualizer.data.SerializedFrame;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
@@ -38,7 +38,7 @@ public final class Visualizer {
 
   public void capture() {
     Optional<ImageFrame> optionalImageFrame = capturer.getImageFrame();
-    if(optionalImageFrame.isEmpty()){
+    if (optionalImageFrame.isEmpty()) {
       return;
     }
 

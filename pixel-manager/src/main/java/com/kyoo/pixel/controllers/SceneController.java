@@ -22,7 +22,7 @@ import javafx.scene.control.Label;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-  public class SceneController implements Initializable {
+public class SceneController implements Initializable {
 
   @FXML
   private Label label;
@@ -46,12 +46,12 @@ import lombok.extern.log4j.Log4j2;
     String javaVersion = System.getProperty("java.version");
     String javafxVersion = System.getProperty("javafx.version");
     label.setText("Hello, JavaFX " + javafxVersion + "\nRunning on Java " + javaVersion);
-    capturer.updateCaptureWindow(new Rectangle((int)canvas.getWidth(), (int)canvas.getHeight()));
+    capturer.updateCaptureWindow(new Rectangle((int) canvas.getWidth(), (int) canvas.getHeight()));
 
     PixelConnectionChannel channelA = new PixelConnectionChannel();
     channelA.setId(0);
-    for(int i=0; i<20;i++) {
-      for(int j=0; j<30; j++) {
+    for (int i = 0; i < 20; i++) {
+      for (int j = 0; j < 30; j++) {
         channelA.getConnectionPositions().add(new Point(j, i));
       }
     }
@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
       @Override
       public void handle(long now) {
         Optional<ImageFrame> frame = capturer.getImageFrame();
-        visualizer.capture();
+//        visualizer.capture();
         if (frame.isPresent()) {
           canvas.getGraphicsContext2D()
               .drawImage(SwingFXUtils.toFXImage(frame.get().getBufferedImage(), null), 0, 0);
