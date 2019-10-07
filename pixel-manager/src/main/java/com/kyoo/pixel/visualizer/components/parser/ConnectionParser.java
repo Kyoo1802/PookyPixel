@@ -2,8 +2,8 @@ package com.kyoo.pixel.visualizer.components.parser;
 
 import com.kyoo.pixel.data.PixelConnection;
 import com.kyoo.pixel.data.PixelConnectionChannel;
-import com.kyoo.pixel.visualizer.data.ImageFrame;
 import com.kyoo.pixel.visualizer.data.ControllerLedStrips;
+import com.kyoo.pixel.visualizer.data.ImageFrame;
 import java.awt.Point;
 
 public final class ConnectionParser {
@@ -24,7 +24,7 @@ public final class ConnectionParser {
   }
 
   private Point toAbsolutePosition(Point startPosition, Point relativePosition) {
-    return new Point(relativePosition.x- startPosition.x, relativePosition.y-startPosition.y);
+    return new Point(relativePosition.x - startPosition.x, relativePosition.y - startPosition.y);
   }
 
   public void update(PixelConnection pixelConnection) {

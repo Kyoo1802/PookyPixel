@@ -3,6 +3,7 @@ package com.kyoo.pixel.visualizer.components.capturer;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.kyoo.pixel.visualizer.data.ImageFrame;
 import java.awt.Dimension;
@@ -18,6 +19,7 @@ import org.bytedeco.javacv.FrameGrabber.Exception;
 import org.bytedeco.javacv.Java2DFrameUtils;
 
 @Log4j2
+@Singleton
 public final class ScreenCapturer implements Capturer {
 
   private Grabber grabber;
@@ -41,10 +43,12 @@ public final class ScreenCapturer implements Capturer {
     double widthRatio = (double) image.getWidth() / screenSize.width;
     double heightRatio = (double) image.getHeight() / screenSize.height;
     int x = (int) (
-        Math.min(Math.max(captureWindow.getX(), 0), screenSize.width - (int) captureWindow.getWidth())
+        Math.min(Math.max(captureWindow.getX(), 0),
+            screenSize.width - (int) captureWindow.getWidth())
             * widthRatio);
     int y = (int) (
-        Math.min(Math.max(captureWindow.getY(), 0), screenSize.height - (int) captureWindow.getHeight())
+        Math.min(Math.max(captureWindow.getY(), 0),
+            screenSize.height - (int) captureWindow.getHeight())
             * heightRatio);
     int width = (int) (captureWindow.getWidth() * widthRatio);
     int height = (int) (captureWindow.getHeight() * heightRatio);

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
+  minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+  xmlns="http://javafx.com/javafx/11.0.1">
+  <children>
+    <VBox style="-fx-background-color: #434343ff#434343ff;" prefHeight="400.0" prefWidth="304.0">
+      <children>
+        <AnchorPane prefHeight="190.0" prefWidth="321.0">
+          <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="14.0"
+              pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@../../../Desktop/Led2.0.png"/>
+              </image>
+            </ImageView>
+            <Label alignment="CENTER" layoutX="102.0" layoutY="117.0" text="Pooky pixel"
+              textFill="#efefef">
+              <font>
+                <Font name="Verdana" size="16.0"/>
+              </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="121.0" layoutY="137.0" text="Version 1.0"
+              textFill="#999999">
+              <font>
+                <Font size="10.0"/>
+              </font>
+            </Label>
+          </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+          <children>
+            <VBox layoutX="78.0" prefHeight="200.0" prefWidth="141.0">
+              <children>
+                <Button style="-fx-background-color: 0;" mnemonicParsing="false" prefHeight="27.0"
+                  prefWidth="144.0" text="+ Nuevo proyecto" textFill="#efefef"/>
+                <Button style="-fx-background-color: transparent;" mnemonicParsing="false"
+                  prefHeight="27.0"
+                  prefWidth="144.0" text="\@ Abrir proyecto"
+                  textFill="#efefef"/>
+              </children>
+            </VBox>
+          </children>
+        </AnchorPane>
+      </children>
+    </VBox>
+    <VBox style="-fx-background-color: #666666ff#666666ff;" prefHeight="400.0" prefWidth="311.0">
+      <children>
+        <HBox prefHeight="48.0" prefWidth="279.0">
+          <children>
+            <Button style="-fx-background-color: transparent; -fx-padding: 0;"
+              mnemonicParsing="false" prefHeight="48.0"
+              prefWidth="314.0">
+              <graphic>
+                <VBox style="-fx-padding: 0 0 0 5px;" prefHeight="48.0" prefWidth="256.0">
+                  <children>
+                    <Label prefHeight="28.0" text="Cabina 3x8" textFill="#efefef"/>
+                    <Label prefHeight="21.0" text="C:/Mis Documentos/Proyectos/Cabina 3x8"
+                      textFill="#999999"/>
+                  </children>
+                </VBox>
+              </graphic>
+            </Button>
+            <Button style="-fx-background-color: transparent;" mnemonicParsing="false"
+              prefHeight="49.0"
+              prefWidth="46.0" text="x" textFill="#efefef"/>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </children>
+</HBox>

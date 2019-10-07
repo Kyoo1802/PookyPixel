@@ -22,11 +22,11 @@ public final class ControllerLedStrips {
     stripsByChannelId.get(channelIdx).addLast(new RgbLed(rgb));
   }
 
-  public int rgbLedCount(){
+  public int rgbLedCount() {
     int count = 0;
-    for (Entry<Integer, LinkedList<RgbLed>> entryStrip:
+    for (Entry<Integer, LinkedList<RgbLed>> entryStrip :
         stripsByChannelId.entrySet()) {
-      count+=entryStrip.getValue().size();
+      count += entryStrip.getValue().size();
     }
     return count;
   }

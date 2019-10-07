@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?language javascript?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
+  minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
+  xmlns="http://javafx.com/javafx/11.0.1"
+  fx:controller="com.kyoo.pixel.views.connection.ConnectionView">
+  <children>
+    <BorderPane>
+      <center>
+        <Canvas BorderPane.alignment="CENTER" height="497.0" width="810.0"
+          fx:id="connectionCanvas"/>
+      </center>
+      <top>
+        <ToggleButton BorderPane.alignment="CENTER" text="P" fx:id="createPanelBtn"/>
+      </top>
+    </BorderPane>
+  </children>
+</StackPane>

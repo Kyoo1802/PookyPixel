@@ -2,8 +2,8 @@ package com.kyoo.pixel;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.kyoo.pixel.controllers.SceneModule;
 import com.kyoo.pixel.inject.GuiceFXMLLoader;
+import com.kyoo.pixel.views.connection.ConnectionModule;
 import com.kyoo.pixel.visualizer.VisualizerModule;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -14,10 +14,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MainApp extends Application {
 
-  public static final Injector injector = Guice.createInjector(new SceneModule(),
+  public static final Injector injector = Guice.createInjector(new ConnectionModule(),
       new VisualizerModule());
 
   public static void main(String[] args) {
+    System.setProperty("javafx.animation.fullspeed", "true");
     launch(args);
   }
 
@@ -27,7 +28,7 @@ public class MainApp extends Application {
 
     GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
 
-    Parent root = loader.load(getClass().getResource("views/scene.fxml"));
+    Parent root = loader.load(getClass().getResource("ui/connectionUI.fxml"));
 
     Scene scene = new Scene(root);
     scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
