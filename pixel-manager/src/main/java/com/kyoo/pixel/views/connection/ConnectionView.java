@@ -27,9 +27,10 @@ public class ConnectionView implements Initializable {
   private ConnectionCanvasRenderer connectionCanvasRenderer;
 
   @Inject
-  public ConnectionView(ConnectionViewModel connectionViewModel) {
+  public ConnectionView(ConnectionViewModel connectionViewModel,
+      ConnectionCanvasRenderer connectionCanvasRenderer ) {
     this.connectionViewModel = connectionViewModel;
-    this.connectionCanvasRenderer = new ConnectionCanvasRenderer(connectionViewModel);
+    this.connectionCanvasRenderer = connectionCanvasRenderer;
   }
 
   @Override
@@ -42,10 +43,10 @@ public class ConnectionView implements Initializable {
     connectionCanvas.addEventHandler(KeyEvent.KEY_TYPED, keyHandler);
 
     connectionViewModel.canvasWidthProperty().set((int) connectionCanvas.getWidth());
-    connectionCanvas.widthProperty().bindBidirectional(connectionViewModel.canvasWidthProperty());
+//    connectionCanvas.widthProperty().bindBidirectional(connectionViewModel.canvasWidthProperty());
 
     connectionViewModel.canvasHeightProperty().set((int) connectionCanvas.getHeight());
-    connectionCanvas.heightProperty().bindBidirectional(connectionViewModel.canvasHeightProperty());
+//    connectionCanvas.heightProperty().bindBidirectional(connectionViewModel.canvasHeightProperty());
 
     createPanelBtn.selectedProperty()
         .bindBidirectional(connectionViewModel.createPanelSelectedProperty());

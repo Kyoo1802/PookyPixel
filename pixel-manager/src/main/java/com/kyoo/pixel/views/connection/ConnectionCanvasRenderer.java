@@ -1,16 +1,11 @@
 package com.kyoo.pixel.views.connection;
 
-import static javafx.scene.paint.Color.GRAY;
-import static javafx.scene.paint.Color.GREEN;
-import static javafx.scene.paint.Color.RED;
-import static javafx.scene.paint.Color.WHITE;
-import static javafx.scene.paint.Color.YELLOW;
-
+import com.google.inject.Inject;
 import com.kyoo.pixel.data.connection.ConnectionComponent;
+import com.kyoo.pixel.data.connection.ConnectionProperties;
 import com.kyoo.pixel.data.connection.Led;
 import com.kyoo.pixel.data.connection.SquarePanel;
 import com.kyoo.pixel.utils.PositionUtils;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -18,8 +13,11 @@ import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import lombok.extern.log4j.Log4j2;
 
-public class ConnectionCanvasRenderer {
+@Log4j2
+public final class ConnectionCanvasRenderer {
 
   public static final int DOT_SIZE = 2;
   public static final double LINE_WIDTH = 2;
@@ -28,11 +26,15 @@ public class ConnectionCanvasRenderer {
 
   private ConnectionViewModel connectionViewModel;
   private BufferedImage background;
+  private ConnectionProperties connectionProperties;
 
-  public ConnectionCanvasRenderer(ConnectionViewModel connectionViewModel) {
+  @Inject
+  public ConnectionCanvasRenderer(ConnectionViewModel connectionViewModel,
+      ConnectionProperties connectionProperties) {
     this.connectionViewModel = connectionViewModel;
     this.connectionViewModel.canvasWidthProperty().addListener(v -> recreateBackground());
     this.connectionViewModel.canvasHeightProperty().addListener(v -> recreateBackground());
+    this.connectionProperties = connectionProperties;
   }
 
   public void render(Canvas connectionCanvas) {
@@ -53,15 +55,16 @@ public class ConnectionCanvasRenderer {
   }
 
   private void recreateBackground() {
-    Dimension canvasWidth = new Dimension(connectionViewModel.canvasWidthProperty().get(),
+    Dimension canvasDimension = new Dimension(connectionViewModel.canvasWidthProperty().get(),
         connectionViewModel.canvasHeightProperty().get());
-    if (canvasWidth.width * canvasWidth.height == 0) {
+    if (canvasDimension.width * canvasDimension.height == 0) {
       return;
     }
     BufferedImage bufferedImage =
-        new BufferedImage(canvasWidth.width, canvasWidth.height, BufferedImage.TYPE_INT_RGB);
+        new BufferedImage(canvasDimension.width, canvasDimension.height, BufferedImage.TYPE_INT_RGB);
     Graphics2D graphics2D = (Graphics2D) bufferedImage.getGraphics();
-    graphics2D.setColor(Color.RED);
+
+    graphics2D.setColor(java.awt.Color.decode(connectionProperties.getBackgroundDotsColor()));
     for (int i = 0; i < MAX_HORIZONTAL_LEDS; i++) {
       for (int j = 0; j < MAX_VERTICAL_LEDS; j++) {
         Point mousePoint = PositionUtils.toCanvasStartPosition(i, j);
@@ -79,7 +82,6 @@ public class ConnectionCanvasRenderer {
     if (connectionViewModel.getConnectionModel().getCreatedComponents().all().isEmpty()) {
       return;
     }
-    gc.setFill(GRAY);
     for (ConnectionComponent cc :
         connectionViewModel.getConnectionModel().getCreatedComponents().all()) {
       switch (cc.connectionType()) {
@@ -90,11 +92,11 @@ public class ConnectionCanvasRenderer {
             Point canvasStartPosition = PositionUtils
                 .toCanvasStartPosition(led.getPosition().y, led.getPosition().x);
             if (idx == 0) {
-              gc.setFill(GREEN);
+              gc.setFill(Color.web(connectionProperties.getLedStartColor()));
             } else if (idx == sp.getLeds().size() - 1) {
-              gc.setFill(RED);
+              gc.setFill(Color.web(connectionProperties.getLedEndColor()));
             } else {
-              gc.setFill(GRAY);
+              gc.setFill(Color.web(connectionProperties.getLedOffColor()));
             }
             gc.fillOval(canvasStartPosition.x, canvasStartPosition.y, PositionUtils.SQUARE_LENGTH
                 , PositionUtils.SQUARE_LENGTH);
@@ -119,12 +121,13 @@ public class ConnectionCanvasRenderer {
         SquarePanel sp = (SquarePanel) cc;
         Point startPosition = PositionUtils.toCanvasStartPosition(
             sp.getStartPosition().y, sp.getStartPosition().x);
-        gc.setFill(GREEN);
+        gc.setFill(Color.web(connectionProperties.getLedStartColor()));
         gc.fillOval(startPosition.x,
             startPosition.y,
             PositionUtils.SQUARE_LENGTH,
             PositionUtils.SQUARE_LENGTH);
-        gc.setStroke(WHITE);
+
+        gc.setStroke(Color.web(connectionProperties.getSelectColor()));
         gc.setLineWidth(1);
         gc.setLineDashes(10);
         gc.strokeRect(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
@@ -141,7 +144,7 @@ public class ConnectionCanvasRenderer {
     switch (connectionViewModel.getConnectionModel().getConnectionAction()) {
       case NO_ACTION:
         gc.setLineWidth(LINE_WIDTH);
-        gc.setStroke(YELLOW);
+        gc.setStroke(Color.web(connectionProperties.getNoActionColor()));
         gc.strokeRect(mouseSquare.x,
             mouseSquare.y,
             PositionUtils.SQUARE_LENGTH,
@@ -151,13 +154,13 @@ public class ConnectionCanvasRenderer {
         switch (connectionViewModel.getConnectionModel().getDrawAction()) {
           case DRAW_SQUARE_PANEL:
             if (connectionViewModel.getConnectionModel().getBeingCreatedComponent().isEmpty()) {
-              gc.setFill(GREEN);
+              gc.setFill(Color.web(connectionProperties.getLedStartColor()));
               gc.fillOval(mouseSquare.x,
                   mouseSquare.y,
                   PositionUtils.SQUARE_LENGTH,
                   PositionUtils.SQUARE_LENGTH);
             } else {
-              gc.setFill(RED);
+              gc.setFill(Color.web(connectionProperties.getLedEndColor()));
               gc.fillOval(mouseSquare.x,
                   mouseSquare.y,
                   PositionUtils.SQUARE_LENGTH,

@@ -1,6 +1,7 @@
 package com.kyoo.pixel.views.connection;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.kyoo.pixel.views.connection.ConnectionModel.ConnectionAction;
 import com.kyoo.pixel.views.connection.ConnectionModel.DrawAction;
 import java.awt.Point;
@@ -11,6 +12,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+@Singleton
 public final class ConnectionViewModel {
 
   private BooleanProperty createPanelSelected =
