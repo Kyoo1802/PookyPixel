@@ -12,6 +12,7 @@ import com.kyoo.pixel.data.connection.LedPath;
 import com.kyoo.pixel.data.connection.Pointer;
 import com.kyoo.pixel.data.connection.PortComponent;
 import com.kyoo.pixel.data.connection.SquarePanel;
+import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,9 +45,9 @@ public final class ConnectionModel {
     this.drawAction = DrawAction.DRAW_SQUARE_PANEL;
   }
 
-  public void handleMove(Point actionPosition) {
-    pointer.setLocation(actionPosition);
-    switch (drawAction){
+  public void handleMove(Point mousePosition) {
+    pointer.setLocation(mousePosition);
+    switch (drawAction) {
       case DRAW_PANEL_BRIDGE:
 
         break;
@@ -54,30 +55,31 @@ public final class ConnectionModel {
     }
   }
 
-  public void handleAction(@Nonnull Point mousePoint) {
+  public void handleAction(@Nonnull Point mousePosition) {
+    Point idxPoint = PositionUtils.toIdxPosition(mousePosition);
     switch (connectionAction) {
       case NO_ACTION:
-        selectComponent(mousePoint);
+        selectComponent(idxPoint);
       case DELETE:
         deleteComponent();
       case DRAW:
         if (beingCreatedComponent.isEmpty()) {
-          startComponent(mousePoint);
+          startComponent(idxPoint);
         } else if (beingCreatedComponent.get().creationType() == CreationType.MULTI_POINT) {
-          continueComponent(mousePoint);
+          continueComponent(idxPoint);
         } else {
-          endComponent(mousePoint);
+          endComponent(idxPoint);
         }
     }
   }
 
-  private boolean selectComponent(Point selectPoint) {
+  private boolean selectComponent(Point idxPoint) {
     if (selectedComponent.isPresent() && selectedComponent.get()
-        .intersects(selectPoint.x, selectPoint.y)) {
-      return selectedComponent.get().internalSelect(selectPoint.x, selectPoint.y);
+        .intersects(idxPoint.x, idxPoint.y)) {
+      return selectedComponent.get().internalSelect(idxPoint.x, idxPoint.y);
     }
     for (ConnectionComponent component : createdComponents.all()) {
-      if (component.intersects(selectPoint.x, selectPoint.y)) {
+      if (component.intersects(idxPoint.x, idxPoint.y)) {
         selectedComponent = Optional.of(component);
         return true;
       }
@@ -86,27 +88,27 @@ public final class ConnectionModel {
     return false;
   }
 
-  private void startComponent(@Nonnull Point mousePoint) {
+  private void startComponent(@Nonnull Point idxPoint) {
     switch (drawAction) {
       case DRAW_DRIVER_PORT:
-        PortComponent portComponent = new PortComponent(countFor(ComponentType.PORT), mousePoint);
+        PortComponent portComponent = new PortComponent(countFor(ComponentType.PORT), idxPoint);
         createdComponents.addComponent(portComponent);
         selectedComponent = Optional.of(portComponent);
         break;
       case DRAW_LED_PATH:
-        LedPath ledPath = new LedPath(countFor(ComponentType.LED_PATH), mousePoint);
+        LedPath ledPath = new LedPath(countFor(ComponentType.LED_PATH), idxPoint);
         beingCreatedComponent = Optional.of(ledPath);
         selectedComponent = Optional.of(ledPath);
         break;
       case DRAW_SQUARE_PANEL:
-        SquarePanel squarePanel = new SquarePanel(countFor(ComponentType.SQUARE_PANEL), mousePoint);
+        SquarePanel squarePanel = new SquarePanel(countFor(ComponentType.SQUARE_PANEL), idxPoint);
         beingCreatedComponent = Optional.of(squarePanel);
         selectedComponent = Optional.of(squarePanel);
         break;
       case DRAW_PANEL_BRIDGE:
-        Optional<Led> ledStart = createdComponents.lookup(ComponentType.LED, mousePoint);
+        Optional<Led> ledStart = createdComponents.lookup(ComponentType.LED, idxPoint);
         if (ledStart.isPresent()) {
-          LedBridge ledBridge = new LedBridge(countFor(ComponentType.PANEL_BRIDGE), mousePoint);
+          LedBridge ledBridge = new LedBridge(countFor(ComponentType.PANEL_BRIDGE), idxPoint);
           beingCreatedComponent = Optional.of(ledBridge);
           selectedComponent = Optional.of(ledBridge);
         }
@@ -116,28 +118,28 @@ public final class ConnectionModel {
     }
   }
 
-  private void continueComponent(Point mousePoint) {
+  private void continueComponent(Point idxPoint) {
     switch (selectedComponent.get().connectionType()) {
       case LED_PATH:
         LedPath ledPath = (LedPath) selectedComponent.get();
-        ledPath.addLed(new Led(mousePoint, ledPath));
+        ledPath.addLed(new Led(idxPoint, ledPath));
         break;
       default:
         log.error("Invalid case, when starting a component: " + connectionAction);
     }
   }
 
-  private void endComponent(@Nonnull Point mousePoint) {
+  private void endComponent(@Nonnull Point idxPoint) {
     switch (selectedComponent.get().connectionType()) {
       case SQUARE_PANEL:
         SquarePanel squarePanel = (SquarePanel) selectedComponent.get();
-        squarePanel.endComponent(mousePoint);
+        squarePanel.endComponent(idxPoint);
         createdComponents.addComponent(squarePanel);
         beingCreatedComponent = Optional.empty();
         break;
       case PANEL_BRIDGE:
         LedBridge ledBridge = (LedBridge) selectedComponent.get();
-        ledBridge.endComponent(mousePoint);
+        ledBridge.endComponent(idxPoint);
         createdComponents.addComponent(ledBridge);
         beingCreatedComponent = Optional.empty();
         break;
@@ -162,7 +164,7 @@ public final class ConnectionModel {
   }
 
   public void selectAction(ConnectionAction connectionAction) {
-    this.connectionAction=connectionAction;
+    this.connectionAction = connectionAction;
   }
 
   public void selectDraw(DrawAction drawAction) {
@@ -174,6 +176,7 @@ public final class ConnectionModel {
     DELETE,
     DRAW,
   }
+
   enum DrawAction {
     UNSET,
     DRAW_SQUARE_PANEL,

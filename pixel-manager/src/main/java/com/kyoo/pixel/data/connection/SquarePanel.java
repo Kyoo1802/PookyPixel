@@ -1,20 +1,23 @@
 package com.kyoo.pixel.data.connection;
 
 import java.awt.Point;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import lombok.Data;
 
 @Data
 public final class SquarePanel implements ConnectionComponent {
 
-  private Point startPoint;
-  private Point endPoint;
+  private Point startPosition;
+  private Optional<Point> endPosition;
+  private LinkedHashMap<Point, Led> leds;
   private int idx;
 
   public SquarePanel(int idx, Point point) {
     this.idx = idx;
-    this.startPoint = point;
-    this.endPoint = point;
+    this.startPosition = point;
+    this.leds = new LinkedHashMap<>();
+    this.endPosition = Optional.empty();
   }
 
   @Override
@@ -43,6 +46,12 @@ public final class SquarePanel implements ConnectionComponent {
   }
 
   public void endComponent(Point endPoint) {
-    this.endPoint = endPoint;
+    this.endPosition = Optional.of(endPoint);
+    for (int i = startPosition.y; i <= endPoint.y; i++) {
+      for (int j = startPosition.x; j <= endPoint.x; j++) {
+        Point ledPoint = new Point(j, i);
+        this.leds.put(ledPoint, new Led(ledPoint, this));
+      }
+    }
   }
 }

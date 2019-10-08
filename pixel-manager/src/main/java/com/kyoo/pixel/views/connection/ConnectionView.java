@@ -41,10 +41,10 @@ public class ConnectionView implements Initializable {
     SceneKeyboardHandler keyHandler = new SceneKeyboardHandler();
     connectionCanvas.addEventHandler(KeyEvent.KEY_TYPED, keyHandler);
 
-    connectionViewModel.canvasWidthProperty().set((int)connectionCanvas.getWidth());
+    connectionViewModel.canvasWidthProperty().set((int) connectionCanvas.getWidth());
     connectionCanvas.widthProperty().bindBidirectional(connectionViewModel.canvasWidthProperty());
 
-    connectionViewModel.canvasHeightProperty().set((int)connectionCanvas.getHeight());
+    connectionViewModel.canvasHeightProperty().set((int) connectionCanvas.getHeight());
     connectionCanvas.heightProperty().bindBidirectional(connectionViewModel.canvasHeightProperty());
 
     createPanelBtn.selectedProperty()
@@ -63,11 +63,12 @@ public class ConnectionView implements Initializable {
 
     @Override
     public void handle(MouseEvent e) {
-      Point mousePosition = new Point((int) e.getX()-2, (int) e.getY()-2);
+      Point mousePosition = new Point((int) e.getX(), (int) e.getY());
 
       if (e.getEventType() == MouseEvent.MOUSE_MOVED) {
 //        log.debug("Mouse Move: " + mousePosition.getX() + " , " + mousePosition.getY());
-        connectionViewModel.positionProperty().get().setLocation(e.getX(), e.getY());
+        connectionViewModel.positionProperty().get()
+            .setLocation(mousePosition.getX(), mousePosition.getY());
         connectionViewModel.updateCursorPosition(mousePosition);
 
       } else if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {

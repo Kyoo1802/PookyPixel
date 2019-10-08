@@ -6,17 +6,15 @@ import java.util.Optional;
 public class Led implements ConnectionComponent {
 
   private final ConnectionComponent parentComponent;
+  private Point position;
 
   public Led(Point position, ConnectionComponent parentComponent) {
+    this.position = position;
     this.parentComponent = parentComponent;
   }
 
-  public ConnectionComponent getParentComponent() {
-    return parentComponent;
-  }
-
-  void addLed(Led led) {
-
+  public Point getPosition() {
+    return position;
   }
 
   @Override

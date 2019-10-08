@@ -28,7 +28,7 @@ public final class ConnectionViewModel {
     this.connectionModel = connectionModel;
     this.createPanelSelected.addListener((observable, oldValue, newValue) ->
     {
-      if(newValue) {
+      if (newValue) {
         connectionModel.selectAction(ConnectionAction.DRAW);
         connectionModel.selectDraw(DrawAction.DRAW_SQUARE_PANEL);
       } else {
@@ -57,10 +57,12 @@ public final class ConnectionViewModel {
   public IntegerProperty canvasWidthProperty() {
     return canvasWidth;
   }
+
   public IntegerProperty canvasHeightProperty() {
     return canvasHeight;
   }
-  public ConnectionModel getConnectionModel(){
+
+  public ConnectionModel getConnectionModel() {
     return connectionModel;
   }
 }
