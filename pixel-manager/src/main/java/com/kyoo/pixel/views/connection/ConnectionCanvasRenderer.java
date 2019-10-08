@@ -61,11 +61,12 @@ public final class ConnectionCanvasRenderer {
       return;
     }
     BufferedImage bufferedImage =
-        new BufferedImage(canvasDimension.width, canvasDimension.height, BufferedImage.TYPE_INT_RGB);
+        new BufferedImage(canvasDimension.width, canvasDimension.height,
+            BufferedImage.TYPE_INT_RGB);
     Graphics2D graphics2D = (Graphics2D) bufferedImage.getGraphics();
 
     graphics2D.setColor(java.awt.Color.decode(connectionProperties.getBackgroundColor()));
-    graphics2D.fillRect(0,0, canvasDimension.width, canvasDimension.height);
+    graphics2D.fillRect(0, 0, canvasDimension.width, canvasDimension.height);
     graphics2D.setColor(java.awt.Color.decode(connectionProperties.getBackgroundDotsColor()));
     for (int i = 0; i < MAX_HORIZONTAL_LEDS; i++) {
       for (int j = 0; j < MAX_VERTICAL_LEDS; j++) {

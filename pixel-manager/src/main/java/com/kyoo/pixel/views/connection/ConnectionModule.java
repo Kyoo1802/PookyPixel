@@ -2,7 +2,6 @@ package com.kyoo.pixel.views.connection;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.name.Names;
 import com.kyoo.pixel.data.connection.ConnectionProperties;
 import java.io.IOException;
 import java.util.Properties;
@@ -22,10 +21,10 @@ public class ConnectionModule extends AbstractModule {
   }
 
   @Provides
-  public ConnectionProperties connectionProperties(){
+  public ConnectionProperties connectionProperties() {
     Properties properties = loadProperties();
 
-    ConnectionProperties.ConnectionPropertiesBuilder cp  = ConnectionProperties.builder();
+    ConnectionProperties.ConnectionPropertiesBuilder cp = ConnectionProperties.builder();
     cp.backgroundColor(properties.getProperty("connection.renderer.background.color"));
     cp.backgroundDotsColor(properties.getProperty("connection.renderer.background.dots.color"));
     cp.backgroundDotsSize(properties.getProperty("connection.renderer.background.dots.size"));
@@ -36,7 +35,6 @@ public class ConnectionModule extends AbstractModule {
     cp.ledEndColor(properties.getProperty("connection.renderer.led.end.color"));
     cp.selectColor(properties.getProperty("connection.renderer.select.color"));
     cp.noActionColor(properties.getProperty("connection.renderer.noaction.color"));
-
 
     return cp.build();
   }

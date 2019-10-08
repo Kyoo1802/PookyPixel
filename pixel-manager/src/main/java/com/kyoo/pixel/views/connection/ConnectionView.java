@@ -28,7 +28,7 @@ public class ConnectionView implements Initializable {
 
   @Inject
   public ConnectionView(ConnectionViewModel connectionViewModel,
-      ConnectionCanvasRenderer connectionCanvasRenderer ) {
+      ConnectionCanvasRenderer connectionCanvasRenderer) {
     this.connectionViewModel = connectionViewModel;
     this.connectionCanvasRenderer = connectionCanvasRenderer;
   }

@@ -8,6 +8,7 @@ import lombok.Getter;
 @Singleton
 @Getter
 public final class ConnectionProperties {
+
   private String backgroundColor;
   private String backgroundDotsColor;
   private String backgroundDotsSize;
