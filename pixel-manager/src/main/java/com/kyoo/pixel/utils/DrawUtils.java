@@ -23,7 +23,7 @@ public final class DrawUtils {
     g2.setColor(java.awt.Color.decode(hexDotsColor));
     for (int i = 0; i < MAX_HORIZONTAL_LEDS; i++) {
       for (int j = 0; j < MAX_VERTICAL_LEDS; j++) {
-        Point mousePoint = PositionUtils.toCanvasStartPosition(i, j);
+        Point mousePoint = PositionUtils.toCanvasPosition(i, j);
         g2.fillOval(mousePoint.x + PositionUtils.HALF_SQUARE_LENGTH - 1,
             mousePoint.y + PositionUtils.HALF_SQUARE_LENGTH - 1,
             DOT_SIZE

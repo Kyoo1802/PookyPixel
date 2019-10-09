@@ -14,4 +14,8 @@ public interface ConnectionComponent {
   Optional<ConnectionComponent> internalIntersects(Point position);
 
   CreationType creationType();
+
+  Point getStartPosition();
+
+  Point getEndPosition();
 }

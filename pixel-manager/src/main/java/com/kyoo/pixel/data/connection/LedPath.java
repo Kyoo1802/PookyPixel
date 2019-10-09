@@ -45,6 +45,11 @@ public final class LedPath implements ConnectionComponent {
     return CreationType.MULTI_POINT;
   }
 
+  @Override
+  public Point getEndPosition() {
+    return null;
+  }
+
   public void addLed(Led led) {
 
   }

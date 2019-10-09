@@ -23,8 +23,14 @@ public final class SquarePanel implements ConnectionComponent {
 
   @Override
   public boolean intersects(int x, int y) {
-    Rectangle tempRect = new Rectangle();
-    return tempRect.contains(new Point(x,y));
+    if(endPosition.isPresent()){
+      if(startPosition.x<=x && x<=endPosition.get().x){
+        if(startPosition.y<=y && y<=endPosition.get().y){
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   @Override
@@ -55,5 +61,13 @@ public final class SquarePanel implements ConnectionComponent {
         this.leds.put(ledPoint, new Led(ledPoint, this));
       }
     }
+  }
+
+  public Point getStartPosition(){
+    return startPosition;
+  }
+
+  public Point getEndPosition(){
+    return endPosition.get();
   }
 }

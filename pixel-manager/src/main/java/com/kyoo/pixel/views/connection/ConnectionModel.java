@@ -60,8 +60,10 @@ public final class ConnectionModel {
     switch (connectionAction) {
       case NO_ACTION:
         selectComponent(idxPoint);
+        break;
       case DELETE:
         deleteComponent();
+        break;
       case DRAW:
         if (beingCreatedComponent.isEmpty()) {
           startComponent(idxPoint);
@@ -70,6 +72,9 @@ public final class ConnectionModel {
         } else {
           endComponent(idxPoint);
         }
+        break;
+      default:
+        log.error("Invalid action to handle");
     }
   }
 
@@ -77,10 +82,12 @@ public final class ConnectionModel {
     if (selectedComponent.isPresent() && selectedComponent.get()
         .intersects(idxPoint.x, idxPoint.y)) {
       selectedComponent.get().internalSelect(idxPoint.x, idxPoint.y);
+      return;
     }
     for (ConnectionComponent component : createdComponents.all()) {
       if (component.intersects(idxPoint.x, idxPoint.y)) {
         selectedComponent = Optional.of(component);
+        return;
       }
     }
     selectedComponent = Optional.empty();
@@ -123,7 +130,7 @@ public final class ConnectionModel {
         ledPath.addLed(new Led(idxPoint, ledPath));
         break;
       default:
-        log.error("Invalid case, when starting a component: " + connectionAction);
+        log.error("Invalid case, when continue a component: " + connectionAction);
     }
   }
 
@@ -142,7 +149,7 @@ public final class ConnectionModel {
         beingCreatedComponent = Optional.empty();
         break;
       default:
-        log.error("Invalid case, when starting a component: " + connectionAction);
+        log.error("Invalid case, when ending a component: " + connectionAction);
     }
   }
 

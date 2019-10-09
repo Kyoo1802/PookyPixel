@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -77,15 +78,33 @@ public final class ConnectionCanvasRenderer {
     if (connectionViewModel.getConnectionModel().getCreatedComponents().all().isEmpty()) {
       return;
     }
+    Optional<ConnectionComponent> selectedComponent =
+        connectionViewModel.getConnectionModel().getSelectedComponent();
     for (ConnectionComponent cc :
         connectionViewModel.getConnectionModel().getCreatedComponents().all()) {
+
+      if(selectedComponent.isPresent()  && selectedComponent.get()==cc){
+
+        String sizeText = String
+            .format("[%d, %d]", cc.getEndPosition().x - cc.getStartPosition().x + 1,
+                cc.getEndPosition().y - cc.getStartPosition().y + 1);
+
+        Point startCanvasPosition = PositionUtils.toCanvasPosition(cc.getStartPosition());
+        Point endCanvasPosition = PositionUtils.toCanvasPosition(cc.getEndPosition());
+
+        DrawUtils.drawMouseText(gc, connectionProperties.getSelectColor(), endCanvasPosition,
+            sizeText);
+        Dimension selectSize = new Dimension(endCanvasPosition.x - startCanvasPosition.x +PositionUtils.HALF_SQUARE_LENGTH*3 ,
+            endCanvasPosition.y - startCanvasPosition.y +PositionUtils.HALF_SQUARE_LENGTH*3);
+        DrawUtils.selectRect(gc, connectionProperties.getSelectColor(), startCanvasPosition, selectSize);
+      }
       switch (cc.connectionType()) {
         case SQUARE_PANEL:
           SquarePanel sp = (SquarePanel) cc;
           int idx = 0;
           for (Led led : sp.getLeds().values()) {
             Point ledCanvasPosition = PositionUtils
-                .toCanvasStartPosition(led.getIdxPosition().y, led.getIdxPosition().x);
+                .toCanvasPosition(led.getIdxPosition().y, led.getIdxPosition().x);
             String color;
             if (idx == 0) {
               color = connectionProperties.getLedStartColor();
@@ -110,14 +129,14 @@ public final class ConnectionCanvasRenderer {
     ConnectionComponent beingCreatedComponent =
         connectionViewModel.getConnectionModel().getBeingCreatedComponent().get();
     Point mouseCanvasPosition = PositionUtils
-        .toCanvasStartPosition(connectionViewModel.positionProperty().get());
+        .toRoundPosition(connectionViewModel.positionProperty().get());
     Point mouseIdxPosition =
         PositionUtils.toIdxPosition(new Point(mouseCanvasPosition.x, mouseCanvasPosition.y));
 
     switch (beingCreatedComponent.connectionType()) {
       case SQUARE_PANEL:
         SquarePanel panel = (SquarePanel) beingCreatedComponent;
-        Point panelCanvasPosition = PositionUtils.toCanvasStartPosition(
+        Point panelCanvasPosition = PositionUtils.toCanvasPosition(
             panel.getStartPosition().y, panel.getStartPosition().x);
 
         DrawUtils.drawLed(gc, connectionProperties.getLedStartColor(), panelCanvasPosition);
@@ -139,7 +158,7 @@ public final class ConnectionCanvasRenderer {
 
   private void drawMouse(GraphicsContext gc) {
     Point mouseSquare = PositionUtils
-        .toCanvasStartPosition(connectionViewModel.positionProperty().get());
+        .toRoundPosition(connectionViewModel.positionProperty().get());
 
     switch (connectionViewModel.getConnectionModel().getConnectionAction()) {
       case NO_ACTION:

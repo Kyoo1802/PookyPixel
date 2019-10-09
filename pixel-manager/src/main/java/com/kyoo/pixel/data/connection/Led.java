@@ -41,4 +41,14 @@ public class Led implements ConnectionComponent {
   public CreationType creationType() {
     return CreationType.ONE_POINT;
   }
+
+  @Override
+  public Point getStartPosition() {
+    return null;
+  }
+
+  @Override
+  public Point getEndPosition() {
+    return null;
+  }
 }

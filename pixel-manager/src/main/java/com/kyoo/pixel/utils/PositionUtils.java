@@ -13,13 +13,17 @@ public final class PositionUtils {
     return new Point(j, i);
   }
 
-  public static Point toCanvasStartPosition(Point mousePosition) {
+  public static Point toRoundPosition(Point mousePosition) {
     int mouseX2 = toStartCanvas(mousePosition.x);
     int mouseY2 = toStartCanvas(mousePosition.y);
     return new Point(mouseX2, mouseY2);
   }
 
-  public static Point toCanvasStartPosition(int i, int j) {
+  public static Point toCanvasPosition(Point mousePosition){
+    return toCanvasPosition(mousePosition.y, mousePosition.x);
+  }
+
+  public static Point toCanvasPosition(int i, int j) {
     int x = toCanvas(j);
     int y = toCanvas(i);
     return new Point(x, y);

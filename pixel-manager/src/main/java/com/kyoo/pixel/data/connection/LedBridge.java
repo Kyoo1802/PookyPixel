@@ -33,6 +33,16 @@ public class LedBridge implements ConnectionComponent {
     return null;
   }
 
+  @Override
+  public Point getStartPosition() {
+    return null;
+  }
+
+  @Override
+  public Point getEndPosition() {
+    return null;
+  }
+
   public void endComponent(Point point) {
 
   }
