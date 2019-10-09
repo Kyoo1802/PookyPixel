@@ -1,6 +1,7 @@
 package com.kyoo.pixel.data.connection;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 import lombok.Data;
@@ -22,12 +23,13 @@ public final class SquarePanel implements ConnectionComponent {
 
   @Override
   public boolean intersects(int x, int y) {
-    return false;
+    Rectangle tempRect = new Rectangle();
+    return tempRect.contains(new Point(x,y));
   }
 
   @Override
   public boolean internalSelect(int x, int y) {
-    return false;
+    return leds.containsKey(new Point(x,y));
   }
 
   @Override

@@ -5,6 +5,7 @@ import com.kyoo.pixel.data.connection.ConnectionComponent;
 import com.kyoo.pixel.data.connection.ConnectionProperties;
 import com.kyoo.pixel.data.connection.Led;
 import com.kyoo.pixel.data.connection.SquarePanel;
+import com.kyoo.pixel.utils.DrawUtils;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -13,16 +14,10 @@ import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public final class ConnectionCanvasRenderer {
-
-  public static final int DOT_SIZE = 2;
-  public static final double LINE_WIDTH = 2;
-  public static final double MAX_HORIZONTAL_LEDS = 800;
-  public static final double MAX_VERTICAL_LEDS = 600;
 
   private ConnectionViewModel connectionViewModel;
   private BufferedImage background;
@@ -35,6 +30,11 @@ public final class ConnectionCanvasRenderer {
     this.connectionViewModel.canvasWidthProperty().addListener(v -> recreateBackground());
     this.connectionViewModel.canvasHeightProperty().addListener(v -> recreateBackground());
     this.connectionProperties = connectionProperties;
+  }
+
+  private static Point getLedPanelPosition(Point canvasPosition) {
+    return new Point(canvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH / 2,
+        canvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH / 2);
   }
 
   public void render(Canvas connectionCanvas) {
@@ -60,24 +60,16 @@ public final class ConnectionCanvasRenderer {
     if (canvasDimension.width * canvasDimension.height == 0) {
       return;
     }
+
     BufferedImage bufferedImage =
         new BufferedImage(canvasDimension.width, canvasDimension.height,
             BufferedImage.TYPE_INT_RGB);
-    Graphics2D graphics2D = (Graphics2D) bufferedImage.getGraphics();
 
-    graphics2D.setColor(java.awt.Color.decode(connectionProperties.getBackgroundColor()));
-    graphics2D.fillRect(0, 0, canvasDimension.width, canvasDimension.height);
-    graphics2D.setColor(java.awt.Color.decode(connectionProperties.getBackgroundDotsColor()));
-    for (int i = 0; i < MAX_HORIZONTAL_LEDS; i++) {
-      for (int j = 0; j < MAX_VERTICAL_LEDS; j++) {
-        Point mousePoint = PositionUtils.toCanvasStartPosition(i, j);
-        graphics2D.fillOval(mousePoint.x + PositionUtils.HALF_SQUARE_LENGTH - 1,
-            mousePoint.y + PositionUtils.HALF_SQUARE_LENGTH - 1,
-            DOT_SIZE
-            , DOT_SIZE);
-      }
-    }
+    Graphics2D graphics2D = (Graphics2D) bufferedImage.getGraphics();
+    DrawUtils.drawBackground(graphics2D, connectionProperties.getBackgroundColor(),
+        connectionProperties.getBackgroundDotsColor(), canvasDimension);
     graphics2D.dispose();
+
     background = bufferedImage;
   }
 
@@ -92,17 +84,17 @@ public final class ConnectionCanvasRenderer {
           SquarePanel sp = (SquarePanel) cc;
           int idx = 0;
           for (Led led : sp.getLeds().values()) {
-            Point canvasStartPosition = PositionUtils
-                .toCanvasStartPosition(led.getPosition().y, led.getPosition().x);
+            Point ledCanvasPosition = PositionUtils
+                .toCanvasStartPosition(led.getIdxPosition().y, led.getIdxPosition().x);
+            String color;
             if (idx == 0) {
-              gc.setFill(Color.web(connectionProperties.getLedStartColor()));
+              color = connectionProperties.getLedStartColor();
             } else if (idx == sp.getLeds().size() - 1) {
-              gc.setFill(Color.web(connectionProperties.getLedEndColor()));
+              color = connectionProperties.getLedEndColor();
             } else {
-              gc.setFill(Color.web(connectionProperties.getLedOffColor()));
+              color = connectionProperties.getLedOffColor();
             }
-            gc.fillOval(canvasStartPosition.x, canvasStartPosition.y, PositionUtils.SQUARE_LENGTH
-                , PositionUtils.SQUARE_LENGTH);
+            DrawUtils.drawLed(gc, color, getLedPanelPosition(ledCanvasPosition));
             idx++;
           }
         default:
@@ -111,31 +103,36 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void currentComponent(GraphicsContext gc) {
-    Point mouseSquare = PositionUtils
-        .toCanvasStartPosition(connectionViewModel.positionProperty().get());
-
     if (connectionViewModel.getConnectionModel().getBeingCreatedComponent().isEmpty()) {
       return;
     }
-    ConnectionComponent cc =
-        connectionViewModel.getConnectionModel().getBeingCreatedComponent().get();
-    switch (cc.connectionType()) {
-      case SQUARE_PANEL:
-        SquarePanel sp = (SquarePanel) cc;
-        Point startPosition = PositionUtils.toCanvasStartPosition(
-            sp.getStartPosition().y, sp.getStartPosition().x);
-        gc.setFill(Color.web(connectionProperties.getLedStartColor()));
-        gc.fillOval(startPosition.x,
-            startPosition.y,
-            PositionUtils.SQUARE_LENGTH,
-            PositionUtils.SQUARE_LENGTH);
 
-        gc.setStroke(Color.web(connectionProperties.getSelectColor()));
-        gc.setLineWidth(1);
-        gc.setLineDashes(10);
-        gc.strokeRect(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
-            startPosition.y + PositionUtils.HALF_SQUARE_LENGTH,
-            mouseSquare.x - startPosition.x, mouseSquare.y - startPosition.y);
+    ConnectionComponent beingCreatedComponent =
+        connectionViewModel.getConnectionModel().getBeingCreatedComponent().get();
+    Point mouseCanvasPosition = PositionUtils
+        .toCanvasStartPosition(connectionViewModel.positionProperty().get());
+    Point mouseIdxPosition =
+        PositionUtils.toIdxPosition(new Point(mouseCanvasPosition.x, mouseCanvasPosition.y));
+
+    switch (beingCreatedComponent.connectionType()) {
+      case SQUARE_PANEL:
+        SquarePanel panel = (SquarePanel) beingCreatedComponent;
+        Point panelCanvasPosition = PositionUtils.toCanvasStartPosition(
+            panel.getStartPosition().y, panel.getStartPosition().x);
+
+        DrawUtils.drawLed(gc, connectionProperties.getLedStartColor(), panelCanvasPosition);
+
+        String sizeText = String
+            .format("[%d, %d]", mouseIdxPosition.x - panel.getStartPosition().x + 1,
+                mouseIdxPosition.y - panel.getStartPosition().y + 1);
+        DrawUtils.drawMouseText(gc, connectionProperties.getSelectColor(), mouseCanvasPosition,
+            sizeText);
+
+        Point selectPosition = new Point(panelCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
+            panelCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
+        Dimension selectSize = new Dimension(mouseCanvasPosition.x - panelCanvasPosition.x,
+            mouseCanvasPosition.y - panelCanvasPosition.y);
+        DrawUtils.selectRect(gc, connectionProperties.getSelectColor(), selectPosition, selectSize);
       default:
     }
   }
@@ -146,32 +143,21 @@ public final class ConnectionCanvasRenderer {
 
     switch (connectionViewModel.getConnectionModel().getConnectionAction()) {
       case NO_ACTION:
-        gc.setLineWidth(LINE_WIDTH);
-        gc.setStroke(Color.web(connectionProperties.getNoActionColor()));
-        gc.strokeRect(mouseSquare.x,
-            mouseSquare.y,
-            PositionUtils.SQUARE_LENGTH,
-            PositionUtils.SQUARE_LENGTH);
+        DrawUtils.drawMousePointer(gc, connectionProperties.getNoActionColor(), mouseSquare);
         break;
       case DRAW:
         switch (connectionViewModel.getConnectionModel().getDrawAction()) {
           case DRAW_SQUARE_PANEL:
             if (connectionViewModel.getConnectionModel().getBeingCreatedComponent().isEmpty()) {
-              gc.setFill(Color.web(connectionProperties.getLedStartColor()));
-              gc.fillOval(mouseSquare.x,
-                  mouseSquare.y,
-                  PositionUtils.SQUARE_LENGTH,
-                  PositionUtils.SQUARE_LENGTH);
+              DrawUtils.drawLed(gc, connectionProperties.getLedStartColor(), mouseSquare);
             } else {
-              gc.setFill(Color.web(connectionProperties.getLedEndColor()));
-              gc.fillOval(mouseSquare.x,
-                  mouseSquare.y,
-                  PositionUtils.SQUARE_LENGTH,
-                  PositionUtils.SQUARE_LENGTH);
+              DrawUtils.drawLed(gc, connectionProperties.getLedEndColor(), mouseSquare);
             }
             break;
           default:
         }
+        break;
+      default:
     }
   }
 }

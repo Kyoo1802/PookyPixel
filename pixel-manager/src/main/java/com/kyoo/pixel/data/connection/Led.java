@@ -13,7 +13,7 @@ public class Led implements ConnectionComponent {
     this.parentComponent = parentComponent;
   }
 
-  public Point getPosition() {
+  public Point getIdxPosition() {
     return position;
   }
 

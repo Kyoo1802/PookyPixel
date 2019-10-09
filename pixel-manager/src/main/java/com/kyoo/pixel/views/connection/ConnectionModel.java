@@ -73,19 +73,17 @@ public final class ConnectionModel {
     }
   }
 
-  private boolean selectComponent(Point idxPoint) {
+  private void selectComponent(Point idxPoint) {
     if (selectedComponent.isPresent() && selectedComponent.get()
         .intersects(idxPoint.x, idxPoint.y)) {
-      return selectedComponent.get().internalSelect(idxPoint.x, idxPoint.y);
+      selectedComponent.get().internalSelect(idxPoint.x, idxPoint.y);
     }
     for (ConnectionComponent component : createdComponents.all()) {
       if (component.intersects(idxPoint.x, idxPoint.y)) {
         selectedComponent = Optional.of(component);
-        return true;
       }
     }
     selectedComponent = Optional.empty();
-    return false;
   }
 
   private void startComponent(@Nonnull Point idxPoint) {
