@@ -28,7 +28,7 @@ public class Led implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType connectionType() {
+  public ComponentType getConnectionType() {
     return ComponentType.LED_PATH;
   }
 
@@ -38,17 +38,22 @@ public class Led implements ConnectionComponent {
   }
 
   @Override
-  public CreationType creationType() {
+  public long getId() {
+    return 0;
+  }
+
+  @Override
+  public CreationType getCreationType() {
     return CreationType.ONE_POINT;
   }
 
   @Override
-  public Point getStartPosition() {
+  public Point getStartIdxPosition() {
     return null;
   }
 
   @Override
-  public Point getEndPosition() {
+  public Point getEndIdxPosition() {
     return null;
   }
 }

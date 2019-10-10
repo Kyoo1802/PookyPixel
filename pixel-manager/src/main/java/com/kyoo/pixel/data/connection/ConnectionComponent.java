@@ -9,13 +9,15 @@ public interface ConnectionComponent {
 
   boolean internalSelect(int x, int y);
 
-  ComponentType connectionType();
-
   Optional<ConnectionComponent> internalIntersects(Point position);
 
-  CreationType creationType();
+  long getId();
 
-  Point getStartPosition();
+  CreationType getCreationType();
 
-  Point getEndPosition();
+  ComponentType getConnectionType();
+
+  Point getStartIdxPosition();
+
+  Point getEndIdxPosition();
 }

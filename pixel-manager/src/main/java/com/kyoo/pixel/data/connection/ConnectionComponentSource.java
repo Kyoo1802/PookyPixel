@@ -1,48 +1,44 @@
 package com.kyoo.pixel.data.connection;
 
 import java.awt.Point;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class ConnectionComponentSource {
 
-  private List<ConnectionComponent> allComponents;
-  private Map<ComponentType, List<ConnectionComponent>> componentsView;
+  private Map<ComponentType, Map<Long, ConnectionComponent>> allComponents;
 
   public ConnectionComponentSource() {
-    allComponents = new CopyOnWriteArrayList<>();
-    componentsView = new HashMap<>();
+    allComponents = new ConcurrentHashMap<>();
   }
 
   public synchronized void addComponent(ConnectionComponent component) {
-    allComponents.add(component);
-    if (!componentsView.containsKey(component.connectionType())) {
-      componentsView.put(component.connectionType(), new LinkedList<>());
+    if (!allComponents.containsKey(component.getConnectionType())) {
+      allComponents.put(component.getConnectionType(), new LinkedHashMap<>());
     }
-    componentsView.get(component.connectionType()).add(component);
-  }
-
-  public synchronized void removeComponent(ConnectionComponent component) {
-    allComponents.remove(component);
-    if (componentsView.containsKey(component.connectionType())) {
-      componentsView.get(component.connectionType()).remove(component);
+    if (!allComponents.get(component.getConnectionType()).containsKey(component.getId())) {
+      allComponents.get(component.getConnectionType()).put(component.getId(), component);
     }
   }
 
-  public synchronized List<ConnectionComponent> all() {
+  public synchronized void removeComponent(ComponentType componentType, long id) {
+    if (allComponents.containsKey(componentType)) {
+      allComponents.get(componentType).remove(id);
+    }
+  }
+
+  public synchronized Map<ComponentType, Map<Long, ConnectionComponent>> all() {
     return allComponents;
   }
 
   public Optional<Led> lookup(ComponentType componentType, Point point) {
     switch (componentType) {
       case LED_PATH:
-        if (componentsView.containsKey(ComponentType.SQUARE_PANEL)) {
-          for (ConnectionComponent panelComponent : componentsView
-              .get(ComponentType.SQUARE_PANEL)) {
+        if (allComponents.containsKey(ComponentType.SQUARE_PANEL)) {
+          for (ConnectionComponent panelComponent : allComponents
+              .get(ComponentType.SQUARE_PANEL).values()) {
             if (panelComponent.intersects(point.x, point.y)) {
               Optional<ConnectionComponent> internalComponent =
                   panelComponent.internalIntersects(point);

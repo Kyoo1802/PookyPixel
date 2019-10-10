@@ -3,10 +3,12 @@ package com.kyoo.pixel.data.connection;
 import java.awt.Point;
 import java.util.Optional;
 
-public class PortComponent implements ConnectionComponent {
+public final class PortComponent implements ConnectionComponent {
 
+  private long id;
 
-  public PortComponent(int idx, Point position) {
+  public PortComponent(int id, Point position) {
+    this.id = id;
   }
 
   @Override
@@ -20,7 +22,7 @@ public class PortComponent implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType connectionType() {
+  public ComponentType getConnectionType() {
     return null;
   }
 
@@ -30,17 +32,22 @@ public class PortComponent implements ConnectionComponent {
   }
 
   @Override
-  public CreationType creationType() {
+  public long getId() {
+    return id;
+  }
+
+  @Override
+  public CreationType getCreationType() {
     return CreationType.ONE_POINT;
   }
 
   @Override
-  public Point getStartPosition() {
+  public Point getStartIdxPosition() {
     return null;
   }
 
   @Override
-  public Point getEndPosition() {
+  public Point getEndIdxPosition() {
     return null;
   }
 }

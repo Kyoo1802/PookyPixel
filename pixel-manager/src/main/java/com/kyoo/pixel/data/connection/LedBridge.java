@@ -19,7 +19,7 @@ public class LedBridge implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType connectionType() {
+  public ComponentType getConnectionType() {
     return null;
   }
 
@@ -29,17 +29,22 @@ public class LedBridge implements ConnectionComponent {
   }
 
   @Override
-  public CreationType creationType() {
+  public long getId() {
+    return 0;
+  }
+
+  @Override
+  public CreationType getCreationType() {
     return null;
   }
 
   @Override
-  public Point getStartPosition() {
+  public Point getStartIdxPosition() {
     return null;
   }
 
   @Override
-  public Point getEndPosition() {
+  public Point getEndIdxPosition() {
     return null;
   }
 

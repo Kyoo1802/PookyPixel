@@ -31,7 +31,12 @@ public final class LedPath implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType connectionType() {
+  public ComponentType getConnectionType() {
+    return null;
+  }
+
+  @Override
+  public Point getStartIdxPosition() {
     return null;
   }
 
@@ -41,12 +46,17 @@ public final class LedPath implements ConnectionComponent {
   }
 
   @Override
-  public CreationType creationType() {
+  public long getId() {
+    return 0;
+  }
+
+  @Override
+  public CreationType getCreationType() {
     return CreationType.MULTI_POINT;
   }
 
   @Override
-  public Point getEndPosition() {
+  public Point getEndIdxPosition() {
     return null;
   }
 

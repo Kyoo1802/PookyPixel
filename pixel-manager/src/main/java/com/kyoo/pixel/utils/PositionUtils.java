@@ -19,7 +19,7 @@ public final class PositionUtils {
     return new Point(mouseX2, mouseY2);
   }
 
-  public static Point toCanvasPosition(Point mousePosition){
+  public static Point toCanvasPosition(Point mousePosition) {
     return toCanvasPosition(mousePosition.y, mousePosition.x);
   }
 
