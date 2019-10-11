@@ -2,12 +2,9 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
-import com.kyoo.pixel.connection.components.commands.DrawPanelCommand;
+import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
 import java.awt.Point;
-import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -32,6 +29,7 @@ public final class ConnectionViewModel {
 
   private ConnectionModel model;
   private ConnectionCommandManager actionManager;
+  private DrawingCommandHandler drawingCommandHandler;
 
   @Inject
   public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager actionManager) {
@@ -39,6 +37,7 @@ public final class ConnectionViewModel {
     this.actionManager = actionManager;
     this.createSquarePanelSelected
         .addListener((observable, oldValue, newValue) -> model.selectDrawSquare(newValue));
+    this.drawingCommandHandler = new DrawingCommandHandler(this);
   }
 
   public void updateCursorPosition() {
@@ -54,7 +53,8 @@ public final class ConnectionViewModel {
         handleDeleteAction();
         break;
       case DRAW:
-        handleDrawAction();
+        drawingCommandHandler.handleDrawAction();
+        break;
       default:
         log.error("Invalid action to handle");
     }
@@ -64,46 +64,5 @@ public final class ConnectionViewModel {
   }
 
   private void handleDeleteAction() {
-  }
-
-  private void handleDrawAction() {
-    Point actionPosition = mousePosition.get();
-    if (model.getBeingCreatedComponent().isEmpty()) {
-      switch (model.getDrawAction()) {
-        case DRAW_SQUARE_PANEL:
-          DrawPanelCommandRequest request =
-              DrawPanelCommandRequest.builder()
-                  .id(model.generateId(ComponentType.SQUARE_PANEL))
-                  .componentType(ComponentType.SQUARE_PANEL)
-                  .startIdxPosition(actionPosition).build();
-          model.setBeingCreatedComponent(Optional.of(request));
-          break;
-        default:
-          log.error("Invalid Draw Action");
-      }
-    } else {
-      executeDrawingCommand(actionPosition);
-    }
-
-  }
-
-  private void executeDrawingCommand(Point actionPosition) {
-    switch (model.getDrawAction()) {
-      case DRAW_SQUARE_PANEL:
-        DrawPanelCommandRequest request =
-            ((DrawPanelCommandRequest) model.getBeingCreatedComponent().get())
-                .toBuilder()
-                .endIdxPosition(actionPosition)
-                .build();
-        DrawPanelCommand panelAction = new DrawPanelCommand(model, request);
-        actionManager.execute(panelAction);
-        break;
-      default:
-        log.error("Invalid Draw Action");
-    }
-  }
-
-  public ConnectionModel getConnectionModel() {
-    return model;
   }
 }

@@ -22,16 +22,16 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class ConnectionCanvasRenderer {
 
-  private ConnectionViewModel connectionViewModel;
+  private ConnectionViewModel viewModel;
   private BufferedImage background;
   private ConnectionProperties connectionProperties;
 
   @Inject
-  public ConnectionCanvasRenderer(ConnectionViewModel connectionViewModel,
+  public ConnectionCanvasRenderer(ConnectionViewModel viewModel,
       ConnectionProperties connectionProperties) {
-    this.connectionViewModel = connectionViewModel;
-    this.connectionViewModel.getCanvasWidth().addListener(v -> recreateBackground());
-    this.connectionViewModel.getCanvasHeight().addListener(v -> recreateBackground());
+    this.viewModel = viewModel;
+    this.viewModel.getCanvasWidth().addListener(v -> recreateBackground());
+    this.viewModel.getCanvasHeight().addListener(v -> recreateBackground());
     this.connectionProperties = connectionProperties;
   }
 
@@ -58,8 +58,8 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void recreateBackground() {
-    Dimension canvasDimension = new Dimension(connectionViewModel.getCanvasWidth().get(),
-        connectionViewModel.getCanvasHeight().get());
+    Dimension canvasDimension = new Dimension(viewModel.getCanvasWidth().get(),
+        viewModel.getCanvasHeight().get());
     if (canvasDimension.width * canvasDimension.height == 0) {
       return;
     }
@@ -77,13 +77,13 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void createdComponents(GraphicsContext gc) {
-    if (connectionViewModel.getConnectionModel().getCreatedComponents().all().isEmpty()) {
+    if (viewModel.getModel().getCreatedComponents().all().isEmpty()) {
       return;
     }
     Optional<ConnectionComponent> selectedComponent =
-        connectionViewModel.getConnectionModel().getSelectedComponent();
+        viewModel.getModel().getSelectedComponent();
     for (Map<Long, ConnectionComponent> components :
-        connectionViewModel.getConnectionModel().getCreatedComponents().all().values()) {
+        viewModel.getModel().getCreatedComponents().all().values()) {
       for (ConnectionComponent component : components.values()) {
         if (selectedComponent.isPresent() && selectedComponent.get() == component) {
 
@@ -130,28 +130,28 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void currentComponent(GraphicsContext gc) {
-    if (connectionViewModel.getConnectionModel().getBeingCreatedComponent().isEmpty()) {
+    if (viewModel.getModel().getBeingCreatedComponent().isEmpty()) {
       return;
     }
 
     ConnectionCommandRequest beingCreatedComponent =
-        connectionViewModel.getConnectionModel().getBeingCreatedComponent().get();
+        viewModel.getModel().getBeingCreatedComponent().get();
     Point mouseCanvasPosition = PositionUtils
-        .toRoundPosition(connectionViewModel.getMousePosition().get());
+        .toRoundPosition(viewModel.getMousePosition().get());
     Point mouseIdxPosition =
         PositionUtils.toIdxPosition(new Point(mouseCanvasPosition.x, mouseCanvasPosition.y));
 
     switch (beingCreatedComponent.getComponentType()) {
       case SQUARE_PANEL:
-        DrawPanelCommandRequest panel = (DrawPanelCommandRequest) beingCreatedComponent;
+        DrawPanelCommandRequest squarePanelRequest = (DrawPanelCommandRequest) beingCreatedComponent;
         Point panelCanvasPosition = PositionUtils.toCanvasPosition(
-            panel.getStartIdxPosition().y, panel.getStartIdxPosition().x);
+            squarePanelRequest.getStartIdxPosition().y, squarePanelRequest.getStartIdxPosition().x);
 
         DrawUtils.drawLed(gc, connectionProperties.getLedStartColor(), panelCanvasPosition);
 
         String sizeText = String
-            .format("[%d, %d]", mouseIdxPosition.x - panel.getStartIdxPosition().x + 1,
-                mouseIdxPosition.y - panel.getStartIdxPosition().y + 1);
+            .format("[%d, %d]", mouseIdxPosition.x - squarePanelRequest.getStartIdxPosition().x + 1,
+                mouseIdxPosition.y - squarePanelRequest.getStartIdxPosition().y + 1);
         DrawUtils.drawMouseText(gc, connectionProperties.getSelectColor(), mouseCanvasPosition,
             sizeText);
 
@@ -160,22 +160,24 @@ public final class ConnectionCanvasRenderer {
         Dimension selectSize = new Dimension(mouseCanvasPosition.x - panelCanvasPosition.x,
             mouseCanvasPosition.y - panelCanvasPosition.y);
         DrawUtils.selectRect(gc, connectionProperties.getSelectColor(), selectPosition, selectSize);
+        break;
       default:
+        log.error("Invalid current component being created: "+beingCreatedComponent.getComponentType());
     }
   }
 
   private void drawMousePointer(GraphicsContext gc) {
     Point mouseSquare = PositionUtils
-        .toRoundPosition(connectionViewModel.getMousePosition().get());
+        .toRoundPosition(viewModel.getMousePosition().get());
 
-    switch (connectionViewModel.getConnectionModel().getConnectionAction()) {
+    switch (viewModel.getModel().getConnectionAction()) {
       case NO_ACTION:
         DrawUtils.drawMousePointer(gc, connectionProperties.getNoActionColor(), mouseSquare);
         break;
       case DRAW:
-        switch (connectionViewModel.getConnectionModel().getDrawAction()) {
+        switch (viewModel.getModel().getDrawAction()) {
           case DRAW_SQUARE_PANEL:
-            if (connectionViewModel.getConnectionModel().getBeingCreatedComponent().isEmpty()) {
+            if (viewModel.getModel().getBeingCreatedComponent().isEmpty()) {
               DrawUtils.drawLed(gc, connectionProperties.getLedStartColor(), mouseSquare);
             } else {
               DrawUtils.drawLed(gc, connectionProperties.getLedEndColor(), mouseSquare);

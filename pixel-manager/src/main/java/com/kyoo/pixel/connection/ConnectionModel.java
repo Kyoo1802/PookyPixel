@@ -164,13 +164,13 @@ public final class ConnectionModel {
     }
   }
 
-  enum ConnectionAction {
+  public enum ConnectionAction {
     NO_ACTION,
     DELETE,
     DRAW,
   }
 
-  enum DrawAction {
+  public enum DrawAction {
     UNSET,
     DRAW_SQUARE_PANEL,
     DRAW_LED_PATH,
