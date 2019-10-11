@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j2;
 @Getter
 public final class ConnectionViewModel {
 
-  private BooleanProperty createPanelSelected =
+  private BooleanProperty createSquarePanelSelected =
       new SimpleBooleanProperty(false);
   private IntegerProperty canvasWidth =
       new SimpleIntegerProperty(0);
@@ -39,7 +39,7 @@ public final class ConnectionViewModel {
   public ConnectionViewModel(ConnectionModel model, ConnectionActionManager actionManager) {
     this.model = model;
     this.actionManager = actionManager;
-    this.createPanelSelected.addListener((observable, oldValue, newValue) ->
+    this.createSquarePanelSelected.addListener((observable, oldValue, newValue) ->
     {
       if (newValue) {
         model.selectAction(ConnectionAction.DRAW);
@@ -49,10 +49,6 @@ public final class ConnectionViewModel {
         model.selectDraw(DrawAction.UNSET);
       }
     });
-  }
-
-  public BooleanProperty createPanelSelectedProperty() {
-    return createPanelSelected;
   }
 
   public void updateCursorPosition() {

@@ -35,27 +35,21 @@ public class ConnectionView implements Initializable {
     // Initialize events
     connectionCanvas.onMouseMovedProperty().set(e -> {
       Point mousePosition = new Point((int) e.getX(), (int) e.getY());
-      connectionViewModel.getMousePosition().get()
-          .setLocation(mousePosition.x, mousePosition.y);
+      connectionViewModel.getMousePosition().set(mousePosition);
       connectionViewModel.updateCursorPosition();
-      log.debug("Mouse Moved: (%d, %d)", mousePosition.x, mousePosition.y);
+      log.debug("Mouse Moved: %s", mousePosition);
     });
     connectionCanvas.onMouseClickedProperty().set(e -> {
       Point mousePosition = new Point((int) e.getX(), (int) e.getY());
       connectionViewModel.handleComponentConnection();
-      log.debug("Mouse Clicked: (%d, %d)", mousePosition.x, mousePosition.y);
+      log.debug("Mouse Clicked: %s", mousePosition);
     });
-    connectionCanvas.onKeyTypedProperty().set(e -> {
-      log.debug("Key typed: %s", e.getSource());
-    });
+    connectionCanvas.onKeyTypedProperty().set(e -> log.debug("Key typed: %s", e.getSource()));
 
     // Initialize properties
-    connectionViewModel.getCanvasWidth().set((int) connectionCanvas.getWidth());
-    connectionCanvas.widthProperty().bindBidirectional(connectionViewModel.getCanvasWidth());
-    connectionViewModel.getCanvasHeight().set((int) connectionCanvas.getHeight());
-    connectionCanvas.heightProperty().bindBidirectional(connectionViewModel.getCanvasHeight());
-    createPanelBtn.selectedProperty()
-        .bindBidirectional(connectionViewModel.createPanelSelectedProperty());
+    connectionViewModel.getCanvasWidth().bindBidirectional(connectionCanvas.widthProperty());
+    connectionViewModel.getCanvasHeight().bindBidirectional(connectionCanvas.heightProperty());
+    connectionViewModel.getCreateSquarePanelSelected().bindBidirectional(createPanelBtn.selectedProperty());
 
     // Initialize animation Handler
     AnimationTimer timer = new AnimationTimer() {
