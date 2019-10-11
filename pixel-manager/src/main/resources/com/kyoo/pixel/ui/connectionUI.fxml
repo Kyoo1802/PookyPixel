@@ -10,7 +10,7 @@
   minHeight="-Infinity"
   minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
   xmlns="http://javafx.com/javafx/11.0.1"
-  fx:controller="com.kyoo.pixel.views.connection.ConnectionView">
+  fx:controller="com.kyoo.pixel.connection.ConnectionView">
   <children>
     <BorderPane>
       <center>

@@ -1,4 +1,4 @@
-package com.kyoo.pixel.views.connection;
+package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import java.awt.Point;
@@ -49,7 +49,8 @@ public class ConnectionView implements Initializable {
     // Initialize properties
     connectionViewModel.getCanvasWidth().bindBidirectional(connectionCanvas.widthProperty());
     connectionViewModel.getCanvasHeight().bindBidirectional(connectionCanvas.heightProperty());
-    connectionViewModel.getCreateSquarePanelSelected().bindBidirectional(createPanelBtn.selectedProperty());
+    connectionViewModel.getCreateSquarePanelSelected()
+        .bindBidirectional(createPanelBtn.selectedProperty());
 
     // Initialize animation Handler
     AnimationTimer timer = new AnimationTimer() {

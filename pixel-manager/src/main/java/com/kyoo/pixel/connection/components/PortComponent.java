@@ -1,20 +1,14 @@
-package com.kyoo.pixel.data.connection;
+package com.kyoo.pixel.connection.components;
 
 import java.awt.Point;
 import java.util.Optional;
 
-public class Led implements ConnectionComponent {
+public final class PortComponent implements ConnectionComponent {
 
-  private final ConnectionComponent parentComponent;
-  private Point position;
+  private long id;
 
-  public Led(Point position, ConnectionComponent parentComponent) {
-    this.position = position;
-    this.parentComponent = parentComponent;
-  }
-
-  public Point getIdxPosition() {
-    return position;
+  public PortComponent(long id, Point position) {
+    this.id = id;
   }
 
   @Override
@@ -29,7 +23,7 @@ public class Led implements ConnectionComponent {
 
   @Override
   public ComponentType getConnectionType() {
-    return ComponentType.LED_PATH;
+    return null;
   }
 
   @Override
@@ -39,7 +33,7 @@ public class Led implements ConnectionComponent {
 
   @Override
   public long getId() {
-    return 0;
+    return id;
   }
 
   @Override

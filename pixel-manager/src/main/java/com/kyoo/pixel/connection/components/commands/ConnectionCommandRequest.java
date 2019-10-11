@@ -1,17 +1,17 @@
-package com.kyoo.pixel.data.connection.actions;
+package com.kyoo.pixel.connection.components.commands;
 
-import com.kyoo.pixel.data.connection.ComponentType;
+import com.kyoo.pixel.connection.components.ComponentType;
 import java.awt.Point;
 import lombok.Builder;
 import lombok.Getter;
 
-public abstract class ConnectionActionRequest {
+public abstract class ConnectionCommandRequest {
 
   public abstract ComponentType getComponentType();
 
   @Getter
   @Builder(toBuilder = true)
-  public static class DrawPanelActionRequest extends ConnectionActionRequest {
+  public static class DrawPanelCommandRequest extends ConnectionCommandRequest {
 
     private long id;
     private Point startIdxPosition;
@@ -21,7 +21,7 @@ public abstract class ConnectionActionRequest {
 
   @Getter
   @Builder(toBuilder = true)
-  public static class SelectActionRequest extends ConnectionActionRequest {
+  public static class SelectCommandRequest extends ConnectionCommandRequest {
 
     private Point idxPosition;
     private ComponentType componentType;

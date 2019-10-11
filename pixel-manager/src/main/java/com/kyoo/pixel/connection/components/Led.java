@@ -1,11 +1,20 @@
-package com.kyoo.pixel.data.connection;
+package com.kyoo.pixel.connection.components;
 
 import java.awt.Point;
 import java.util.Optional;
 
-public class LedBridge implements ConnectionComponent {
+public class Led implements ConnectionComponent {
 
-  public LedBridge(int idx, Point mousePoint) {
+  private final ConnectionComponent parentComponent;
+  private Point position;
+
+  public Led(Point position, ConnectionComponent parentComponent) {
+    this.position = position;
+    this.parentComponent = parentComponent;
+  }
+
+  public Point getIdxPosition() {
+    return position;
   }
 
   @Override
@@ -20,7 +29,7 @@ public class LedBridge implements ConnectionComponent {
 
   @Override
   public ComponentType getConnectionType() {
-    return null;
+    return ComponentType.LED_PATH;
   }
 
   @Override
@@ -35,7 +44,7 @@ public class LedBridge implements ConnectionComponent {
 
   @Override
   public CreationType getCreationType() {
-    return null;
+    return CreationType.ONE_POINT;
   }
 
   @Override
@@ -46,9 +55,5 @@ public class LedBridge implements ConnectionComponent {
   @Override
   public Point getEndIdxPosition() {
     return null;
-  }
-
-  public void endComponent(Point point) {
-
   }
 }

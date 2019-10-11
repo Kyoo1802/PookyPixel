@@ -1,4 +1,4 @@
-package com.kyoo.pixel.data.connection;
+package com.kyoo.pixel.connection.components;
 
 public enum CreationType {
   ONE_POINT,

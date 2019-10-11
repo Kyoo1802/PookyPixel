@@ -1,4 +1,4 @@
-package com.kyoo.pixel.data.connection;
+package com.kyoo.pixel.connection;
 
 import com.google.inject.Singleton;
 import lombok.Builder;

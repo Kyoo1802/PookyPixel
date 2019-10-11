@@ -1,12 +1,11 @@
-package com.kyoo.pixel.views.connection;
+package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.data.connection.ConnectionComponent;
-import com.kyoo.pixel.data.connection.ConnectionProperties;
-import com.kyoo.pixel.data.connection.Led;
-import com.kyoo.pixel.data.connection.SquarePanel;
-import com.kyoo.pixel.data.connection.actions.ConnectionActionRequest;
-import com.kyoo.pixel.data.connection.actions.ConnectionActionRequest.DrawPanelActionRequest;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.Led;
+import com.kyoo.pixel.connection.components.SquarePanel;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
 import com.kyoo.pixel.utils.DrawUtils;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
@@ -135,7 +134,7 @@ public final class ConnectionCanvasRenderer {
       return;
     }
 
-    ConnectionActionRequest beingCreatedComponent =
+    ConnectionCommandRequest beingCreatedComponent =
         connectionViewModel.getConnectionModel().getBeingCreatedComponent().get();
     Point mouseCanvasPosition = PositionUtils
         .toRoundPosition(connectionViewModel.getMousePosition().get());
@@ -144,7 +143,7 @@ public final class ConnectionCanvasRenderer {
 
     switch (beingCreatedComponent.getComponentType()) {
       case SQUARE_PANEL:
-        DrawPanelActionRequest panel = (DrawPanelActionRequest) beingCreatedComponent;
+        DrawPanelCommandRequest panel = (DrawPanelCommandRequest) beingCreatedComponent;
         Point panelCanvasPosition = PositionUtils.toCanvasPosition(
             panel.getStartIdxPosition().y, panel.getStartIdxPosition().x);
 

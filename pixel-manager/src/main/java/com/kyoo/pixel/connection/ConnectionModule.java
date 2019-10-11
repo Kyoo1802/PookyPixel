@@ -1,8 +1,7 @@
-package com.kyoo.pixel.views.connection;
+package com.kyoo.pixel.connection;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.kyoo.pixel.data.connection.ConnectionProperties;
 import java.io.IOException;
 import java.util.Properties;
 import lombok.extern.log4j.Log4j2;

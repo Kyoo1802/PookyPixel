@@ -1,4 +1,4 @@
-package com.kyoo.pixel.data.connection;
+package com.kyoo.pixel.connection.components;
 
 import java.awt.Point;
 import java.util.LinkedHashMap;
@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class ConnectionComponentSource {
+public final class ConnectionComponentManager {
 
   private Map<ComponentType, Map<Long, ConnectionComponent>> allComponents;
 
-  public ConnectionComponentSource() {
+  public ConnectionComponentManager() {
     allComponents = new ConcurrentHashMap<>();
   }
 

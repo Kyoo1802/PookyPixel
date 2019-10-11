@@ -1,13 +1,11 @@
-package com.kyoo.pixel.views.connection;
+package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.kyoo.pixel.data.connection.ComponentType;
-import com.kyoo.pixel.data.connection.actions.ConnectionActionManager;
-import com.kyoo.pixel.data.connection.actions.ConnectionActionRequest.DrawPanelActionRequest;
-import com.kyoo.pixel.data.connection.actions.DrawPanelAction;
-import com.kyoo.pixel.views.connection.ConnectionModel.ConnectionAction;
-import com.kyoo.pixel.views.connection.ConnectionModel.DrawAction;
+import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
+import com.kyoo.pixel.connection.components.commands.DrawPanelCommand;
 import java.awt.Point;
 import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
@@ -33,22 +31,14 @@ public final class ConnectionViewModel {
   private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>(new Point(0, 0));
 
   private ConnectionModel model;
-  private ConnectionActionManager actionManager;
+  private ConnectionCommandManager actionManager;
 
   @Inject
-  public ConnectionViewModel(ConnectionModel model, ConnectionActionManager actionManager) {
+  public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager actionManager) {
     this.model = model;
     this.actionManager = actionManager;
-    this.createSquarePanelSelected.addListener((observable, oldValue, newValue) ->
-    {
-      if (newValue) {
-        model.selectAction(ConnectionAction.DRAW);
-        model.selectDraw(DrawAction.DRAW_SQUARE_PANEL);
-      } else {
-        model.selectAction(ConnectionAction.NO_ACTION);
-        model.selectDraw(DrawAction.UNSET);
-      }
-    });
+    this.createSquarePanelSelected
+        .addListener((observable, oldValue, newValue) -> model.selectDrawSquare(newValue));
   }
 
   public void updateCursorPosition() {
@@ -81,8 +71,10 @@ public final class ConnectionViewModel {
     if (model.getBeingCreatedComponent().isEmpty()) {
       switch (model.getDrawAction()) {
         case DRAW_SQUARE_PANEL:
-          DrawPanelActionRequest request =
-              DrawPanelActionRequest.builder().id(1).componentType(ComponentType.SQUARE_PANEL)
+          DrawPanelCommandRequest request =
+              DrawPanelCommandRequest.builder()
+                  .id(model.generateId(ComponentType.SQUARE_PANEL))
+                  .componentType(ComponentType.SQUARE_PANEL)
                   .startIdxPosition(actionPosition).build();
           model.setBeingCreatedComponent(Optional.of(request));
           break;
@@ -98,12 +90,12 @@ public final class ConnectionViewModel {
   private void executeDrawingCommand(Point actionPosition) {
     switch (model.getDrawAction()) {
       case DRAW_SQUARE_PANEL:
-        DrawPanelActionRequest request =
-            ((DrawPanelActionRequest) model.getBeingCreatedComponent().get())
+        DrawPanelCommandRequest request =
+            ((DrawPanelCommandRequest) model.getBeingCreatedComponent().get())
                 .toBuilder()
                 .endIdxPosition(actionPosition)
                 .build();
-        DrawPanelAction panelAction = new DrawPanelAction(model, request);
+        DrawPanelCommand panelAction = new DrawPanelCommand(model, request);
         actionManager.execute(panelAction);
         break;
       default:

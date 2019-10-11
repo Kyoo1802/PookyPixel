@@ -1,17 +1,17 @@
-package com.kyoo.pixel.data.connection.actions;
+package com.kyoo.pixel.connection.components.commands;
 
-import com.kyoo.pixel.data.connection.ConnectionComponent;
-import com.kyoo.pixel.data.connection.actions.ConnectionActionRequest.SelectActionRequest;
-import com.kyoo.pixel.views.connection.ConnectionModel;
+import com.kyoo.pixel.connection.ConnectionModel;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
 import java.util.Map;
 import java.util.Optional;
 
-public final class SelectAction implements ConnectionAction {
+public final class SelectCommand implements ConnectionCommand {
 
   private ConnectionModel connectionModel;
-  private SelectActionRequest request;
+  private SelectCommandRequest request;
 
-  public SelectAction(ConnectionModel connectionModel, SelectActionRequest request) {
+  public SelectCommand(ConnectionModel connectionModel, SelectCommandRequest request) {
     this.connectionModel = connectionModel;
     this.request = request;
   }

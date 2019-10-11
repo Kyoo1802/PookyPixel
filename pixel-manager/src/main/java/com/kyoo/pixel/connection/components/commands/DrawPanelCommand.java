@@ -1,18 +1,18 @@
-package com.kyoo.pixel.data.connection.actions;
+package com.kyoo.pixel.connection.components.commands;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.data.connection.SquarePanel;
-import com.kyoo.pixel.data.connection.actions.ConnectionActionRequest.DrawPanelActionRequest;
-import com.kyoo.pixel.views.connection.ConnectionModel;
+import com.kyoo.pixel.connection.ConnectionModel;
+import com.kyoo.pixel.connection.components.SquarePanel;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
 import java.util.Optional;
 
-public final class DrawPanelAction implements ConnectionAction {
+public final class DrawPanelCommand implements ConnectionCommand {
 
   private ConnectionModel connectionModel;
-  private DrawPanelActionRequest request;
+  private DrawPanelCommandRequest request;
 
   @Inject
-  public DrawPanelAction(ConnectionModel connectionModel, DrawPanelActionRequest request) {
+  public DrawPanelCommand(ConnectionModel connectionModel, DrawPanelCommandRequest request) {
     this.connectionModel = connectionModel;
     this.request = request;
   }

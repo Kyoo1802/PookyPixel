@@ -2,8 +2,8 @@ package com.kyoo.pixel;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.kyoo.pixel.connection.ConnectionModule;
 import com.kyoo.pixel.inject.GuiceFXMLLoader;
-import com.kyoo.pixel.views.connection.ConnectionModule;
 import com.kyoo.pixel.visualizer.VisualizerModule;
 import javafx.application.Application;
 import javafx.scene.Parent;
