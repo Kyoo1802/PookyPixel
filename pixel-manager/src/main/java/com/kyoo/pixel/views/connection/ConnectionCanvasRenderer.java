@@ -31,8 +31,8 @@ public final class ConnectionCanvasRenderer {
   public ConnectionCanvasRenderer(ConnectionViewModel connectionViewModel,
       ConnectionProperties connectionProperties) {
     this.connectionViewModel = connectionViewModel;
-    this.connectionViewModel.canvasWidthProperty().addListener(v -> recreateBackground());
-    this.connectionViewModel.canvasHeightProperty().addListener(v -> recreateBackground());
+    this.connectionViewModel.getCanvasWidth().addListener(v -> recreateBackground());
+    this.connectionViewModel.getCanvasHeight().addListener(v -> recreateBackground());
     this.connectionProperties = connectionProperties;
   }
 
@@ -59,8 +59,8 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void recreateBackground() {
-    Dimension canvasDimension = new Dimension(connectionViewModel.canvasWidthProperty().get(),
-        connectionViewModel.canvasHeightProperty().get());
+    Dimension canvasDimension = new Dimension(connectionViewModel.getCanvasWidth().get(),
+        connectionViewModel.getCanvasHeight().get());
     if (canvasDimension.width * canvasDimension.height == 0) {
       return;
     }
@@ -138,7 +138,7 @@ public final class ConnectionCanvasRenderer {
     ConnectionActionRequest beingCreatedComponent =
         connectionViewModel.getConnectionModel().getBeingCreatedComponent().get();
     Point mouseCanvasPosition = PositionUtils
-        .toRoundPosition(connectionViewModel.positionProperty().get());
+        .toRoundPosition(connectionViewModel.getMousePosition().get());
     Point mouseIdxPosition =
         PositionUtils.toIdxPosition(new Point(mouseCanvasPosition.x, mouseCanvasPosition.y));
 
@@ -167,7 +167,7 @@ public final class ConnectionCanvasRenderer {
 
   private void drawMousePointer(GraphicsContext gc) {
     Point mouseSquare = PositionUtils
-        .toRoundPosition(connectionViewModel.positionProperty().get());
+        .toRoundPosition(connectionViewModel.getMousePosition().get());
 
     switch (connectionViewModel.getConnectionModel().getConnectionAction()) {
       case NO_ACTION:

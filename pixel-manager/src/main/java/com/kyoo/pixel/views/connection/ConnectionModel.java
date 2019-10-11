@@ -122,9 +122,6 @@ public final class ConnectionModel {
   private void endComponent(@Nonnull Point idxPoint) {
     switch (selectedComponent.get().getConnectionType()) {
       case SQUARE_PANEL:
-//        SquarePanel squarePanel = (SquarePanel) selectedComponent.get();
-//        squarePanel.endComponent(idxPoint);
-//        createdComponents.addComponent(squarePanel);
         beingCreatedComponent = Optional.empty();
         break;
       case PANEL_BRIDGE:

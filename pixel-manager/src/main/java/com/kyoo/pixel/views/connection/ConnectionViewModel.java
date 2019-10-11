@@ -16,10 +16,12 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Singleton
+@Getter
 public final class ConnectionViewModel {
 
   private BooleanProperty createPanelSelected =
@@ -28,7 +30,7 @@ public final class ConnectionViewModel {
       new SimpleIntegerProperty(0);
   private IntegerProperty canvasHeight =
       new SimpleIntegerProperty(0);
-  private ObjectProperty<Point> position = new SimpleObjectProperty<>(new Point(0, 0));
+  private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>(new Point(0, 0));
 
   private ConnectionModel model;
   private ConnectionActionManager actionManager;
@@ -53,36 +55,33 @@ public final class ConnectionViewModel {
     return createPanelSelected;
   }
 
-  public ObjectProperty<Point> positionProperty() {
-    return position;
+  public void updateCursorPosition() {
+    model.handleMove(mousePosition.get());
   }
 
-  public void updateCursorPosition(Point actionPosition) {
-    model.handleMove(actionPosition);
-  }
-
-  public void handleComponentConnection(Point actionPosition) {
+  public void handleComponentConnection() {
     switch (model.getConnectionAction()) {
       case NO_ACTION:
-        handleSelectAction(actionPosition);
+        handleSelectAction();
         break;
       case DELETE:
-        handleDeleteAction(actionPosition);
+        handleDeleteAction();
         break;
       case DRAW:
-        handleDrawAction(actionPosition);
+        handleDrawAction();
       default:
         log.error("Invalid action to handle");
     }
   }
 
-  private void handleSelectAction(Point actionPosition) {
+  private void handleSelectAction() {
   }
 
-  private void handleDeleteAction(Point actionPosition) {
+  private void handleDeleteAction() {
   }
 
-  private void handleDrawAction(Point actionPosition) {
+  private void handleDrawAction() {
+    Point actionPosition = mousePosition.get();
     if (model.getBeingCreatedComponent().isEmpty()) {
       switch (model.getDrawAction()) {
         case DRAW_SQUARE_PANEL:
@@ -114,14 +113,6 @@ public final class ConnectionViewModel {
       default:
         log.error("Invalid Draw Action");
     }
-  }
-
-  public IntegerProperty canvasWidthProperty() {
-    return canvasWidth;
-  }
-
-  public IntegerProperty canvasHeightProperty() {
-    return canvasHeight;
   }
 
   public ConnectionModel getConnectionModel() {
