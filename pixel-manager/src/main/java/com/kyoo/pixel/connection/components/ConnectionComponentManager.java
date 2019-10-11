@@ -24,7 +24,8 @@ public final class ConnectionComponentManager {
   }
 
   public synchronized void removeComponent(ComponentType componentType, long id) {
-    if (allComponents.containsKey(componentType)) {
+    if (allComponents.containsKey(componentType) && allComponents.get(componentType)
+        .containsKey(id)) {
       allComponents.get(componentType).remove(id);
     }
   }

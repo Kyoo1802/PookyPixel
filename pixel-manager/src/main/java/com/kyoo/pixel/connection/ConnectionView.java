@@ -18,45 +18,44 @@ public class ConnectionView implements Initializable {
   private ToggleButton createPanelBtn;
 
   @FXML
-  private Canvas connectionCanvas;
-
-  private ConnectionViewModel connectionViewModel;
-  private ConnectionCanvasRenderer connectionCanvasRenderer;
+  private Canvas canvas;
+  private ConnectionViewModel viewModel;
+  private ConnectionCanvasRenderer canvasRenderer;
 
   @Inject
-  public ConnectionView(ConnectionViewModel connectionViewModel,
-      ConnectionCanvasRenderer connectionCanvasRenderer) {
-    this.connectionViewModel = connectionViewModel;
-    this.connectionCanvasRenderer = connectionCanvasRenderer;
+  public ConnectionView(ConnectionViewModel viewModel,
+      ConnectionCanvasRenderer canvasRenderer) {
+    this.viewModel = viewModel;
+    this.canvasRenderer = canvasRenderer;
   }
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     // Initialize events
-    connectionCanvas.onMouseMovedProperty().set(e -> {
+    canvas.onMouseMovedProperty().set(e -> {
       Point mousePosition = new Point((int) e.getX(), (int) e.getY());
-      connectionViewModel.getMousePosition().set(mousePosition);
-      connectionViewModel.updateCursorPosition();
+      viewModel.getMousePosition().set(mousePosition);
+      viewModel.updateCursorPosition();
       log.debug("Mouse Moved: %s", mousePosition);
     });
-    connectionCanvas.onMouseClickedProperty().set(e -> {
+    canvas.onMouseClickedProperty().set(e -> {
       Point mousePosition = new Point((int) e.getX(), (int) e.getY());
-      connectionViewModel.handleComponentConnection();
+      viewModel.handleComponentConnection();
       log.debug("Mouse Clicked: %s", mousePosition);
     });
-    connectionCanvas.onKeyTypedProperty().set(e -> log.debug("Key typed: %s", e.getSource()));
+    canvas.onKeyTypedProperty().set(e -> log.debug("Key typed: %s", e.getSource()));
 
     // Initialize properties
-    connectionViewModel.getCanvasWidth().bindBidirectional(connectionCanvas.widthProperty());
-    connectionViewModel.getCanvasHeight().bindBidirectional(connectionCanvas.heightProperty());
-    connectionViewModel.getCreateSquarePanelSelected()
+    viewModel.getCanvasWidth().bindBidirectional(canvas.widthProperty());
+    viewModel.getCanvasHeight().bindBidirectional(canvas.heightProperty());
+    viewModel.getCreateSquarePanelSelected()
         .bindBidirectional(createPanelBtn.selectedProperty());
 
     // Initialize animation Handler
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(long now) {
-        connectionCanvasRenderer.render(connectionCanvas);
+        canvasRenderer.render(canvas);
       }
     };
     timer.start();

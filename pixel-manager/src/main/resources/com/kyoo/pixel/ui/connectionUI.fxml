@@ -15,7 +15,7 @@
     <BorderPane>
       <center>
         <Canvas BorderPane.alignment="CENTER" height="497.0" width="810.0"
-          fx:id="connectionCanvas"/>
+          fx:id="canvas"/>
       </center>
       <top>
         <ToggleButton BorderPane.alignment="CENTER" text="P" fx:id="createPanelBtn"/>

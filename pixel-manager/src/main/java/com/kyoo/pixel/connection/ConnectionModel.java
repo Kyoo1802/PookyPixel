@@ -24,8 +24,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class ConnectionModel {
 
-  private ConnectionAction connectionAction;
-  private DrawAction drawAction;
+  private ConnectionAction connectionActionState;
+  private DrawAction drawActionState;
   private ConnectionComponentManager createdComponentsManager;
   private Optional<ConnectionCommandRequest> beingCreatedComponent;
   private Optional<ConnectionComponent> selectedComponent;
@@ -39,13 +39,13 @@ public final class ConnectionModel {
     this.createdComponentsCount = new HashMap<>();
     this.createdComponentsManager = new ConnectionComponentManager();
     this.pointer = new Pointer(new Point(0, 0));
-    this.connectionAction = ConnectionAction.NO_ACTION;
-    this.drawAction = DrawAction.DRAW_SQUARE_PANEL;
+    this.connectionActionState = ConnectionAction.NO_ACTION;
+    this.drawActionState = DrawAction.DRAW_SQUARE_PANEL;
   }
 
   public void handleMove(Point mousePosition) {
     pointer.setLocation(mousePosition);
-    switch (drawAction) {
+    switch (drawActionState) {
       case DRAW_PANEL_BRIDGE:
 
         break;
@@ -54,7 +54,7 @@ public final class ConnectionModel {
   }
 
   private void startComponent(@Nonnull Point idxPoint) {
-    switch (drawAction) {
+    switch (drawActionState) {
       case DRAW_DRIVER_PORT:
         PortComponent portComponent = new PortComponent(generateId(ComponentType.PORT), idxPoint);
         createdComponentsManager.addComponent(portComponent);
@@ -72,7 +72,7 @@ public final class ConnectionModel {
         }
         break;
       default:
-        log.error("Invalid case, when starting a component: " + connectionAction);
+        log.error("Invalid case, when starting a component: " + connectionActionState);
     }
   }
 
@@ -83,7 +83,7 @@ public final class ConnectionModel {
         ledPath.addLed(new Led(idxPoint, ledPath));
         break;
       default:
-        log.error("Invalid case, when continue a component: " + connectionAction);
+        log.error("Invalid case, when continue a component: " + connectionActionState);
     }
   }
 
@@ -96,7 +96,7 @@ public final class ConnectionModel {
         beingCreatedComponent = Optional.empty();
         break;
       default:
-        log.error("Invalid case, when ending a component: " + connectionAction);
+        log.error("Invalid case, when ending a component: " + connectionActionState);
     }
   }
 
@@ -110,14 +110,14 @@ public final class ConnectionModel {
   }
 
   public void unSelectActionState() {
-    connectionAction = ConnectionAction.NO_ACTION;
-    drawAction = DrawAction.UNSET;
+    connectionActionState = ConnectionAction.NO_ACTION;
+    drawActionState = DrawAction.UNSET;
   }
 
   public void selectDrawSquareState(boolean select) {
     if (select) {
-      connectionAction = ConnectionAction.DRAW;
-      drawAction = DrawAction.DRAW_SQUARE_PANEL;
+      connectionActionState = ConnectionAction.DRAW;
+      drawActionState = DrawAction.DRAW_SQUARE_PANEL;
     } else {
       unSelectActionState();
     }

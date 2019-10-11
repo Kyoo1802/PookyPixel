@@ -4,19 +4,19 @@ import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
-import com.kyoo.pixel.connection.components.commands.DrawPanelCommand;
+import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Point;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class DrawingCommandsHandler {
+public final class DrawingCommandHandler {
 
   private ConnectionViewModel viewModel;
   private ConnectionModel model;
 
-  public DrawingCommandsHandler(ConnectionViewModel viewModel) {
+  public DrawingCommandHandler(ConnectionViewModel viewModel) {
     this.viewModel = viewModel;
     this.model = viewModel.getModel();
   }
@@ -35,7 +35,7 @@ public final class DrawingCommandsHandler {
   }
 
   private void startNewDrawing(Point actionPosition) {
-    switch (model.getDrawAction()) {
+    switch (model.getDrawActionState()) {
       case DRAW_SQUARE_PANEL:
         DrawPanelCommandRequest request =
             DrawPanelCommandRequest.builder()
@@ -50,14 +50,14 @@ public final class DrawingCommandsHandler {
   }
 
   private void continueDrawingCommand(Point actionPosition) {
-    switch (model.getDrawAction()) {
+    switch (model.getDrawActionState()) {
       case DRAW_SQUARE_PANEL:
         DrawPanelCommandRequest request =
             ((DrawPanelCommandRequest) model.getBeingCreatedComponent().get())
                 .toBuilder()
                 .endIdxPosition(actionPosition)
                 .build();
-        viewModel.executeCommand(new DrawPanelCommand(model, request));
+        viewModel.executeCommand(new DrawSquarePanelCommand(model, request));
         model.setBeingCreatedComponent(Optional.empty());
         break;
       default:

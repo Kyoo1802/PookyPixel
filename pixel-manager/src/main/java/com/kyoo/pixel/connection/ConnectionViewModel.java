@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommand;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
-import com.kyoo.pixel.connection.handlers.DrawingCommandsHandler;
-import com.kyoo.pixel.connection.handlers.SelectCommandsHandler;
+import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
+import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
 import java.awt.Point;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -31,8 +31,8 @@ public final class ConnectionViewModel {
 
   private ConnectionModel model;
   private ConnectionCommandManager commandManager;
-  private DrawingCommandsHandler drawingCommandsHandler;
-  private SelectCommandsHandler selectCommandsHandler;
+  private DrawingCommandHandler drawingCommandHandler;
+  private SelectCommandHandler selectCommandHandler;
 
   @Inject
   public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager commandManager) {
@@ -40,8 +40,8 @@ public final class ConnectionViewModel {
     this.commandManager = commandManager;
     this.createSquarePanelSelected
         .addListener((observable, oldValue, newValue) -> model.selectDrawSquareState(newValue));
-    this.drawingCommandsHandler = new DrawingCommandsHandler(this);
-    this.selectCommandsHandler = new SelectCommandsHandler(this);
+    this.drawingCommandHandler = new DrawingCommandHandler(this);
+    this.selectCommandHandler = new SelectCommandHandler(this);
   }
 
   public void updateCursorPosition() {
@@ -49,15 +49,15 @@ public final class ConnectionViewModel {
   }
 
   public void handleComponentConnection() {
-    switch (model.getConnectionAction()) {
+    switch (model.getConnectionActionState()) {
       case NO_ACTION:
-        selectCommandsHandler.handleSelectAction();
+        selectCommandHandler.handleSelectAction();
         break;
       case DRAW:
-        drawingCommandsHandler.handleDrawAction();
+        drawingCommandHandler.handleDrawAction();
         break;
       default:
-        log.error("Invalid action to handle: " + model.getConnectionAction());
+        log.error("Invalid action to handle: " + model.getConnectionActionState());
     }
   }
 

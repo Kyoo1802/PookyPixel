@@ -10,12 +10,12 @@ import java.awt.Point;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class SelectCommandsHandler {
+public final class SelectCommandHandler {
 
   private ConnectionViewModel viewModel;
   private ConnectionModel model;
 
-  public SelectCommandsHandler(ConnectionViewModel viewModel) {
+  public SelectCommandHandler(ConnectionViewModel viewModel) {
     this.viewModel = viewModel;
     this.model = viewModel.getModel();
   }
