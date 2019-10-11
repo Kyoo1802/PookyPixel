@@ -6,6 +6,7 @@ import com.kyoo.pixel.connection.components.commands.ConnectionCommand;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
 import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
+import com.kyoo.pixel.connection.handlers.TransformationHandler;
 import java.awt.Point;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -35,17 +36,20 @@ public final class ConnectionViewModel {
   private ConnectionCommandManager commandManager;
   private DrawingCommandHandler drawingCommandHandler;
   private SelectCommandHandler selectCommandHandler;
+  private TransformationHandler transformationHandler;
 
   @Inject
   public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager commandManager) {
     this.model = model;
     this.commandManager = commandManager;
     this.createSquarePanelSelected
-        .addListener((observable, oldValue, newValue) -> model.selectDrawSquarePanelState(newValue));
+        .addListener(
+            (observable, oldValue, newValue) -> model.selectDrawSquarePanelState(newValue));
     this.createDriverPortSelected
         .addListener((observable, oldValue, newValue) -> model.selectDrawDriverPortState(newValue));
     this.drawingCommandHandler = new DrawingCommandHandler(this);
     this.selectCommandHandler = new SelectCommandHandler(this);
+    this.transformationHandler = new TransformationHandler(this);
   }
 
   public void updateCursorPosition() {
@@ -59,6 +63,9 @@ public final class ConnectionViewModel {
         break;
       case DRAW:
         drawingCommandHandler.handleDrawAction();
+        break;
+      case TRANSFORMATION:
+        transformationHandler.handleTransformation();
         break;
       default:
         log.error("Invalid action to handle: " + model.getConnectionActionState());

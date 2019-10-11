@@ -4,6 +4,7 @@ import com.kyoo.pixel.connection.components.ComponentType;
 import java.awt.Point;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 public abstract class ConnectionCommandRequest {
 
@@ -34,6 +35,19 @@ public abstract class ConnectionCommandRequest {
 
     private long id;
     private Point selectIdxPosition;
+    private ComponentType componentType;
+  }
+
+  @Getter
+  @ToString
+  @Builder(toBuilder = true)
+  public static class MovementCommandRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private ComponentType typeToMove;
+    private long idToMove;
+    private Point startIdxPosition;
+    private Point endIdxPosition;
     private ComponentType componentType;
   }
 }

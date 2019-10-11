@@ -8,4 +8,6 @@ public enum ComponentType {
   PANEL_BRIDGE,
   LED,
   SELECT,
+  MOVEMENT,
+  ;
 }

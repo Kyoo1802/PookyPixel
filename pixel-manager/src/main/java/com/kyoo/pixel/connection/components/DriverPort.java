@@ -17,13 +17,13 @@ public final class DriverPort implements ConnectionComponent {
     this.id = id;
     this.idxPosition = idxPosition;
     this.size = size;
-    this.endPosition = new Point(idxPosition.x+size.width-1, idxPosition.y+size.height-1);
+    this.endPosition = new Point(idxPosition.x + size.width - 1, idxPosition.y + size.height - 1);
   }
 
   @Override
   public boolean intersects(int x, int y) {
-    return idxPosition.x <= x && x <= idxPosition.x+size.width && idxPosition.y <= y
-        && y <= idxPosition.y+size.height;
+    return idxPosition.x <= x && x <= idxPosition.x + size.width && idxPosition.y <= y
+        && y <= idxPosition.y + size.height;
   }
 
   @Override

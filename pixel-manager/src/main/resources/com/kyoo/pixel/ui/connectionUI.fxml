@@ -5,8 +5,8 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
   minHeight="-Infinity"
   minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
@@ -19,7 +19,7 @@
           fx:id="canvas"/>
       </center>
       <top>
-        <FlowPane BorderPane.alignment="CENTER" >
+        <FlowPane BorderPane.alignment="CENTER">
           <ToggleButton text="Sp" fx:id="createSquarePanelBtn"/>
           <ToggleButton text="Dp" fx:id="createDriverPortBtn"/>
         </FlowPane>

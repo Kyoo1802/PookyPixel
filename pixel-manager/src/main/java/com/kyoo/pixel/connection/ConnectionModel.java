@@ -5,17 +5,12 @@ import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.ConnectionComponentManager;
-import com.kyoo.pixel.connection.components.Led;
-import com.kyoo.pixel.connection.components.LedBridge;
-import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.Pointer;
-import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Nonnull;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -50,6 +45,7 @@ public final class ConnectionModel {
   public void addComponent(ConnectionComponent component) {
     createdComponentsManager.addComponent(component);
   }
+
   public void removeComponent(ComponentType componentType, long id) {
     createdComponentsManager.removeComponent(componentType, id);
   }
@@ -92,6 +88,7 @@ public final class ConnectionModel {
     NO_ACTION,
     DELETE,
     DRAW,
+    TRANSFORMATION,
   }
 
   public enum DrawAction {

@@ -92,7 +92,8 @@ public final class DrawUtils {
     gc.strokeRect(position.x, position.y, size.width, size.height);
   }
 
-  public static void drawPort(GraphicsContext gc, ConnectionProperties properties, DriverPort port) {
+  public static void drawPort(GraphicsContext gc, ConnectionProperties properties,
+      DriverPort port) {
     Point canvasPosition = PositionUtils
         .toCanvasPosition(port.getIdxPosition().y, port.getIdxPosition().x);
     Dimension canvasDimension = PositionUtils.toCanvasDimension(port.getSize());

@@ -5,14 +5,12 @@ import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
 import java.awt.Dimension;
 import java.util.Optional;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public final class DrawDriverPortCommand implements ConnectionCommand {
 
-  public static final Dimension DEFAULT_CONNECTION_PORT_SIZE = new Dimension(2,2);
+  public static final Dimension DEFAULT_CONNECTION_PORT_SIZE = new Dimension(2, 2);
   private ConnectionModel model;
   private DrawDriverPortRequest request;
 
