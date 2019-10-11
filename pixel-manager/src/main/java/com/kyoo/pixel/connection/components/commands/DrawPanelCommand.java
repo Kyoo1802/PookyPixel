@@ -21,7 +21,7 @@ public final class DrawPanelCommand implements ConnectionCommand {
   public void execute() {
     SquarePanel squarePanel = new SquarePanel(request.getId(), request.getStartIdxPosition(),
         request.getEndIdxPosition());
-    connectionModel.getCreatedComponents().addComponent(squarePanel);
+    connectionModel.getCreatedComponentsManager().addComponent(squarePanel);
     connectionModel.setSelectedComponent(Optional.of(squarePanel));
   }
 
@@ -29,7 +29,7 @@ public final class DrawPanelCommand implements ConnectionCommand {
   public void undo() {
     SquarePanel squarePanel = new SquarePanel(request.getId(), request.getStartIdxPosition(),
         request.getEndIdxPosition());
-    connectionModel.getCreatedComponents()
+    connectionModel.getCreatedComponentsManager()
         .removeComponent(request.getComponentType(), request.getId());
     connectionModel.setSelectedComponent(Optional.empty());
   }

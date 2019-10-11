@@ -23,7 +23,8 @@ public abstract class ConnectionCommandRequest {
   @Builder(toBuilder = true)
   public static class SelectCommandRequest extends ConnectionCommandRequest {
 
-    private Point idxPosition;
+    private long id;
+    private Point selectIdxPosition;
     private ComponentType componentType;
   }
 }

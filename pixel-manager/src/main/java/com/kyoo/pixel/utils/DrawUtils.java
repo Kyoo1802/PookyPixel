@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 public final class DrawUtils {
 
-  public static final double LINE_WIDTH = 2;
+  public static final double LINE_WIDTH = 1;
   public static final int DOT_SIZE = 2;
   public static final double MAX_HORIZONTAL_LEDS = 800;
   public static final double MAX_VERTICAL_LEDS = 600;
@@ -45,8 +45,8 @@ public final class DrawUtils {
     gc.setStroke(Color.web(hexColor));
     gc.strokeRect(position.x,
         position.y,
-        PositionUtils.SQUARE_LENGTH,
-        PositionUtils.SQUARE_LENGTH);
+        PositionUtils.SQUARE_LENGTH + 4,
+        PositionUtils.SQUARE_LENGTH + 4);
   }
 
   public static void drawMouseText(GraphicsContext gc, String hexColor,

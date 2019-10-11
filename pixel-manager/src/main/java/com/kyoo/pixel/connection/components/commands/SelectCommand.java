@@ -5,36 +5,38 @@ import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
 import java.util.Map;
 import java.util.Optional;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public final class SelectCommand implements ConnectionCommand {
 
-  private ConnectionModel connectionModel;
+  private ConnectionModel model;
   private SelectCommandRequest request;
 
-  public SelectCommand(ConnectionModel connectionModel, SelectCommandRequest request) {
-    this.connectionModel = connectionModel;
+  public SelectCommand(ConnectionModel model, SelectCommandRequest request) {
+    this.model = model;
     this.request = request;
   }
 
   @Override
   public void execute() {
-    if (connectionModel.getSelectedComponent().isPresent()) {
-      return;
-    }
     for (Map<Long, ConnectionComponent> components :
-        connectionModel.getCreatedComponents().all().values()) {
+        model.getCreatedComponentsManager().all().values()) {
       for (ConnectionComponent component : components.values()) {
-        if (component.intersects(request.getIdxPosition().x, request.getIdxPosition().y)) {
-          connectionModel.setSelectedComponent(Optional.of(component));
+        if (component
+            .intersects(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y)) {
+          model.setSelectedComponent(Optional.of(component));
+          log.debug("Selection triggered %s", request.getSelectIdxPosition());
           return;
         }
       }
     }
-    connectionModel.setSelectedComponent(Optional.empty());
+    log.debug("No selection triggered %s", request.getSelectIdxPosition());
+    model.setSelectedComponent(Optional.empty());
   }
 
   @Override
   public void undo() {
-    connectionModel.setSelectedComponent(Optional.empty());
+    model.setSelectedComponent(Optional.empty());
   }
 }

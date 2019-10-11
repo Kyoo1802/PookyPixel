@@ -11,7 +11,6 @@ import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.Pointer;
 import com.kyoo.pixel.connection.components.PortComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
-import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +26,7 @@ public final class ConnectionModel {
 
   private ConnectionAction connectionAction;
   private DrawAction drawAction;
-  private ConnectionComponentManager createdComponents;
+  private ConnectionComponentManager createdComponentsManager;
   private Optional<ConnectionCommandRequest> beingCreatedComponent;
   private Optional<ConnectionComponent> selectedComponent;
   private Map<ComponentType, Integer> createdComponentsCount;
@@ -38,7 +37,7 @@ public final class ConnectionModel {
     this.beingCreatedComponent = Optional.empty();
     this.selectedComponent = Optional.empty();
     this.createdComponentsCount = new HashMap<>();
-    this.createdComponents = new ConnectionComponentManager();
+    this.createdComponentsManager = new ConnectionComponentManager();
     this.pointer = new Pointer(new Point(0, 0));
     this.connectionAction = ConnectionAction.NO_ACTION;
     this.drawAction = DrawAction.DRAW_SQUARE_PANEL;
@@ -54,42 +53,11 @@ public final class ConnectionModel {
     }
   }
 
-  public void handleAction(@Nonnull Point mousePosition) {
-    Point idxPoint = PositionUtils.toIdxPosition(mousePosition);
-    switch (connectionAction) {
-      case NO_ACTION:
-        selectComponent(idxPoint);
-        break;
-      case DELETE:
-        deleteComponent();
-        break;
-      default:
-        log.error("Invalid action to handle");
-    }
-  }
-
-  private void selectComponent(@Nonnull Point idxPoint) {
-    if (selectedComponent.isPresent() && selectedComponent.get()
-        .intersects(idxPoint.x, idxPoint.y)) {
-      selectedComponent.get().internalSelect(idxPoint.x, idxPoint.y);
-      return;
-    }
-    for (Map<Long, ConnectionComponent> components : createdComponents.all().values()) {
-      for (ConnectionComponent component : components.values()) {
-        if (component.intersects(idxPoint.x, idxPoint.y)) {
-          selectedComponent = Optional.of(component);
-          return;
-        }
-      }
-    }
-    selectedComponent = Optional.empty();
-  }
-
   private void startComponent(@Nonnull Point idxPoint) {
     switch (drawAction) {
       case DRAW_DRIVER_PORT:
         PortComponent portComponent = new PortComponent(generateId(ComponentType.PORT), idxPoint);
-        createdComponents.addComponent(portComponent);
+        createdComponentsManager.addComponent(portComponent);
         selectedComponent = Optional.of(portComponent);
         break;
       case DRAW_LED_PATH:
@@ -97,7 +65,7 @@ public final class ConnectionModel {
         selectedComponent = Optional.of(ledPath);
         break;
       case DRAW_PANEL_BRIDGE:
-        Optional<Led> ledStart = createdComponents.lookup(ComponentType.LED, idxPoint);
+        Optional<Led> ledStart = createdComponentsManager.lookup(ComponentType.LED, idxPoint);
         if (ledStart.isPresent()) {
           LedBridge ledBridge = new LedBridge(generateId(ComponentType.PANEL_BRIDGE), idxPoint);
           selectedComponent = Optional.of(ledBridge);
@@ -121,23 +89,14 @@ public final class ConnectionModel {
 
   private void endComponent(@Nonnull Point idxPoint) {
     switch (selectedComponent.get().getConnectionType()) {
-      case SQUARE_PANEL:
-        beingCreatedComponent = Optional.empty();
-        break;
       case PANEL_BRIDGE:
         LedBridge ledBridge = (LedBridge) selectedComponent.get();
         ledBridge.endComponent(idxPoint);
-        createdComponents.addComponent(ledBridge);
+        createdComponentsManager.addComponent(ledBridge);
         beingCreatedComponent = Optional.empty();
         break;
       default:
         log.error("Invalid case, when ending a component: " + connectionAction);
-    }
-  }
-
-  private void deleteComponent() {
-    if (selectedComponent.isEmpty()) {
-
     }
   }
 
@@ -150,17 +109,17 @@ public final class ConnectionModel {
     return newCount;
   }
 
-  public void unSelectAction() {
+  public void unSelectActionState() {
     connectionAction = ConnectionAction.NO_ACTION;
     drawAction = DrawAction.UNSET;
   }
 
-  public void selectDrawSquare(boolean select) {
+  public void selectDrawSquareState(boolean select) {
     if (select) {
       connectionAction = ConnectionAction.DRAW;
       drawAction = DrawAction.DRAW_SQUARE_PANEL;
     } else {
-      unSelectAction();
+      unSelectActionState();
     }
   }
 

@@ -7,4 +7,5 @@ public enum ComponentType {
   LED_PATH,
   PANEL_BRIDGE,
   LED,
+  SELECT,
 }

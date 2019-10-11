@@ -77,13 +77,13 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void createdComponents(GraphicsContext gc) {
-    if (viewModel.getModel().getCreatedComponents().all().isEmpty()) {
+    if (viewModel.getModel().getCreatedComponentsManager().all().isEmpty()) {
       return;
     }
     Optional<ConnectionComponent> selectedComponent =
         viewModel.getModel().getSelectedComponent();
     for (Map<Long, ConnectionComponent> components :
-        viewModel.getModel().getCreatedComponents().all().values()) {
+        viewModel.getModel().getCreatedComponentsManager().all().values()) {
       for (ConnectionComponent component : components.values()) {
         if (selectedComponent.isPresent() && selectedComponent.get() == component) {
 
@@ -162,7 +162,8 @@ public final class ConnectionCanvasRenderer {
         DrawUtils.selectRect(gc, connectionProperties.getSelectColor(), selectPosition, selectSize);
         break;
       default:
-        log.error("Invalid current component being created: "+beingCreatedComponent.getComponentType());
+        log.error(
+            "Invalid current component being created: " + beingCreatedComponent.getComponentType());
     }
   }
 

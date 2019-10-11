@@ -2,8 +2,10 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommand;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
-import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
+import com.kyoo.pixel.connection.handlers.DrawingCommandsHandler;
+import com.kyoo.pixel.connection.handlers.SelectCommandsHandler;
 import java.awt.Point;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -28,16 +30,18 @@ public final class ConnectionViewModel {
   private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>(new Point(0, 0));
 
   private ConnectionModel model;
-  private ConnectionCommandManager actionManager;
-  private DrawingCommandHandler drawingCommandHandler;
+  private ConnectionCommandManager commandManager;
+  private DrawingCommandsHandler drawingCommandsHandler;
+  private SelectCommandsHandler selectCommandsHandler;
 
   @Inject
-  public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager actionManager) {
+  public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager commandManager) {
     this.model = model;
-    this.actionManager = actionManager;
+    this.commandManager = commandManager;
     this.createSquarePanelSelected
-        .addListener((observable, oldValue, newValue) -> model.selectDrawSquare(newValue));
-    this.drawingCommandHandler = new DrawingCommandHandler(this);
+        .addListener((observable, oldValue, newValue) -> model.selectDrawSquareState(newValue));
+    this.drawingCommandsHandler = new DrawingCommandsHandler(this);
+    this.selectCommandsHandler = new SelectCommandsHandler(this);
   }
 
   public void updateCursorPosition() {
@@ -47,22 +51,17 @@ public final class ConnectionViewModel {
   public void handleComponentConnection() {
     switch (model.getConnectionAction()) {
       case NO_ACTION:
-        handleSelectAction();
-        break;
-      case DELETE:
-        handleDeleteAction();
+        selectCommandsHandler.handleSelectAction();
         break;
       case DRAW:
-        drawingCommandHandler.handleDrawAction();
+        drawingCommandsHandler.handleDrawAction();
         break;
       default:
-        log.error("Invalid action to handle");
+        log.error("Invalid action to handle: " + model.getConnectionAction());
     }
   }
 
-  private void handleSelectAction() {
-  }
-
-  private void handleDeleteAction() {
+  public void executeCommand(ConnectionCommand command) {
+    commandManager.execute(command);
   }
 }

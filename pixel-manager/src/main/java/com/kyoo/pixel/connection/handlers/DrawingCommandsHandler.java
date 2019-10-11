@@ -1,5 +1,6 @@
 package com.kyoo.pixel.connection.handlers;
 
+import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
@@ -10,36 +11,38 @@ import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class DrawingCommandHandler {
+public final class DrawingCommandsHandler {
 
   private ConnectionViewModel viewModel;
+  private ConnectionModel model;
 
-  public DrawingCommandHandler(ConnectionViewModel viewModel) {
+  public DrawingCommandsHandler(ConnectionViewModel viewModel) {
     this.viewModel = viewModel;
+    this.model = viewModel.getModel();
   }
 
   public void handleDrawAction() {
     Point actionPosition = PositionUtils.toIdxPosition(viewModel.getMousePosition().get());
     if (isNewDrawing()) {
-      handleNewDrawing(actionPosition);
+      startNewDrawing(actionPosition);
     } else {
       continueDrawingCommand(actionPosition);
     }
   }
 
   private boolean isNewDrawing() {
-    return viewModel.getModel().getBeingCreatedComponent().isEmpty();
+    return model.getBeingCreatedComponent().isEmpty();
   }
 
-  private void handleNewDrawing(Point actionPosition) {
-    switch (viewModel.getModel().getDrawAction()) {
+  private void startNewDrawing(Point actionPosition) {
+    switch (model.getDrawAction()) {
       case DRAW_SQUARE_PANEL:
         DrawPanelCommandRequest request =
             DrawPanelCommandRequest.builder()
-                .id(viewModel.getModel().generateId(ComponentType.SQUARE_PANEL))
+                .id(model.generateId(ComponentType.SQUARE_PANEL))
                 .componentType(ComponentType.SQUARE_PANEL)
                 .startIdxPosition(actionPosition).build();
-        viewModel.getModel().setBeingCreatedComponent(Optional.of(request));
+        model.setBeingCreatedComponent(Optional.of(request));
         break;
       default:
         log.error("Invalid New draw Action");
@@ -47,17 +50,15 @@ public final class DrawingCommandHandler {
   }
 
   private void continueDrawingCommand(Point actionPosition) {
-    switch (viewModel.getModel().getDrawAction()) {
+    switch (model.getDrawAction()) {
       case DRAW_SQUARE_PANEL:
         DrawPanelCommandRequest request =
-            ((DrawPanelCommandRequest) viewModel.getModel().getBeingCreatedComponent().get())
+            ((DrawPanelCommandRequest) model.getBeingCreatedComponent().get())
                 .toBuilder()
                 .endIdxPosition(actionPosition)
                 .build();
-        DrawPanelCommand panelAction = new DrawPanelCommand(viewModel.getModel(), request);
-        viewModel.getActionManager().execute(panelAction);
-        viewModel.getModel().setBeingCreatedComponent(Optional.empty());
-
+        viewModel.executeCommand(new DrawPanelCommand(model, request));
+        model.setBeingCreatedComponent(Optional.empty());
         break;
       default:
         log.error("Invalid Continue draw Action");
