@@ -2,10 +2,10 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.Led;
+import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.utils.DrawUtils;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
@@ -23,6 +23,7 @@ import lombok.extern.log4j.Log4j2;
 public final class ConnectionCanvasRenderer {
 
   private ConnectionViewModel viewModel;
+  private ConnectionModel model;
   private BufferedImage background;
   private ConnectionProperties properties;
 
@@ -32,12 +33,8 @@ public final class ConnectionCanvasRenderer {
     this.viewModel = viewModel;
     this.viewModel.getCanvasWidth().addListener(v -> recreateBackground());
     this.viewModel.getCanvasHeight().addListener(v -> recreateBackground());
+    this.model = viewModel.getModel();
     this.properties = properties;
-  }
-
-  private static Point getLedPanelPosition(Point canvasPosition) {
-    return new Point(canvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH / 2,
-        canvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH / 2);
   }
 
   public void render(Canvas connectionCanvas) {
@@ -77,14 +74,16 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void createdComponents(GraphicsContext gc) {
-    if (viewModel.getModel().getCreatedComponentsManager().all().isEmpty()) {
+    if (model.getCreatedComponentsManager().all().isEmpty()) {
       return;
     }
     Optional<ConnectionComponent> selectedComponent =
-        viewModel.getModel().getSelectedComponent();
+        model.getSelectedComponent();
     for (Map<Long, ConnectionComponent> components :
-        viewModel.getModel().getCreatedComponentsManager().all().values()) {
+        model.getCreatedComponentsManager().all().values()) {
       for (ConnectionComponent component : components.values()) {
+
+        // Draw Selection
         if (selectedComponent.isPresent() && selectedComponent.get() == component) {
 
           String sizeText = String
@@ -105,37 +104,29 @@ public final class ConnectionCanvasRenderer {
               .selectRect(gc, properties.getSelectColor(), startCanvasPosition,
                   selectSize);
         }
-        switch (component.getConnectionType()) {
+
+        // Draw Component
+        switch (component.getComponentType()) {
           case SQUARE_PANEL:
-            SquarePanel sp = (SquarePanel) component;
-            int idx = 0;
-            for (Led led : sp.getLeds().values()) {
-              Point ledCanvasPosition = PositionUtils
-                  .toCanvasPosition(led.getIdxPosition().y, led.getIdxPosition().x);
-              String color;
-              if (idx == 0) {
-                color = properties.getLedStartColor();
-              } else if (idx == sp.getLeds().size() - 1) {
-                color = properties.getLedEndColor();
-              } else {
-                color = properties.getLedOffColor();
-              }
-              DrawUtils.drawLed(gc, color, getLedPanelPosition(ledCanvasPosition));
-              idx++;
-            }
+            DrawUtils.drawSquarePanel(gc, properties, (SquarePanel) component);
+            break;
+          case DRIVER_PORT:
+            DrawUtils.drawPort(gc, properties, (DriverPort) component);
+            break;
           default:
+            log.error("Invalid component to draw: %s", component.getComponentType());
         }
       }
     }
   }
 
   private void currentComponent(GraphicsContext gc) {
-    if (viewModel.getModel().getBeingCreatedComponent().isEmpty()) {
+    if (model.getBeingCreatedComponent().isEmpty()) {
       return;
     }
 
     ConnectionCommandRequest beingCreatedComponent =
-        viewModel.getModel().getBeingCreatedComponent().get();
+        model.getBeingCreatedComponent().get();
     Point mouseCanvasPosition = PositionUtils
         .toRoundPosition(viewModel.getMousePosition().get());
     Point mouseIdxPosition =
@@ -143,7 +134,7 @@ public final class ConnectionCanvasRenderer {
 
     switch (beingCreatedComponent.getComponentType()) {
       case SQUARE_PANEL:
-        DrawPanelCommandRequest squarePanelRequest = (DrawPanelCommandRequest) beingCreatedComponent;
+        DrawSquarePanelCommandRequest squarePanelRequest = (DrawSquarePanelCommandRequest) beingCreatedComponent;
         Point panelCanvasPosition = PositionUtils.toCanvasPosition(
             squarePanelRequest.getStartIdxPosition().y, squarePanelRequest.getStartIdxPosition().x);
 
@@ -171,23 +162,29 @@ public final class ConnectionCanvasRenderer {
     Point mouseSquare = PositionUtils
         .toRoundPosition(viewModel.getMousePosition().get());
 
-    switch (viewModel.getModel().getConnectionActionState()) {
+    switch (model.getConnectionActionState()) {
       case NO_ACTION:
         DrawUtils.drawMousePointer(gc, properties.getNoActionColor(), mouseSquare);
         break;
       case DRAW:
-        switch (viewModel.getModel().getDrawActionState()) {
+        switch (model.getDrawActionState()) {
           case DRAW_SQUARE_PANEL:
-            if (viewModel.getModel().getBeingCreatedComponent().isEmpty()) {
+            if (model.getBeingCreatedComponent().isEmpty()) {
               DrawUtils.drawLed(gc, properties.getLedStartColor(), mouseSquare);
             } else {
               DrawUtils.drawLed(gc, properties.getLedEndColor(), mouseSquare);
             }
             break;
+          case DRAW_DRIVER_PORT:
+            DrawUtils.drawTempPort(gc, mouseSquare);
+            break;
           default:
+            log.error("Invalid Mouse Pointer (Draw): %s",
+                model.getDrawActionState());
         }
         break;
       default:
+        log.error("Invalid Mouse Pointer (Action): %s", model.getConnectionActionState());
     }
   }
 }

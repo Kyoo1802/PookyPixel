@@ -9,7 +9,7 @@ import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedBridge;
 import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.Pointer;
-import com.kyoo.pixel.connection.components.PortComponent;
+import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import java.awt.Point;
 import java.util.HashMap;
@@ -45,59 +45,13 @@ public final class ConnectionModel {
 
   public void handleMove(Point mousePosition) {
     pointer.setLocation(mousePosition);
-    switch (drawActionState) {
-      case DRAW_PANEL_BRIDGE:
-
-        break;
-      default:
-    }
   }
 
-  private void startComponent(@Nonnull Point idxPoint) {
-    switch (drawActionState) {
-      case DRAW_DRIVER_PORT:
-        PortComponent portComponent = new PortComponent(generateId(ComponentType.PORT), idxPoint);
-        createdComponentsManager.addComponent(portComponent);
-        selectedComponent = Optional.of(portComponent);
-        break;
-      case DRAW_LED_PATH:
-        LedPath ledPath = new LedPath(generateId(ComponentType.LED_PATH), idxPoint);
-        selectedComponent = Optional.of(ledPath);
-        break;
-      case DRAW_PANEL_BRIDGE:
-        Optional<Led> ledStart = createdComponentsManager.lookup(ComponentType.LED, idxPoint);
-        if (ledStart.isPresent()) {
-          LedBridge ledBridge = new LedBridge(generateId(ComponentType.PANEL_BRIDGE), idxPoint);
-          selectedComponent = Optional.of(ledBridge);
-        }
-        break;
-      default:
-        log.error("Invalid case, when starting a component: " + connectionActionState);
-    }
+  public void addComponent(ConnectionComponent component) {
+    createdComponentsManager.addComponent(component);
   }
-
-  private void continueComponent(Point idxPoint) {
-    switch (selectedComponent.get().getConnectionType()) {
-      case LED_PATH:
-        LedPath ledPath = (LedPath) selectedComponent.get();
-        ledPath.addLed(new Led(idxPoint, ledPath));
-        break;
-      default:
-        log.error("Invalid case, when continue a component: " + connectionActionState);
-    }
-  }
-
-  private void endComponent(@Nonnull Point idxPoint) {
-    switch (selectedComponent.get().getConnectionType()) {
-      case PANEL_BRIDGE:
-        LedBridge ledBridge = (LedBridge) selectedComponent.get();
-        ledBridge.endComponent(idxPoint);
-        createdComponentsManager.addComponent(ledBridge);
-        beingCreatedComponent = Optional.empty();
-        break;
-      default:
-        log.error("Invalid case, when ending a component: " + connectionActionState);
-    }
+  public void removeComponent(ComponentType componentType, long id) {
+    createdComponentsManager.removeComponent(componentType, id);
   }
 
   public long generateId(ComponentType componentType) {
@@ -114,10 +68,21 @@ public final class ConnectionModel {
     drawActionState = DrawAction.UNSET;
   }
 
-  public void selectDrawSquareState(boolean select) {
+  public void selectDrawSquarePanelState(boolean select) {
+    beingCreatedComponent = Optional.empty();
     if (select) {
       connectionActionState = ConnectionAction.DRAW;
       drawActionState = DrawAction.DRAW_SQUARE_PANEL;
+    } else {
+      unSelectActionState();
+    }
+  }
+
+  public void selectDrawDriverPortState(boolean select) {
+    beingCreatedComponent = Optional.empty();
+    if (select) {
+      connectionActionState = ConnectionAction.DRAW;
+      drawActionState = DrawAction.DRAW_DRIVER_PORT;
     } else {
       unSelectActionState();
     }

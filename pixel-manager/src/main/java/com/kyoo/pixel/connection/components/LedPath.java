@@ -31,7 +31,7 @@ public final class LedPath implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType getConnectionType() {
+  public ComponentType getComponentType() {
     return null;
   }
 

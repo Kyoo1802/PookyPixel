@@ -33,7 +33,7 @@ public final class SquarePanel implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType getConnectionType() {
+  public ComponentType getComponentType() {
     return ComponentType.SQUARE_PANEL;
   }
 

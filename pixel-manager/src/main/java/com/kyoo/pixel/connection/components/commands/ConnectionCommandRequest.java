@@ -11,7 +11,16 @@ public abstract class ConnectionCommandRequest {
 
   @Getter
   @Builder(toBuilder = true)
-  public static class DrawPanelCommandRequest extends ConnectionCommandRequest {
+  public static class DrawDriverPortRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private Point idxPosition;
+    private ComponentType componentType;
+  }
+
+  @Getter
+  @Builder(toBuilder = true)
+  public static class DrawSquarePanelCommandRequest extends ConnectionCommandRequest {
 
     private long id;
     private Point startIdxPosition;

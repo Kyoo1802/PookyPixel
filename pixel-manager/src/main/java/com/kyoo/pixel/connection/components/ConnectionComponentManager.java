@@ -15,11 +15,11 @@ public final class ConnectionComponentManager {
   }
 
   public synchronized void addComponent(ConnectionComponent component) {
-    if (!allComponents.containsKey(component.getConnectionType())) {
-      allComponents.put(component.getConnectionType(), new LinkedHashMap<>());
+    if (!allComponents.containsKey(component.getComponentType())) {
+      allComponents.put(component.getComponentType(), new LinkedHashMap<>());
     }
-    if (!allComponents.get(component.getConnectionType()).containsKey(component.getId())) {
-      allComponents.get(component.getConnectionType()).put(component.getId(), component);
+    if (!allComponents.get(component.getComponentType()).containsKey(component.getId())) {
+      allComponents.get(component.getComponentType()).put(component.getId(), component);
     }
   }
 

@@ -15,7 +15,7 @@ public interface ConnectionComponent {
 
   CreationType getCreationType();
 
-  ComponentType getConnectionType();
+  ComponentType getComponentType();
 
   Point getStartIdxPosition();
 

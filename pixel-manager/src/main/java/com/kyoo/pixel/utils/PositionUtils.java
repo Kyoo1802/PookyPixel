@@ -1,5 +1,6 @@
 package com.kyoo.pixel.utils;
 
+import java.awt.Dimension;
 import java.awt.Point;
 
 public final class PositionUtils {
@@ -41,5 +42,11 @@ public final class PositionUtils {
   private static int toIdx(int xy) {
     int tmpXY = Math.max(xy - HALF_SQUARE_LENGTH, 0);
     return tmpXY / SQUARE_LENGTH;
+  }
+
+  public static Dimension toCanvasDimension(Dimension dimension) {
+    int w = toCanvas(dimension.width);
+    int h = toCanvas(dimension.height);
+    return new Dimension(w, h);
   }
 }

@@ -19,4 +19,5 @@ public final class ConnectionProperties {
   private String ledEndColor;
   private String selectColor;
   private String noActionColor;
+  private String driverPortColor;
 }

@@ -15,8 +15,9 @@ import lombok.extern.log4j.Log4j2;
 public class ConnectionView implements Initializable {
 
   @FXML
-  private ToggleButton createPanelBtn;
-
+  private ToggleButton createSquarePanelBtn;
+  @FXML
+  private ToggleButton createDriverPortBtn;
   @FXML
   private Canvas canvas;
   private ConnectionViewModel viewModel;
@@ -49,7 +50,9 @@ public class ConnectionView implements Initializable {
     viewModel.getCanvasWidth().bindBidirectional(canvas.widthProperty());
     viewModel.getCanvasHeight().bindBidirectional(canvas.heightProperty());
     viewModel.getCreateSquarePanelSelected()
-        .bindBidirectional(createPanelBtn.selectedProperty());
+        .bindBidirectional(createSquarePanelBtn.selectedProperty());
+    viewModel.getCreateDriverPortSelected()
+        .bindBidirectional(createDriverPortBtn.selectedProperty());
 
     // Initialize animation Handler
     AnimationTimer timer = new AnimationTimer() {

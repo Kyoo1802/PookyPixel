@@ -1,5 +1,9 @@
 package com.kyoo.pixel.utils;
 
+import com.kyoo.pixel.connection.ConnectionProperties;
+import com.kyoo.pixel.connection.components.DriverPort;
+import com.kyoo.pixel.connection.components.Led;
+import com.kyoo.pixel.connection.components.SquarePanel;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -32,6 +36,30 @@ public final class DrawUtils {
     }
   }
 
+  public static void drawSquarePanel(GraphicsContext gc, ConnectionProperties properties,
+      SquarePanel sp) {
+    int idx = 0;
+    for (Led led : sp.getLeds().values()) {
+      Point ledCanvasPosition = PositionUtils
+          .toCanvasPosition(led.getIdxPosition().y, led.getIdxPosition().x);
+      String hexColor;
+      if (idx == 0) {
+        hexColor = properties.getLedStartColor();
+      } else if (idx == sp.getLeds().size() - 1) {
+        hexColor = properties.getLedEndColor();
+      } else {
+        hexColor = properties.getLedOffColor();
+      }
+      idx++;
+      drawLed(gc, hexColor, getLedPanelPosition(ledCanvasPosition));
+    }
+  }
+
+  private static Point getLedPanelPosition(Point ledCanvasPosition) {
+    return new Point(ledCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH / 2,
+        ledCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH / 2);
+  }
+
   public static void drawLed(GraphicsContext gc, String hexColor, Point position) {
     gc.setFill(Color.web(hexColor));
     gc.fillOval(position.x,
@@ -43,6 +71,7 @@ public final class DrawUtils {
   public static void drawMousePointer(GraphicsContext gc, String hexColor, Point position) {
     gc.setLineWidth(LINE_WIDTH);
     gc.setStroke(Color.web(hexColor));
+    gc.setLineDashes();
     gc.strokeRect(position.x,
         position.y,
         PositionUtils.SQUARE_LENGTH + 4,
@@ -61,5 +90,19 @@ public final class DrawUtils {
     gc.setLineWidth(1);
     gc.setLineDashes(10);
     gc.strokeRect(position.x, position.y, size.width, size.height);
+  }
+
+  public static void drawPort(GraphicsContext gc, ConnectionProperties properties, DriverPort port) {
+    Point canvasPosition = PositionUtils
+        .toCanvasPosition(port.getIdxPosition().y, port.getIdxPosition().x);
+    Dimension canvasDimension = PositionUtils.toCanvasDimension(port.getSize());
+
+    String hexColor = properties.getDriverPortColor();
+    gc.setFill(Color.web(hexColor));
+    gc.fillOval(canvasPosition.x, canvasPosition.y, canvasDimension.width, canvasDimension.height);
+  }
+
+  public static void drawTempPort(GraphicsContext gc, Point canvasPosition) {
+    gc.fillOval(canvasPosition.x, canvasPosition.y, 20, 20);
   }
 }

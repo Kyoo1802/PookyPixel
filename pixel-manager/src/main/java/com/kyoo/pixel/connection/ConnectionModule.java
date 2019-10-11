@@ -29,6 +29,7 @@ public class ConnectionModule extends AbstractModule {
     cp.backgroundDotsSize(properties.getProperty("connection.renderer.background.dots.size"));
     cp.squareSize(properties.getProperty("connection.renderer.square.size"));
     cp.ledSize(properties.getProperty("connection.renderer.led.size"));
+    cp.driverPortColor(properties.getProperty("connection.renderer.port.color"));
     cp.ledStartColor(properties.getProperty("connection.renderer.led.start.color"));
     cp.ledOffColor(properties.getProperty("connection.renderer.led.off.color"));
     cp.ledEndColor(properties.getProperty("connection.renderer.led.end.color"));

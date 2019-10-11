@@ -19,7 +19,7 @@ public class LedBridge implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType getConnectionType() {
+  public ComponentType getComponentType() {
     return null;
   }
 

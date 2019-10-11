@@ -21,6 +21,8 @@ import lombok.extern.log4j.Log4j2;
 @Getter
 public final class ConnectionViewModel {
 
+  private BooleanProperty createDriverPortSelected =
+      new SimpleBooleanProperty(false);
   private BooleanProperty createSquarePanelSelected =
       new SimpleBooleanProperty(false);
   private IntegerProperty canvasWidth =
@@ -39,7 +41,9 @@ public final class ConnectionViewModel {
     this.model = model;
     this.commandManager = commandManager;
     this.createSquarePanelSelected
-        .addListener((observable, oldValue, newValue) -> model.selectDrawSquareState(newValue));
+        .addListener((observable, oldValue, newValue) -> model.selectDrawSquarePanelState(newValue));
+    this.createDriverPortSelected
+        .addListener((observable, oldValue, newValue) -> model.selectDrawDriverPortState(newValue));
     this.drawingCommandHandler = new DrawingCommandHandler(this);
     this.selectCommandHandler = new SelectCommandHandler(this);
   }

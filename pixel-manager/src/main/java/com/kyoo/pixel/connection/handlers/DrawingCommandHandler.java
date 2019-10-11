@@ -3,7 +3,9 @@ package com.kyoo.pixel.connection.handlers;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawPanelCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
+import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
 import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Point;
@@ -37,12 +39,22 @@ public final class DrawingCommandHandler {
   private void startNewDrawing(Point actionPosition) {
     switch (model.getDrawActionState()) {
       case DRAW_SQUARE_PANEL:
-        DrawPanelCommandRequest request =
-            DrawPanelCommandRequest.builder()
+        DrawSquarePanelCommandRequest squarePanelRequest =
+            DrawSquarePanelCommandRequest.builder()
                 .id(model.generateId(ComponentType.SQUARE_PANEL))
                 .componentType(ComponentType.SQUARE_PANEL)
-                .startIdxPosition(actionPosition).build();
-        model.setBeingCreatedComponent(Optional.of(request));
+                .startIdxPosition(actionPosition)
+                .build();
+        model.setBeingCreatedComponent(Optional.of(squarePanelRequest));
+        break;
+      case DRAW_DRIVER_PORT:
+        DrawDriverPortRequest portCommandRequest =
+            DrawDriverPortRequest.builder()
+                .id(model.generateId(ComponentType.DRIVER_PORT))
+                .componentType(ComponentType.DRIVER_PORT)
+                .idxPosition(actionPosition)
+                .build();
+        viewModel.executeCommand(new DrawDriverPortCommand(model, portCommandRequest));
         break;
       default:
         log.error("Invalid New draw Action");
@@ -52,8 +64,8 @@ public final class DrawingCommandHandler {
   private void continueDrawingCommand(Point actionPosition) {
     switch (model.getDrawActionState()) {
       case DRAW_SQUARE_PANEL:
-        DrawPanelCommandRequest request =
-            ((DrawPanelCommandRequest) model.getBeingCreatedComponent().get())
+        DrawSquarePanelCommandRequest request =
+            ((DrawSquarePanelCommandRequest) model.getBeingCreatedComponent().get())
                 .toBuilder()
                 .endIdxPosition(actionPosition)
                 .build();

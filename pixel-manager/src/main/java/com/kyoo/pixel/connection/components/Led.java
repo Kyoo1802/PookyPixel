@@ -28,7 +28,7 @@ public class Led implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType getConnectionType() {
+  public ComponentType getComponentType() {
     return ComponentType.LED_PATH;
   }
 
