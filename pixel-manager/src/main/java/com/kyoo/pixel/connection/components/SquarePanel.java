@@ -48,9 +48,10 @@ public final class SquarePanel implements ConnectionComponent {
   }
 
   public void createLeds() {
-    for (int i = startIdxPosition.y; i <= endIdxPosition.y; i++) {
+    for (int i = startIdxPosition.y, pair = 0; i <= endIdxPosition.y; i++, pair++) {
       for (int j = startIdxPosition.x; j <= endIdxPosition.x; j++) {
-        Point ledPoint = new Point(j, i);
+        int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x + endIdxPosition.x - j;
+        Point ledPoint = new Point(tmpJ, i);
         this.leds.put(ledPoint, new Led(ledPoint, this));
       }
     }

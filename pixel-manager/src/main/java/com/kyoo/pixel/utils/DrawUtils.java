@@ -1,5 +1,8 @@
 package com.kyoo.pixel.utils;
 
+import static javafx.scene.paint.Color.WHITE;
+import static javafx.scene.paint.Color.YELLOW;
+
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.Led;
@@ -29,15 +32,14 @@ public final class DrawUtils {
       for (int j = 0; j < MAX_VERTICAL_LEDS; j++) {
         Point mousePoint = PositionUtils.toCanvasPosition(i, j);
         g2.fillOval(mousePoint.x + PositionUtils.HALF_SQUARE_LENGTH - 1,
-            mousePoint.y + PositionUtils.HALF_SQUARE_LENGTH - 1,
-            DOT_SIZE
-            , DOT_SIZE);
+            mousePoint.y + PositionUtils.HALF_SQUARE_LENGTH - 1, DOT_SIZE, DOT_SIZE);
       }
     }
   }
 
   public static void drawSquarePanel(GraphicsContext gc, ConnectionProperties properties,
       SquarePanel sp) {
+    Point points[] = new Point[sp.getLeds().size()];
     int idx = 0;
     for (Led led : sp.getLeds().values()) {
       Point ledCanvasPosition = PositionUtils
@@ -50,38 +52,50 @@ public final class DrawUtils {
       } else {
         hexColor = properties.getLedOffColor();
       }
-      idx++;
-      drawLed(gc, hexColor, getLedPanelPosition(ledCanvasPosition));
+      Point ledPosition = getLedPanelPosition(ledCanvasPosition);
+      points[idx++] = ledPosition;
+      drawLed(gc, hexColor, ledPosition);
     }
+    gc.setStroke(YELLOW);
+    gc.setLineWidth(1);
+    gc.setLineDashes();
+    gc.beginPath();
+    for (int i = 0; i < points.length; i++) {
+      if (i == 0) {
+        gc.moveTo(points[i].x + PositionUtils.HALF_SQUARE_LENGTH,
+            points[i].y + PositionUtils.HALF_SQUARE_LENGTH);
+      } else {
+        gc.lineTo(points[i].x + PositionUtils.HALF_SQUARE_LENGTH,
+            points[i].y + PositionUtils.HALF_SQUARE_LENGTH);
+      }
+
+    }
+    gc.stroke();
   }
 
   private static Point getLedPanelPosition(Point ledCanvasPosition) {
-    return new Point(ledCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH / 2,
-        ledCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH / 2);
+    return new Point(ledCanvasPosition.x, ledCanvasPosition.y);
   }
 
   public static void drawLed(GraphicsContext gc, String hexColor, Point position) {
     gc.setFill(Color.web(hexColor));
-    gc.fillOval(position.x,
-        position.y,
-        PositionUtils.SQUARE_LENGTH,
-        PositionUtils.SQUARE_LENGTH);
+    gc.fillOval(position.x, position.y, PositionUtils.SQUARE_LENGTH, PositionUtils.SQUARE_LENGTH);
   }
 
   public static void drawMousePointer(GraphicsContext gc, String hexColor, Point position) {
     gc.setLineWidth(LINE_WIDTH);
     gc.setStroke(Color.web(hexColor));
     gc.setLineDashes();
-    gc.strokeRect(position.x,
-        position.y,
-        PositionUtils.SQUARE_LENGTH + 4,
+    gc.strokeRect(position.x, position.y, PositionUtils.SQUARE_LENGTH + 4,
         PositionUtils.SQUARE_LENGTH + 4);
   }
 
   public static void drawMouseText(GraphicsContext gc, String hexColor,
       Point position, String text) {
-    gc.setFill(Color.web(hexColor));
-    gc.fillText(text, position.x, position.y);
+//    gc.setFill(Color.web("#0000ff"));
+    gc.setFill(WHITE);
+    gc.fillText(text, position.x + PositionUtils.SQUARE_LENGTH,
+        position.y + PositionUtils.SQUARE_LENGTH);
   }
 
   public static void selectRect(GraphicsContext gc, String hexColor, Point position,
@@ -89,7 +103,8 @@ public final class DrawUtils {
     gc.setStroke(Color.web(hexColor));
     gc.setLineWidth(1);
     gc.setLineDashes(10);
-    gc.strokeRect(position.x, position.y, size.width, size.height);
+    gc.strokeRect(position.x - PositionUtils.HALF_SQUARE_LENGTH / 2,
+        position.y - PositionUtils.HALF_SQUARE_LENGTH / 2, size.width, size.height);
   }
 
   public static void drawPort(GraphicsContext gc, ConnectionProperties properties,

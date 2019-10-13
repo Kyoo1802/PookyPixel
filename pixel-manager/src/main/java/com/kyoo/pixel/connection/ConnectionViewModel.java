@@ -2,6 +2,8 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.kyoo.pixel.connection.ConnectionModel.MouseState;
+import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommand;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
@@ -31,6 +33,7 @@ public final class ConnectionViewModel {
   private IntegerProperty canvasHeight =
       new SimpleIntegerProperty(0);
   private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>(new Point(0, 0));
+  private ObjectProperty<MouseState> mouseState = new SimpleObjectProperty<>(MouseState.MOVED);
 
   private ConnectionModel model;
   private ConnectionCommandManager commandManager;
@@ -52,20 +55,40 @@ public final class ConnectionViewModel {
     this.transformationHandler = new TransformationHandler(this);
   }
 
-  public void updateCursorPosition() {
-    model.handleMove(mousePosition.get());
-  }
-
-  public void handleComponentConnection() {
+  public void handleActions() {
     switch (model.getConnectionActionState()) {
       case NO_ACTION:
-        selectCommandHandler.handleSelectAction();
+        switch (mouseState.get()) {
+          case MOVED:
+          case DRAGGED:
+            model.handlePointerMovement(mousePosition.get());
+            break;
+          case PRESSED:
+            selectCommandHandler.handleSelectAction();
+            transformationHandler.handleTransformation();
+            break;
+          case RELEASED:
+            transformationHandler.handleTransformation();
+            break;
+          case CLICKED:
+            selectCommandHandler.handleSelectAction();
+            model.setTransformationActionState(TransformationAction.UNSET);
+            break;
+        }
         break;
-      case DRAW:
-        drawingCommandHandler.handleDrawAction();
-        break;
-      case TRANSFORMATION:
-        transformationHandler.handleTransformation();
+      case DRAW_DRIVER_PORT:
+      case DRAW_PANEL_BRIDGE:
+      case DRAW_SQUARE_PANEL:
+      case DRAW_LED_PATH:
+        switch (mouseState.get()) {
+          case CLICKED:
+            drawingCommandHandler.handleDrawAction();
+            break;
+          case MOVED:
+            model.handlePointerMovement(mousePosition.get());
+            break;
+          default:
+        }
         break;
       default:
         log.error("Invalid action to handle: " + model.getConnectionActionState());

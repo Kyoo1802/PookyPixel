@@ -15,4 +15,8 @@ public class Pointer {
   public void setLocation(Point actionPosition) {
     position.setLocation(actionPosition);
   }
+
+  public Point getPosition() {
+    return new Point(position);
+  }
 }

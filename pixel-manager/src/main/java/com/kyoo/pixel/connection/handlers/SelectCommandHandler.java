@@ -5,8 +5,6 @@ import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
 import com.kyoo.pixel.connection.components.commands.SelectCommand;
-import com.kyoo.pixel.utils.PositionUtils;
-import java.awt.Point;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -21,12 +19,11 @@ public final class SelectCommandHandler {
   }
 
   public void handleSelectAction() {
-    Point actionPosition = PositionUtils.toIdxPosition(viewModel.getMousePosition().get());
     SelectCommandRequest request =
         SelectCommandRequest.builder()
             .id(model.generateId(ComponentType.SELECT))
             .componentType(ComponentType.SQUARE_PANEL)
-            .selectIdxPosition(actionPosition)
+            .selectIdxPosition(model.getIdxPointer().getPosition())
             .build();
     viewModel.executeCommand(new SelectCommand(model, request));
   }

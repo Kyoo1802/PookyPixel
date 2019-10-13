@@ -1,11 +1,14 @@
 package com.kyoo.pixel.connection;
 
+import static javafx.scene.paint.Color.WHITE;
+
 import com.google.inject.Inject;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import com.kyoo.pixel.utils.DrawUtils;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
@@ -47,8 +50,7 @@ public final class ConnectionCanvasRenderer {
 
   private void drawBackground(GraphicsContext gc) {
     if (background != null) {
-      gc.drawImage(
-          SwingFXUtils.toFXImage(background, null), 0, 0);
+      gc.drawImage(SwingFXUtils.toFXImage(background, null), 0, 0);
       return;
     }
     recreateBackground();
@@ -86,17 +88,15 @@ public final class ConnectionCanvasRenderer {
         // Draw Selection
         if (selectedComponent.isPresent() && selectedComponent.get() == component) {
 
-          String sizeText = String
-              .format("[%d, %d]",
-                  component.getEndIdxPosition().x - component.getStartIdxPosition().x + 1,
-                  component.getEndIdxPosition().y - component.getStartIdxPosition().y + 1);
+          int w = component.getEndIdxPosition().x - component.getStartIdxPosition().x + 1;
+          int h = component.getEndIdxPosition().y - component.getStartIdxPosition().y + 1;
+          String sizeText = String.format("[%d, %d] = %d", w, h, w * h);
 
           Point startCanvasPosition = PositionUtils
               .toCanvasPosition(component.getStartIdxPosition());
           Point endCanvasPosition = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
 
-          DrawUtils.drawMouseText(gc, properties.getSelectColor(), endCanvasPosition,
-              sizeText);
+          DrawUtils.drawMouseText(gc, properties.getSelectColor(), endCanvasPosition, sizeText);
           Dimension selectSize = new Dimension(
               endCanvasPosition.x - startCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH * 3,
               endCanvasPosition.y - startCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH * 3);
@@ -146,11 +146,22 @@ public final class ConnectionCanvasRenderer {
         DrawUtils.drawMouseText(gc, properties.getSelectColor(), mouseCanvasPosition,
             sizeText);
 
-        Point selectPosition = new Point(panelCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
-            panelCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
+        Point selectPosition = new Point(panelCanvasPosition.x,
+            panelCanvasPosition.y);
         Dimension selectSize = new Dimension(mouseCanvasPosition.x - panelCanvasPosition.x,
             mouseCanvasPosition.y - panelCanvasPosition.y);
         DrawUtils.selectRect(gc, properties.getSelectColor(), selectPosition, selectSize);
+        break;
+      case MOVEMENT:
+        MovementCommandRequest movementRequest =
+            (MovementCommandRequest) beingCreatedComponent;
+
+        Point start = PositionUtils.toCanvasPosition(movementRequest.getStartIdxPosition());
+        Point end = PositionUtils.toCanvasPosition(model.getIdxPointer().getPosition());
+        gc.setLineWidth(1);
+        gc.setStroke(WHITE);
+        gc.setLineDashes(10);
+        gc.strokeLine(start.x, start.y, end.x, end.y);
         break;
       default:
         log.error(
@@ -166,22 +177,15 @@ public final class ConnectionCanvasRenderer {
       case NO_ACTION:
         DrawUtils.drawMousePointer(gc, properties.getNoActionColor(), mouseSquare);
         break;
-      case DRAW:
-        switch (model.getDrawActionState()) {
-          case DRAW_SQUARE_PANEL:
-            if (model.getBeingCreatedComponent().isEmpty()) {
-              DrawUtils.drawLed(gc, properties.getLedStartColor(), mouseSquare);
-            } else {
-              DrawUtils.drawLed(gc, properties.getLedEndColor(), mouseSquare);
-            }
-            break;
-          case DRAW_DRIVER_PORT:
-            DrawUtils.drawTempPort(gc, mouseSquare);
-            break;
-          default:
-            log.error("Invalid Mouse Pointer (Draw): %s",
-                model.getDrawActionState());
+      case DRAW_SQUARE_PANEL:
+        if (model.getBeingCreatedComponent().isEmpty()) {
+          DrawUtils.drawLed(gc, properties.getLedStartColor(), mouseSquare);
+        } else {
+          DrawUtils.drawLed(gc, properties.getLedEndColor(), mouseSquare);
         }
+        break;
+      case DRAW_DRIVER_PORT:
+        DrawUtils.drawTempPort(gc, mouseSquare);
         break;
       default:
         log.error("Invalid Mouse Pointer (Action): %s", model.getConnectionActionState());
