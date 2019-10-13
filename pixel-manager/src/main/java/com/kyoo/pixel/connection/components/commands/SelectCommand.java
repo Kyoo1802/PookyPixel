@@ -20,7 +20,7 @@ public final class SelectCommand implements ConnectionCommand {
   }
 
   @Override
-  public void execute() {
+  public boolean execute() {
     for (Map<Long, ConnectionComponent> components :
         model.getCreatedComponentsManager().all().values()) {
       for (ConnectionComponent component : components.values()) {
@@ -29,12 +29,13 @@ public final class SelectCommand implements ConnectionCommand {
           model.setSelectedComponent(Optional.of(component));
           model.setTransformationActionState(TransformationAction.MOVE);
           log.debug("Selection triggered %s", request.getSelectIdxPosition());
-          return;
+          return true;
         }
       }
     }
     log.debug("No selection triggered %s", request.getSelectIdxPosition());
     model.setSelectedComponent(Optional.empty());
+    return false;
   }
 
   @Override

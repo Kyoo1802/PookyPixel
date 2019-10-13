@@ -15,8 +15,10 @@ public final class ConnectionCommandManager {
   }
 
   public void execute(ConnectionCommand action) {
-    action.execute();
-    actionQueue.add(action);
+    // Just insert commands which makes a real change
+    if(action.execute()) {
+      actionQueue.add(action);
+    }
   }
 
   public void unDo() {

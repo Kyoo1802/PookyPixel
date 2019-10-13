@@ -20,12 +20,13 @@ public final class DrawDriverPortCommand implements ConnectionCommand {
   }
 
   @Override
-  public void execute() {
+  public boolean execute() {
     DriverPort port = new DriverPort(request.getId(), request.getIdxPosition(),
         DEFAULT_CONNECTION_PORT_SIZE);
     model.addComponent(port);
     model.setSelectedComponent(Optional.of(port));
     log.debug("Draw Driver Port triggered %s", request.getIdxPosition());
+    return true;
   }
 
   @Override

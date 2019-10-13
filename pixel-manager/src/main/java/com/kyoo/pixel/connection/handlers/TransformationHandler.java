@@ -27,12 +27,38 @@ public final class TransformationHandler {
       case MOVE:
         handleMovement();
         break;
+      case SCALE:
+        handleScale();
+        break;
       default:
         log.error("Invalid transformation: " + model.getTransformationActionState());
     }
   }
 
+
   private void handleMovement() {
+    if (model.thereIsNotComponentBeingCreated()) {
+      MovementCommandRequest request =
+          MovementCommandRequest.builder()
+              .id(model.generateId(ComponentType.MOVEMENT))
+              .componentType(ComponentType.MOVEMENT)
+              .idToMove(model.getSelectedComponent().get().getId())
+              .typeToMove(model.getSelectedComponent().get().getComponentType())
+              .startIdxPosition(model.getIdxPointer().getPosition())
+              .build();
+      model.setBeingCreatedComponent(Optional.of(request));
+    } else {
+      MovementCommandRequest request =
+          ((MovementCommandRequest) model.getBeingCreatedComponent().get())
+              .toBuilder()
+              .endIdxPosition(model.getIdxPointer().getPosition())
+              .build();
+      viewModel.executeCommand(new MoveCommand(model, request));
+      model.setBeingCreatedComponent(Optional.empty());
+    }
+  }
+
+  private void handleScale() {
     if (model.thereIsNotComponentBeingCreated()) {
       MovementCommandRequest request =
           MovementCommandRequest.builder()

@@ -23,17 +23,34 @@ public final class MoveCommand implements ConnectionCommand {
   }
 
   @Override
-  public void execute() {
+  public boolean execute() {
+    doMove(false);
+    return true;
+  }
+
+  @Override
+  public void undo() {
+    doMove(true);
+  }
+
+  private void doMove(boolean isInverse) {
     Map<Long, ConnectionComponent> componentsByType =
         model.getCreatedComponentsManager().all().get(request.getTypeToMove());
 
     if (componentsByType != null && componentsByType.containsKey(request.getIdToMove())) {
       Point movement = new Point(request.getEndIdxPosition().x - request.getStartIdxPosition().x,
           request.getEndIdxPosition().y - request.getStartIdxPosition().y);
+      movement = isInverse? invert(movement) : movement;
       move(componentsByType.get(request.getIdToMove()), movement);
     }
-    log.debug("No selection for move %s", request);
+    log.debug("No component selected for move %s", request);
     model.setSelectedComponent(Optional.empty());
+  }
+
+  private Point invert(Point movement) {
+    movement.x = -movement.x;
+    movement.y = -movement.y;
+    return movement;
   }
 
   private void move(ConnectionComponent component, Point movement) {
@@ -48,10 +65,5 @@ public final class MoveCommand implements ConnectionCommand {
         component.getEndIdxPosition().setLocation(component.getEndIdxPosition().x + movement.x,
             component.getEndIdxPosition().y + movement.y);
     }
-  }
-
-  @Override
-  public void undo() {
-    model.setSelectedComponent(Optional.empty());
   }
 }

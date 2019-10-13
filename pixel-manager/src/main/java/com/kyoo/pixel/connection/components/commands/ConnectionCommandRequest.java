@@ -50,4 +50,17 @@ public abstract class ConnectionCommandRequest {
     private Point endIdxPosition;
     private ComponentType componentType;
   }
+
+  @Getter
+  @ToString
+  @Builder(toBuilder = true)
+  public static class ScaleCommandRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private ComponentType typeToMove;
+    private long idToMove;
+    private Point startIdxPosition;
+    private Point endIdxPosition;
+    private ComponentType componentType;
+  }
 }
