@@ -1,5 +1,6 @@
 package com.kyoo.pixel.connection.components;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,7 +61,11 @@ public final class LedPath implements ConnectionComponent {
     return null;
   }
 
-  public void addLed(Led led) {
-
+  @Override
+  public Dimension getSize() {
+    return null;
   }
+
+  @Override
+  public void addDimension(Dimension addDimension) { }
 }

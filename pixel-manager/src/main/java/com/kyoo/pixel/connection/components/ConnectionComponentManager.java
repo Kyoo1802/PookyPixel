@@ -34,6 +34,14 @@ public final class ConnectionComponentManager {
     return allComponents;
   }
 
+  public Optional<ConnectionComponent> getComponent(ComponentType type, long id) {
+    Map<Long, ConnectionComponent> componentsByType = all().get(type);
+    if (componentsByType != null && componentsByType.containsKey(id)) {
+      return Optional.of(componentsByType.get(id));
+    }
+    return Optional.empty();
+  }
+
   public Optional<Led> lookup(ComponentType componentType, Point point) {
     switch (componentType) {
       case LED_PATH:

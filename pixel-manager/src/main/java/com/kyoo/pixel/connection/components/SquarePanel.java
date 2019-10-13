@@ -1,7 +1,9 @@
 package com.kyoo.pixel.connection.components;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Optional;
 import lombok.Data;
 
@@ -67,5 +69,30 @@ public final class SquarePanel implements ConnectionComponent {
 
   public Point getEndIdxPosition() {
     return endIdxPosition;
+  }
+
+  @Override
+  public Dimension getSize() {
+    return new Dimension(endIdxPosition.x-startIdxPosition.x+1,endIdxPosition.y-startIdxPosition.y+1);
+  }
+
+  @Override
+  public void addDimension(Dimension addDimension) {
+    LinkedHashMap<Point, Led> newLeds = new LinkedHashMap<>();
+    int newHeight = endIdxPosition.y+addDimension.height;
+    int newWidth = endIdxPosition.x+addDimension.width;
+    for (int i = startIdxPosition.y, pair = 0; i <= newHeight; i++, pair++) {
+      for (int j = startIdxPosition.x; j <= newWidth; j++) {
+        int tmpJ = pair % 2 == 0 ? j : newWidth - j;
+        Point ledPoint = new Point(tmpJ, i);
+        if(this.leds.containsKey(ledPoint)){
+          newLeds.put(ledPoint, this.leds.get(ledPoint));
+        } else {
+          newLeds.put(ledPoint, new Led(ledPoint, this));
+        }
+      }
+    }
+    this.leds.clear();
+    this.leds.putAll(newLeds);
   }
 }

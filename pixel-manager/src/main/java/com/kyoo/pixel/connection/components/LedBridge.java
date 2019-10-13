@@ -1,5 +1,6 @@
 package com.kyoo.pixel.connection.components;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Optional;
 
@@ -48,7 +49,12 @@ public class LedBridge implements ConnectionComponent {
     return null;
   }
 
-  public void endComponent(Point point) {
-
+  @Override
+  public Dimension getSize() {
+    return null;
   }
+
+  @Override
+  public void addDimension(Dimension addDimension) { }
+
 }

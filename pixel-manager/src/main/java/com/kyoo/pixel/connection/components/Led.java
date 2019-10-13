@@ -1,10 +1,12 @@
 package com.kyoo.pixel.connection.components;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Optional;
 
 public class Led implements ConnectionComponent {
 
+  private static final Dimension LED_DIMENSION = new Dimension(1, 1);
   private final ConnectionComponent parentComponent;
   private Point position;
 
@@ -56,4 +58,12 @@ public class Led implements ConnectionComponent {
   public Point getEndIdxPosition() {
     return null;
   }
+
+  @Override
+  public Dimension getSize() {
+    return LED_DIMENSION;
+  }
+
+  @Override
+  public void addDimension(Dimension addDimension) {}
 }

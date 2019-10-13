@@ -44,8 +44,8 @@ public abstract class ConnectionCommandRequest {
   public static class MovementCommandRequest extends ConnectionCommandRequest {
 
     private long id;
-    private long idToMove;
     private ComponentType commandType;
+    private long idToMove;
     private ComponentType typeToMove;
     private Point startIdxPosition;
     private Point endIdxPosition;
@@ -57,16 +57,22 @@ public abstract class ConnectionCommandRequest {
   public static class ScaleCommandRequest extends ConnectionCommandRequest {
 
     private long id;
-    private long idToScale;
     private ComponentType commandType;
+    private long idToScale;
     private ComponentType typeToScale;
-    private COMPONENT_CORNER cornerToScale;
+    private COMPONENT_SIDE cornerToScale;
+    private Point startIdxPosition;
+    private Point endIdxPosition;
     private int scaleSize;
   }
-  public enum COMPONENT_CORNER {
+  public enum COMPONENT_SIDE {
+    UPPER,
     UPPER_LEFT,
+    LEFT,
     UPPER_RIGHT,
+    RIGHT,
     BOTTOM_LEFT,
+    BOTTOM,
     BOTTOM_RIGHT
   }
 }

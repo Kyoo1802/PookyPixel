@@ -1,5 +1,6 @@
 package com.kyoo.pixel.connection.components;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Optional;
 
@@ -20,4 +21,8 @@ public interface ConnectionComponent {
   Point getStartIdxPosition();
 
   Point getEndIdxPosition();
+
+  Dimension getSize();
+
+  void addDimension(Dimension scale);
 }
