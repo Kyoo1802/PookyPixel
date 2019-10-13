@@ -8,15 +8,15 @@ import lombok.ToString;
 
 public abstract class ConnectionCommandRequest {
 
-  public abstract ComponentType getComponentType();
+  public abstract ComponentType getCommandType();
 
   @Getter
   @Builder(toBuilder = true)
   public static class DrawDriverPortRequest extends ConnectionCommandRequest {
 
     private long id;
+    private ComponentType commandType;
     private Point idxPosition;
-    private ComponentType componentType;
   }
 
   @Getter
@@ -24,9 +24,9 @@ public abstract class ConnectionCommandRequest {
   public static class DrawSquarePanelCommandRequest extends ConnectionCommandRequest {
 
     private long id;
+    private ComponentType commandType;
     private Point startIdxPosition;
     private Point endIdxPosition;
-    private ComponentType componentType;
   }
 
   @Getter
@@ -34,8 +34,8 @@ public abstract class ConnectionCommandRequest {
   public static class SelectCommandRequest extends ConnectionCommandRequest {
 
     private long id;
+    private ComponentType commandType;
     private Point selectIdxPosition;
-    private ComponentType componentType;
   }
 
   @Getter
@@ -44,11 +44,11 @@ public abstract class ConnectionCommandRequest {
   public static class MovementCommandRequest extends ConnectionCommandRequest {
 
     private long id;
-    private ComponentType typeToMove;
     private long idToMove;
+    private ComponentType commandType;
+    private ComponentType typeToMove;
     private Point startIdxPosition;
     private Point endIdxPosition;
-    private ComponentType componentType;
   }
 
   @Getter
@@ -57,10 +57,16 @@ public abstract class ConnectionCommandRequest {
   public static class ScaleCommandRequest extends ConnectionCommandRequest {
 
     private long id;
-    private ComponentType typeToMove;
-    private long idToMove;
-    private Point startIdxPosition;
-    private Point endIdxPosition;
-    private ComponentType componentType;
+    private long idToScale;
+    private ComponentType commandType;
+    private ComponentType typeToScale;
+    private COMPONENT_CORNER cornerToScale;
+    private int scaleSize;
+  }
+  public enum COMPONENT_CORNER {
+    UPPER_LEFT,
+    UPPER_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT
   }
 }

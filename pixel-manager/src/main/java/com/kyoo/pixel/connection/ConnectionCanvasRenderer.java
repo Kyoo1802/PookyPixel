@@ -132,7 +132,7 @@ public final class ConnectionCanvasRenderer {
     Point mouseIdxPosition =
         PositionUtils.toIdxPosition(new Point(mouseCanvasPosition.x, mouseCanvasPosition.y));
 
-    switch (beingCreatedComponent.getComponentType()) {
+    switch (beingCreatedComponent.getCommandType()) {
       case SQUARE_PANEL:
         DrawSquarePanelCommandRequest squarePanelRequest = (DrawSquarePanelCommandRequest) beingCreatedComponent;
         Point panelCanvasPosition = PositionUtils.toCanvasPosition(
@@ -165,7 +165,7 @@ public final class ConnectionCanvasRenderer {
         break;
       default:
         log.error(
-            "Invalid current component being created: " + beingCreatedComponent.getComponentType());
+            "Invalid current component being created: " + beingCreatedComponent.getCommandType());
     }
   }
 

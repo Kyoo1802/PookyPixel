@@ -41,7 +41,7 @@ public final class TransformationHandler {
       MovementCommandRequest request =
           MovementCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
-              .componentType(ComponentType.MOVEMENT)
+              .commandType(ComponentType.MOVEMENT)
               .idToMove(model.getSelectedComponent().get().getId())
               .typeToMove(model.getSelectedComponent().get().getComponentType())
               .startIdxPosition(model.getIdxPointer().getPosition())
@@ -63,7 +63,7 @@ public final class TransformationHandler {
       MovementCommandRequest request =
           MovementCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
-              .componentType(ComponentType.MOVEMENT)
+              .commandType(ComponentType.MOVEMENT)
               .idToMove(model.getSelectedComponent().get().getId())
               .typeToMove(model.getSelectedComponent().get().getComponentType())
               .startIdxPosition(model.getIdxPointer().getPosition())

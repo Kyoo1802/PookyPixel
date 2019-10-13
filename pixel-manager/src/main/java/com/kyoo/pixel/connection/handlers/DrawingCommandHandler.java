@@ -39,7 +39,7 @@ public final class DrawingCommandHandler {
     DrawDriverPortRequest portCommandRequest =
         DrawDriverPortRequest.builder()
             .id(model.generateId(ComponentType.DRIVER_PORT))
-            .componentType(ComponentType.DRIVER_PORT)
+            .commandType(ComponentType.DRIVER_PORT)
             .idxPosition(model.getIdxPointer().getPosition())
             .build();
     viewModel.executeCommand(new DrawDriverPortCommand(model, portCommandRequest));
@@ -50,7 +50,7 @@ public final class DrawingCommandHandler {
       DrawSquarePanelCommandRequest squarePanelRequest =
           DrawSquarePanelCommandRequest.builder()
               .id(model.generateId(ComponentType.SQUARE_PANEL))
-              .componentType(ComponentType.SQUARE_PANEL)
+              .commandType(ComponentType.SQUARE_PANEL)
               .startIdxPosition(model.getIdxPointer().getPosition())
               .build();
       model.setBeingCreatedComponent(Optional.of(squarePanelRequest));

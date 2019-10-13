@@ -22,7 +22,7 @@ public final class SelectCommandHandler {
     SelectCommandRequest request =
         SelectCommandRequest.builder()
             .id(model.generateId(ComponentType.SELECT))
-            .componentType(ComponentType.SQUARE_PANEL)
+            .commandType(ComponentType.SQUARE_PANEL)
             .selectIdxPosition(model.getIdxPointer().getPosition())
             .build();
     viewModel.executeCommand(new SelectCommand(model, request));

@@ -31,8 +31,8 @@ public final class DrawDriverPortCommand implements ConnectionCommand {
 
   @Override
   public void undo() {
-    model.removeComponent(request.getComponentType(), request.getId());
-    log.debug("Draw Delete Driver Port triggered %s-%s", request.getComponentType(),
+    model.removeComponent(request.getCommandType(), request.getId());
+    log.debug("Draw Delete Driver Port triggered %s-%s", request.getCommandType(),
         request.getId());
   }
 }
