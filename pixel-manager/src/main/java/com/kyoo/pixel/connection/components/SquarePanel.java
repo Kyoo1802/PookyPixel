@@ -79,14 +79,14 @@ public final class SquarePanel implements ConnectionComponent {
   @Override
   public void addDimension(Dimension addDimension) {
     LinkedHashMap<Point, Led> newLeds = new LinkedHashMap<>();
-    int newHeight = endIdxPosition.y + addDimension.height;
     int newWidth = endIdxPosition.x + addDimension.width;
+    int newHeight = endIdxPosition.y + addDimension.height;
     for (int i = startIdxPosition.y, pair = 0; i <= newHeight; i++, pair++) {
       for (int j = startIdxPosition.x; j <= newWidth; j++) {
-        int tmpJ = pair % 2 == 0 ? j : newWidth - j;
+        int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x+newWidth - j;
         Point ledPoint = new Point(tmpJ, i);
         if (this.leds.containsKey(ledPoint)) {
-          newLeds.put(ledPoint, this.leds.get(ledPoint));
+          newLeds.put(leds.get(ledPoint).getIdxPosition(), this.leds.get(ledPoint));
         } else {
           newLeds.put(ledPoint, new Led(ledPoint, this));
         }
@@ -94,6 +94,7 @@ public final class SquarePanel implements ConnectionComponent {
     }
     this.leds.clear();
     this.leds.putAll(newLeds);
+    this.endIdxPosition.setLocation(newWidth, newHeight);
   }
 
   @Override

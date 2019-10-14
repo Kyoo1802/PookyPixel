@@ -3,8 +3,9 @@ package com.kyoo.pixel.connection.components;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Optional;
+import lombok.ToString;
 
-public class Led implements ConnectionComponent {
+public final class Led implements ConnectionComponent {
 
   private static final Dimension LED_DIMENSION = new Dimension(1, 1);
   private final ConnectionComponent parentComponent;
@@ -75,6 +76,6 @@ public class Led implements ConnectionComponent {
 
   @Override
   public String description() {
-    return null;
+    return position.toString();
   }
 }

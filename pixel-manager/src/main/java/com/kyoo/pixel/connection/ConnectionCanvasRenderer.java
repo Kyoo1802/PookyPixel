@@ -9,6 +9,7 @@ import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
 import com.kyoo.pixel.utils.DrawUtils;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
@@ -126,7 +127,7 @@ public final class ConnectionCanvasRenderer {
         PositionUtils.toIdxPosition(new Point(mouseCanvasPosition.x, mouseCanvasPosition.y));
 
     switch (beingCreatedComponent.getCommandType()) {
-      case SQUARE_PANEL:
+      case SQUARE_PANEL: {
         DrawSquarePanelCommandRequest squarePanelRequest = (DrawSquarePanelCommandRequest) beingCreatedComponent;
 
         Point startPosition = PositionUtils.toCanvasPosition(
@@ -146,9 +147,9 @@ public final class ConnectionCanvasRenderer {
           String sizeText = String.format("[%d, %d]", dimension.width, dimension.height);
           DrawUtils.drawSelectText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
         }
-
+      }
         break;
-      case MOVEMENT:
+      case MOVEMENT: {
         MovementCommandRequest movementRequest =
             (MovementCommandRequest) beingCreatedComponent;
 
@@ -158,7 +159,20 @@ public final class ConnectionCanvasRenderer {
         gc.setStroke(WHITE);
         gc.setLineDashes(10);
         gc.strokeLine(start.x, start.y, end.x, end.y);
-        break;
+      }
+      break;
+      case SCALE: {
+        ScaleCommandRequest scaleRequest =
+            (ScaleCommandRequest) beingCreatedComponent;
+
+        Point start = PositionUtils.toCanvasPosition(scaleRequest.getStartIdxPosition());
+        Point end = PositionUtils.toCanvasPosition(model.getIdxPointer().getPosition());
+        gc.setLineWidth(1);
+        gc.setStroke(WHITE);
+        gc.setLineDashes(10);
+        gc.strokeRect(start.x, start.y, end.x-start.x, end.y-start.y);
+      }
+      break;
       default:
         log.error(
             "Invalid current component being created: " + beingCreatedComponent.getCommandType());

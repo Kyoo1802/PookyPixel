@@ -9,5 +9,5 @@ public enum ComponentType {
   LED,
   SELECT,
   MOVEMENT,
-  ;
+  SCALE,
 }
