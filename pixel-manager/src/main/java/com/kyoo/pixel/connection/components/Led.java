@@ -3,7 +3,6 @@ package com.kyoo.pixel.connection.components;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Optional;
-import lombok.ToString;
 
 public final class Led implements ConnectionComponent {
 

@@ -148,7 +148,7 @@ public final class ConnectionCanvasRenderer {
           DrawUtils.drawSelectText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
         }
       }
-        break;
+      break;
       case MOVEMENT: {
         MovementCommandRequest movementRequest =
             (MovementCommandRequest) beingCreatedComponent;
@@ -170,7 +170,21 @@ public final class ConnectionCanvasRenderer {
         gc.setLineWidth(1);
         gc.setStroke(WHITE);
         gc.setLineDashes(10);
-        gc.strokeRect(start.x, start.y, end.x-start.x, end.y-start.y);
+        gc.strokeLine(start.x, start.y, end.x + PositionUtils.SQUARE_LENGTH,
+            end.y + PositionUtils.SQUARE_LENGTH);
+
+        ConnectionComponent selectedComponent = model.getSelectedComponent().get();
+        Dimension newDimension =
+            new Dimension(selectedComponent.getSize().width + model.getIdxPointer().getPosition().x
+                - scaleRequest.getStartIdxPosition().x,
+                selectedComponent.getSize().height + model.getIdxPointer().getPosition().y
+                    - scaleRequest.getStartIdxPosition().y);
+
+        if (newDimension.width > 0 && newDimension.height > 0) {
+          String sizeText = String.format("[%d, %d] = %d", newDimension.width, newDimension.height,
+              newDimension.width * newDimension.height);
+          DrawUtils.drawSelectText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
+        }
       }
       break;
       default:

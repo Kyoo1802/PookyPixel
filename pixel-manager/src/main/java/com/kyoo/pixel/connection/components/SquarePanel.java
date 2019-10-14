@@ -83,7 +83,7 @@ public final class SquarePanel implements ConnectionComponent {
     int newHeight = endIdxPosition.y + addDimension.height;
     for (int i = startIdxPosition.y, pair = 0; i <= newHeight; i++, pair++) {
       for (int j = startIdxPosition.x; j <= newWidth; j++) {
-        int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x+newWidth - j;
+        int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x + newWidth - j;
         Point ledPoint = new Point(tmpJ, i);
         if (this.leds.containsKey(ledPoint)) {
           newLeds.put(leds.get(ledPoint).getIdxPosition(), this.leds.get(ledPoint));
