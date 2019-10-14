@@ -3,6 +3,7 @@ package com.kyoo.pixel.connection.components.commands;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
 import java.awt.Point;
+import java.util.LinkedHashSet;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -28,6 +29,15 @@ public abstract class ConnectionCommandRequest {
     private ComponentType commandType;
     private Point startIdxPosition;
     private Point endIdxPosition;
+  }
+
+  @Getter
+  @Builder(toBuilder = true)
+  public static class DrawLedPathCommandRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private ComponentType commandType;
+    private LinkedHashSet<Point> idxPositions;
   }
 
   @Getter

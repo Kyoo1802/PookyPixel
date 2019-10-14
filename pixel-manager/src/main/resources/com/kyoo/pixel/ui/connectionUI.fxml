@@ -22,6 +22,7 @@
         <FlowPane BorderPane.alignment="CENTER">
           <ToggleButton text="Sp" fx:id="createSquarePanelBtn"/>
           <ToggleButton text="Dp" fx:id="createDriverPortBtn"/>
+          <ToggleButton text="Lp" fx:id="createLedPathBtn"/>
         </FlowPane>
       </top>
     </BorderPane>

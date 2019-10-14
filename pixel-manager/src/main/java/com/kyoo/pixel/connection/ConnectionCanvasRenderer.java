@@ -94,7 +94,7 @@ public final class ConnectionCanvasRenderer {
             DrawUtils.drawPort(gc, properties, (DriverPort) component);
             break;
           default:
-            log.error("Invalid component to draw: %s", component.getComponentType());
+            log.error("Invalid component to draw: " + component.getComponentType());
         }
 
         // Draw Selection
@@ -201,6 +201,7 @@ public final class ConnectionCanvasRenderer {
       case NO_ACTION:
         DrawUtils.drawMousePointer(gc, properties.getNoActionColor(), mouseSquare);
         break;
+      case DRAW_LED_PATH:
       case DRAW_SQUARE_PANEL:
         if (model.getBeingCreatedComponent().isEmpty()) {
           DrawUtils.drawLed(gc, properties.getLedStartColor(), mouseSquare);
@@ -212,7 +213,7 @@ public final class ConnectionCanvasRenderer {
         DrawUtils.drawTempPort(gc, mouseSquare);
         break;
       default:
-        log.error("Invalid Mouse Pointer (Action): %s", model.getConnectionActionState());
+        log.error("Invalid Mouse Pointer (Action): " + model.getConnectionActionState());
     }
   }
 }

@@ -2,8 +2,8 @@ package com.kyoo.pixel.connection.components;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import lombok.Data;
 
@@ -11,18 +11,39 @@ import lombok.Data;
 public final class LedPath implements ConnectionComponent {
 
   private long id;
-  private List<Led> internalLeds;
+  private LinkedHashSet<Led> leds;
   private Point startPosition;
+  private Led first;
+  private Led last;
+  private Dimension size;
 
-  public LedPath(long id, Point position) {
+  public LedPath(long id, Collection<Point> leds) {
     this.id = id;
-    this.startPosition = position;
-    this.internalLeds = new LinkedList<>();
-    this.internalLeds.add(new Led(position, this));
+    this.leds = new LinkedHashSet<>();
+    Point minXY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    Point maxXY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    for (Point p : leds) {
+      minXY.x = Math.min(p.x, minXY.x);
+      minXY.y = Math.min(p.y, minXY.y);
+      maxXY.x = Math.max(p.x, maxXY.x);
+      maxXY.y = Math.max(p.y, maxXY.y);
+      Led led = new Led(p, this);
+      if (first == null) {
+        first = led;
+      }
+      last = led;
+      this.leds.add(led);
+    }
+    size = new Dimension(maxXY.x - minXY.x, maxXY.y - maxXY.y);
   }
 
   @Override
   public boolean intersects(int x, int y) {
+    for (Led led : leds) {
+      if (led.intersects(x, y)) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -33,12 +54,12 @@ public final class LedPath implements ConnectionComponent {
 
   @Override
   public ComponentType getComponentType() {
-    return null;
+    return ComponentType.LED_PATH;
   }
 
   @Override
   public Point getStartIdxPosition() {
-    return null;
+    return first.getIdxPosition();
   }
 
   @Override
@@ -48,7 +69,7 @@ public final class LedPath implements ConnectionComponent {
 
   @Override
   public long getId() {
-    return 0;
+    return id;
   }
 
   @Override
@@ -58,12 +79,12 @@ public final class LedPath implements ConnectionComponent {
 
   @Override
   public Point getEndIdxPosition() {
-    return null;
+    return last.getIdxPosition();
   }
 
   @Override
   public Dimension getSize() {
-    return null;
+    return size;
   }
 
   @Override
@@ -77,6 +98,6 @@ public final class LedPath implements ConnectionComponent {
 
   @Override
   public String description() {
-    return null;
+    return String.format("id: %d, size: %s ", id, size);
   }
 }

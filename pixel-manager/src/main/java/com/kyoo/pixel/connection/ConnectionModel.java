@@ -82,6 +82,16 @@ public final class ConnectionModel {
     }
   }
 
+  public void selectDrawLedPathState(boolean select) {
+    beingCreatedComponent = Optional.empty();
+    if (select) {
+      connectionActionState = ConnectionAction.DRAW_LED_PATH;
+    } else {
+      unSelectActionState();
+    }
+  }
+
+
   public boolean thereIsNotComponentBeingCreated() {
     return getBeingCreatedComponent().isEmpty();
   }

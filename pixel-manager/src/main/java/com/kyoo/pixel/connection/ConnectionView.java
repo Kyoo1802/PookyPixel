@@ -19,6 +19,8 @@ public class ConnectionView implements Initializable {
   @FXML
   private ToggleButton createSquarePanelBtn;
   @FXML
+  private ToggleButton createLedPathBtn;
+  @FXML
   private ToggleButton createDriverPortBtn;
   @FXML
   private Canvas canvas;
@@ -45,8 +47,11 @@ public class ConnectionView implements Initializable {
     // Initialize properties
     viewModel.getCanvasWidth().bindBidirectional(canvas.widthProperty());
     viewModel.getCanvasHeight().bindBidirectional(canvas.heightProperty());
+
     viewModel.getCreateSquarePanelSelected()
         .bindBidirectional(createSquarePanelBtn.selectedProperty());
+    viewModel.getCreateLedPathSelected()
+        .bindBidirectional(createLedPathBtn.selectedProperty());
     viewModel.getCreateDriverPortSelected()
         .bindBidirectional(createDriverPortBtn.selectedProperty());
 

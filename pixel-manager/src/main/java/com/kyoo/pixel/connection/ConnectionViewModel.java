@@ -28,6 +28,8 @@ public final class ConnectionViewModel {
       new SimpleBooleanProperty(false);
   private BooleanProperty createSquarePanelSelected =
       new SimpleBooleanProperty(false);
+  private BooleanProperty createLedPathSelected =
+      new SimpleBooleanProperty(false);
   private IntegerProperty canvasWidth =
       new SimpleIntegerProperty(0);
   private IntegerProperty canvasHeight =
@@ -50,6 +52,8 @@ public final class ConnectionViewModel {
             (observable, oldValue, newValue) -> model.selectDrawSquarePanelState(newValue));
     this.createDriverPortSelected
         .addListener((observable, oldValue, newValue) -> model.selectDrawDriverPortState(newValue));
+    this.createLedPathSelected
+        .addListener((observable, oldValue, newValue) -> model.selectDrawLedPathState(newValue));
     this.drawingCommandHandler = new DrawingCommandHandler(this);
     this.selectCommandHandler = new SelectCommandHandler(this);
     this.transformationHandler = new TransformationHandler(this);

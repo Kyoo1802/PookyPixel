@@ -21,7 +21,7 @@ public final class Led implements ConnectionComponent {
 
   @Override
   public boolean intersects(int x, int y) {
-    return false;
+    return position.x == x && position.y == y;
   }
 
   @Override
