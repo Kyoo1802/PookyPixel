@@ -1,6 +1,7 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
 import java.awt.Point;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,19 +61,9 @@ public abstract class ConnectionCommandRequest {
     private ComponentType commandType;
     private long idToScale;
     private ComponentType typeToScale;
-    private COMPONENT_SIDE cornerToScale;
+    private ComponentSide cornerToScale;
     private Point startIdxPosition;
     private Point endIdxPosition;
     private int scaleSize;
-  }
-  public enum COMPONENT_SIDE {
-    UPPER,
-    UPPER_LEFT,
-    LEFT,
-    UPPER_RIGHT,
-    RIGHT,
-    BOTTOM_LEFT,
-    BOTTOM,
-    BOTTOM_RIGHT
   }
 }

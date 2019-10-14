@@ -6,7 +6,6 @@ import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import java.awt.Point;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
@@ -34,13 +33,13 @@ public final class MoveCommand implements ConnectionCommand {
 
   private boolean doMove(boolean isInverse) {
     Optional<ConnectionComponent> component =
-    model.getCreatedComponentsManager().getComponent(request.getTypeToMove(),
-        request.getIdToMove());
+        model.getCreatedComponentsManager().getComponent(request.getTypeToMove(),
+            request.getIdToMove());
 
     if (component.isPresent()) {
       Point movement = new Point(request.getEndIdxPosition().x - request.getStartIdxPosition().x,
           request.getEndIdxPosition().y - request.getStartIdxPosition().y);
-      movement = isInverse? invert(movement) : movement;
+      movement = isInverse ? invert(movement) : movement;
       move(component.get(), movement);
       return true;
     }

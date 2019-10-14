@@ -65,5 +65,16 @@ public class Led implements ConnectionComponent {
   }
 
   @Override
-  public void addDimension(Dimension addDimension) {}
+  public void addDimension(Dimension addDimension) {
+  }
+
+  @Override
+  public ComponentSide scaleIntersection(int x, int y) {
+    return ComponentSide.NONE;
+  }
+
+  @Override
+  public String description() {
+    return null;
+  }
 }

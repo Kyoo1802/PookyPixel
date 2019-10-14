@@ -22,7 +22,6 @@ public final class DrawingCommandHandler {
   }
 
   public void handleDrawAction() {
-    ;
     switch (model.getConnectionActionState()) {
       case DRAW_SQUARE_PANEL:
         handleSquarePanelDrawing();

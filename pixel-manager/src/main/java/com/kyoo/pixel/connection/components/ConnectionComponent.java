@@ -25,4 +25,20 @@ public interface ConnectionComponent {
   Dimension getSize();
 
   void addDimension(Dimension scale);
+
+  ComponentSide scaleIntersection(int x, int y);
+
+  String description();
+
+  enum ComponentSide {
+    NONE,
+    UPPER,
+    UPPER_LEFT,
+    LEFT,
+    UPPER_RIGHT,
+    RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM,
+    BOTTOM_RIGHT
+  }
 }

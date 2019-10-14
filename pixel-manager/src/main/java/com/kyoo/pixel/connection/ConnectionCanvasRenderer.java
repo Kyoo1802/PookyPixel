@@ -84,27 +84,6 @@ public final class ConnectionCanvasRenderer {
     for (Map<Long, ConnectionComponent> components :
         model.getCreatedComponentsManager().all().values()) {
       for (ConnectionComponent component : components.values()) {
-
-        // Draw Selection
-        if (selectedComponent.isPresent() && selectedComponent.get() == component) {
-
-          int w = component.getEndIdxPosition().x - component.getStartIdxPosition().x + 1;
-          int h = component.getEndIdxPosition().y - component.getStartIdxPosition().y + 1;
-          String sizeText = String.format("[%d, %d] = %d", w, h, w * h);
-
-          Point startCanvasPosition = PositionUtils
-              .toCanvasPosition(component.getStartIdxPosition());
-          Point endCanvasPosition = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
-
-          DrawUtils.drawMouseText(gc, properties.getSelectColor(), endCanvasPosition, sizeText);
-          Dimension selectSize = new Dimension(
-              endCanvasPosition.x - startCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH * 3,
-              endCanvasPosition.y - startCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH * 3);
-          DrawUtils
-              .selectRect(gc, properties.getSelectColor(), startCanvasPosition,
-                  selectSize);
-        }
-
         // Draw Component
         switch (component.getComponentType()) {
           case SQUARE_PANEL:
@@ -115,6 +94,20 @@ public final class ConnectionCanvasRenderer {
             break;
           default:
             log.error("Invalid component to draw: %s", component.getComponentType());
+        }
+
+        // Draw Selection
+        if (selectedComponent.isPresent() && selectedComponent.get() == component) {
+          Point startPosition = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
+          Point endPosition = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
+          Dimension size = PositionUtils.toCanvasDimension(component.getSize());
+
+          DrawUtils.selectRect(gc, properties.getSelectColor(), startPosition, size);
+          DrawUtils
+              .selectResize(gc, properties.getSelectColor(), startPosition, endPosition);
+          DrawUtils
+              .drawSelectText(gc, properties.getSelectColor(), endPosition,
+                  component.description());
         }
       }
     }
@@ -135,22 +128,25 @@ public final class ConnectionCanvasRenderer {
     switch (beingCreatedComponent.getCommandType()) {
       case SQUARE_PANEL:
         DrawSquarePanelCommandRequest squarePanelRequest = (DrawSquarePanelCommandRequest) beingCreatedComponent;
-        Point panelCanvasPosition = PositionUtils.toCanvasPosition(
+
+        Point startPosition = PositionUtils.toCanvasPosition(
             squarePanelRequest.getStartIdxPosition().y, squarePanelRequest.getStartIdxPosition().x);
 
-        DrawUtils.drawLed(gc, properties.getLedStartColor(), panelCanvasPosition);
+        DrawUtils.drawLed(gc, properties.getLedStartColor(), startPosition);
 
-        String sizeText = String
-            .format("[%d, %d]", mouseIdxPosition.x - squarePanelRequest.getStartIdxPosition().x + 1,
+        Dimension size = new Dimension(
+            mouseCanvasPosition.x - startPosition.x + PositionUtils.SQUARE_LENGTH,
+            mouseCanvasPosition.y - startPosition.y + PositionUtils.SQUARE_LENGTH);
+        DrawUtils.selectRect(gc, properties.getSelectColor(), startPosition, size);
+
+        Dimension dimension =
+            new Dimension(mouseIdxPosition.x - squarePanelRequest.getStartIdxPosition().x + 1,
                 mouseIdxPosition.y - squarePanelRequest.getStartIdxPosition().y + 1);
-        DrawUtils.drawMouseText(gc, properties.getSelectColor(), mouseCanvasPosition,
-            sizeText);
+        if (dimension.width > 0 && dimension.height > 0) {
+          String sizeText = String.format("[%d, %d]", dimension.width, dimension.height);
+          DrawUtils.drawSelectText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
+        }
 
-        Point selectPosition = new Point(panelCanvasPosition.x,
-            panelCanvasPosition.y);
-        Dimension selectSize = new Dimension(mouseCanvasPosition.x - panelCanvasPosition.x,
-            mouseCanvasPosition.y - panelCanvasPosition.y);
-        DrawUtils.selectRect(gc, properties.getSelectColor(), selectPosition, selectSize);
         break;
       case MOVEMENT:
         MovementCommandRequest movementRequest =

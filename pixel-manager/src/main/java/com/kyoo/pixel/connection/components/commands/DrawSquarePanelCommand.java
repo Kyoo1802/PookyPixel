@@ -19,6 +19,9 @@ public final class DrawSquarePanelCommand implements ConnectionCommand {
 
   @Override
   public boolean execute() {
+    if (!isValidCommand()) {
+      return false;
+    }
     SquarePanel squarePanel = new SquarePanel(request.getId(), request.getStartIdxPosition(),
         request.getEndIdxPosition());
     model.addComponent(squarePanel);
@@ -26,6 +29,11 @@ public final class DrawSquarePanelCommand implements ConnectionCommand {
     log.debug("Draw Square Panel triggered %s-%s", request.getStartIdxPosition(),
         request.getEndIdxPosition());
     return true;
+  }
+
+  private boolean isValidCommand() {
+    return request.getEndIdxPosition().x - request.getStartIdxPosition().x + 1 > 0
+        && request.getEndIdxPosition().y - request.getStartIdxPosition().y + 1 > 0;
   }
 
   @Override

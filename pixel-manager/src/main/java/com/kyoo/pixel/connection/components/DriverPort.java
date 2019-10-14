@@ -63,9 +63,22 @@ public final class DriverPort implements ConnectionComponent {
 
   @Override
   public Dimension getSize() {
-    return new Dimension(endPosition.x-idxPosition.x+1, endPosition.y-idxPosition.y+1);
+    return new Dimension(endPosition.x - idxPosition.x + 1, endPosition.y - idxPosition.y + 1);
   }
 
   @Override
-  public void addDimension(Dimension addDimension) { }
+  public void addDimension(Dimension addDimension) {
+  }
+
+  @Override
+  public ComponentSide scaleIntersection(int x, int y) {
+    return ComponentSide.NONE;
+  }
+
+  @Override
+  public String description() {
+    int w = getEndIdxPosition().x - getStartIdxPosition().x + 1;
+    int h = getEndIdxPosition().y - getStartIdxPosition().y + 1;
+    return String.format("[%d, %d] = %d", w, h, w * h);
+  }
 }

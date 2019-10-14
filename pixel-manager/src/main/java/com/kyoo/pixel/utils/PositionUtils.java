@@ -36,7 +36,7 @@ public final class PositionUtils {
   }
 
   private static int toCanvas(int idx) {
-    return (int) (SQUARE_LENGTH * (idx + .5));
+    return SQUARE_LENGTH * idx + HALF_SQUARE_LENGTH;
   }
 
   private static int toIdx(int xy) {
@@ -45,8 +45,12 @@ public final class PositionUtils {
   }
 
   public static Dimension toCanvasDimension(Dimension dimension) {
-    int w = toCanvas(dimension.width);
-    int h = toCanvas(dimension.height);
+    int w = toCanvasDimension(dimension.width);
+    int h = toCanvasDimension(dimension.height);
     return new Dimension(w, h);
+  }
+
+  private static int toCanvasDimension(int size) {
+    return SQUARE_LENGTH * size;
   }
 }

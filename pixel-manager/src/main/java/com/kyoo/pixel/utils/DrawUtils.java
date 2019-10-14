@@ -1,6 +1,5 @@
 package com.kyoo.pixel.utils;
 
-import static javafx.scene.paint.Color.WHITE;
 import static javafx.scene.paint.Color.YELLOW;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
@@ -31,8 +30,8 @@ public final class DrawUtils {
     for (int i = 0; i < MAX_HORIZONTAL_LEDS; i++) {
       for (int j = 0; j < MAX_VERTICAL_LEDS; j++) {
         Point mousePoint = PositionUtils.toCanvasPosition(i, j);
-        g2.fillOval(mousePoint.x + PositionUtils.HALF_SQUARE_LENGTH - 1,
-            mousePoint.y + PositionUtils.HALF_SQUARE_LENGTH - 1, DOT_SIZE, DOT_SIZE);
+        g2.fillOval(mousePoint.x + PositionUtils.HALF_SQUARE_LENGTH - DOT_SIZE / 2,
+            mousePoint.y + PositionUtils.HALF_SQUARE_LENGTH - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
       }
     }
   }
@@ -52,7 +51,8 @@ public final class DrawUtils {
       } else {
         hexColor = properties.getLedOffColor();
       }
-      Point ledPosition = getLedPanelPosition(ledCanvasPosition);
+      Point ledPosition = new Point(ledCanvasPosition.x, ledCanvasPosition.y);
+      ;
       points[idx++] = ledPosition;
       drawLed(gc, hexColor, ledPosition);
     }
@@ -73,10 +73,6 @@ public final class DrawUtils {
     gc.stroke();
   }
 
-  private static Point getLedPanelPosition(Point ledCanvasPosition) {
-    return new Point(ledCanvasPosition.x, ledCanvasPosition.y);
-  }
-
   public static void drawLed(GraphicsContext gc, String hexColor, Point position) {
     gc.setFill(Color.web(hexColor));
     gc.fillOval(position.x, position.y, PositionUtils.SQUARE_LENGTH, PositionUtils.SQUARE_LENGTH);
@@ -90,10 +86,9 @@ public final class DrawUtils {
         PositionUtils.SQUARE_LENGTH + 4);
   }
 
-  public static void drawMouseText(GraphicsContext gc, String hexColor,
+  public static void drawSelectText(GraphicsContext gc, String hexColor,
       Point position, String text) {
-//    gc.setFill(Color.web("#0000ff"));
-    gc.setFill(WHITE);
+    gc.setFill(Color.web(hexColor));
     gc.fillText(text, position.x + PositionUtils.SQUARE_LENGTH,
         position.y + PositionUtils.SQUARE_LENGTH);
   }
@@ -103,8 +98,28 @@ public final class DrawUtils {
     gc.setStroke(Color.web(hexColor));
     gc.setLineWidth(1);
     gc.setLineDashes(10);
-    gc.strokeRect(position.x - PositionUtils.HALF_SQUARE_LENGTH / 2,
-        position.y - PositionUtils.HALF_SQUARE_LENGTH / 2, size.width, size.height);
+    gc.strokeRect(position.x, position.y, size.width, size.height);
+  }
+
+  public static void selectResize(GraphicsContext gc, String hexColor, Point startPosition,
+      Point endPosition) {
+    gc.setFill(Color.web(hexColor));
+    gc.setLineWidth(1);
+    gc.setLineDashes();
+    gc.fillRect(startPosition.x, startPosition.y, PositionUtils.HALF_SQUARE_LENGTH,
+        PositionUtils.HALF_SQUARE_LENGTH);
+
+    gc.fillRect(startPosition.x,
+        endPosition.y + PositionUtils.HALF_SQUARE_LENGTH, PositionUtils.HALF_SQUARE_LENGTH,
+        PositionUtils.HALF_SQUARE_LENGTH);
+
+    gc.fillRect(endPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
+        startPosition.y, PositionUtils.HALF_SQUARE_LENGTH,
+        PositionUtils.HALF_SQUARE_LENGTH);
+
+    gc.fillRect(endPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
+        endPosition.y + PositionUtils.HALF_SQUARE_LENGTH, PositionUtils.HALF_SQUARE_LENGTH,
+        PositionUtils.HALF_SQUARE_LENGTH);
   }
 
   public static void drawPort(GraphicsContext gc, ConnectionProperties properties,

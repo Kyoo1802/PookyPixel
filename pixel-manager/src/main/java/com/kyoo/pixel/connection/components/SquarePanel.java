@@ -3,7 +3,6 @@ package com.kyoo.pixel.connection.components;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Optional;
 import lombok.Data;
 
@@ -73,19 +72,20 @@ public final class SquarePanel implements ConnectionComponent {
 
   @Override
   public Dimension getSize() {
-    return new Dimension(endIdxPosition.x-startIdxPosition.x+1,endIdxPosition.y-startIdxPosition.y+1);
+    return new Dimension(endIdxPosition.x - startIdxPosition.x + 1,
+        endIdxPosition.y - startIdxPosition.y + 1);
   }
 
   @Override
   public void addDimension(Dimension addDimension) {
     LinkedHashMap<Point, Led> newLeds = new LinkedHashMap<>();
-    int newHeight = endIdxPosition.y+addDimension.height;
-    int newWidth = endIdxPosition.x+addDimension.width;
+    int newHeight = endIdxPosition.y + addDimension.height;
+    int newWidth = endIdxPosition.x + addDimension.width;
     for (int i = startIdxPosition.y, pair = 0; i <= newHeight; i++, pair++) {
       for (int j = startIdxPosition.x; j <= newWidth; j++) {
         int tmpJ = pair % 2 == 0 ? j : newWidth - j;
         Point ledPoint = new Point(tmpJ, i);
-        if(this.leds.containsKey(ledPoint)){
+        if (this.leds.containsKey(ledPoint)) {
           newLeds.put(ledPoint, this.leds.get(ledPoint));
         } else {
           newLeds.put(ledPoint, new Led(ledPoint, this));
@@ -94,5 +94,40 @@ public final class SquarePanel implements ConnectionComponent {
     }
     this.leds.clear();
     this.leds.putAll(newLeds);
+  }
+
+  @Override
+  public ComponentSide scaleIntersection(int x, int y) {
+    if (startIdxPosition.x <= x && x <= startIdxPosition.x) {
+      if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
+        return ComponentSide.UPPER_LEFT;
+      } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
+        return ComponentSide.BOTTOM_LEFT;
+      } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
+        return ComponentSide.LEFT;
+      }
+    } else if (endIdxPosition.x <= x && x <= endIdxPosition.x) {
+      if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
+        return ComponentSide.UPPER_RIGHT;
+      } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
+        return ComponentSide.BOTTOM_RIGHT;
+      } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
+        return ComponentSide.RIGHT;
+      }
+    } else if (startIdxPosition.x <= x && x <= endIdxPosition.x) {
+      if (startIdxPosition.y <= y && y == startIdxPosition.y) {
+        return ComponentSide.UPPER;
+      } else if (endIdxPosition.y <= y && y == endIdxPosition.y) {
+        return ComponentSide.BOTTOM;
+      }
+    }
+    return ComponentSide.NONE;
+  }
+
+  @Override
+  public String description() {
+    int w = getEndIdxPosition().x - getStartIdxPosition().x + 1;
+    int h = getEndIdxPosition().y - getStartIdxPosition().y + 1;
+    return String.format("[%d, %d] = %d", w, h, w * h);
   }
 }

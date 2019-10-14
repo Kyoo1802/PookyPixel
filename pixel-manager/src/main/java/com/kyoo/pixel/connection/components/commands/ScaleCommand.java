@@ -28,17 +28,17 @@ public final class ScaleCommand implements ConnectionCommand {
     doScale(true);
   }
 
-  public boolean doScale(boolean isInverse){
+  public boolean doScale(boolean isInverse) {
     Optional<ConnectionComponent> component =
         model.getCreatedComponentsManager().getComponent(request.getTypeToScale(),
-        request.getIdToScale());
+            request.getIdToScale());
 
     if (component.isPresent()) {
       Dimension scale =
           new Dimension(request.getEndIdxPosition().x - request.getStartIdxPosition().x,
-          request.getEndIdxPosition().y - request.getStartIdxPosition().y);
-      scale = isInverse? invert(scale) : scale;
-      if(isValidScale(component.get(),scale)){
+              request.getEndIdxPosition().y - request.getStartIdxPosition().y);
+      scale = isInverse ? invert(scale) : scale;
+      if (isValidScale(component.get(), scale)) {
         scale(component.get(), scale);
       } else {
         log.debug("Invalid  scale %s", scale);
@@ -50,13 +50,14 @@ public final class ScaleCommand implements ConnectionCommand {
 
   private boolean isValidScale(ConnectionComponent component, Dimension scale) {
     Dimension d = component.getSize();
-    return d.width+scale.width>0 && d.height+scale.height>0;
+    return d.width + scale.width > 0 && d.height + scale.height > 0;
   }
 
   private Dimension invert(Dimension scale) {
     scale.setSize(-scale.width, -scale.height);
     return scale;
   }
+
   private void scale(ConnectionComponent component, Dimension scale) {
     component.addDimension(scale);
   }

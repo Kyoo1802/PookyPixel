@@ -3,6 +3,7 @@ package com.kyoo.pixel.connection.components.commands;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
 import java.util.Map;
 import java.util.Optional;
@@ -24,10 +25,16 @@ public final class SelectCommand implements ConnectionCommand {
     for (Map<Long, ConnectionComponent> components :
         model.getCreatedComponentsManager().all().values()) {
       for (ConnectionComponent component : components.values()) {
-        if (component
+        ComponentSide scaleSide = component.scaleIntersection(request.getSelectIdxPosition().x,
+            request.getSelectIdxPosition().y);
+        if (scaleSide != ComponentSide.NONE || component
             .intersects(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y)) {
           model.setSelectedComponent(Optional.of(component));
-          model.setTransformationActionState(TransformationAction.MOVE);
+          if (scaleSide == ComponentSide.NONE) {
+            model.setTransformationActionState(TransformationAction.MOVE);
+          } else {
+            model.setTransformationActionState(TransformationAction.SCALE);
+          }
           log.debug("Selection triggered %s", request.getSelectIdxPosition());
           return true;
         }
@@ -35,6 +42,14 @@ public final class SelectCommand implements ConnectionCommand {
     }
     log.debug("No selection triggered %s", request.getSelectIdxPosition());
     model.setSelectedComponent(Optional.empty());
+    return false;
+  }
+
+  private boolean isRotate() {
+    return false;
+  }
+
+  private boolean isScale() {
     return false;
   }
 
