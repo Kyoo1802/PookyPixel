@@ -23,7 +23,7 @@ public final class SelectCommand implements ConnectionCommand {
   @Override
   public boolean execute() {
     for (Map<Long, ConnectionComponent> components :
-        model.getCreatedComponentsManager().all().values()) {
+        model.getCreatedComponentsManager().getComponents().values()) {
       for (ConnectionComponent component : components.values()) {
         ComponentSide scaleSide = component.scaleIntersection(request.getSelectIdxPosition().x,
             request.getSelectIdxPosition().y);
@@ -43,14 +43,6 @@ public final class SelectCommand implements ConnectionCommand {
     log.debug("No selection triggered %s", request.getSelectIdxPosition());
     model.setSelectedComponent(Optional.empty());
     model.setBeingCreatedComponent(Optional.empty());
-    return false;
-  }
-
-  private boolean isRotate() {
-    return false;
-  }
-
-  private boolean isScale() {
     return false;
   }
 

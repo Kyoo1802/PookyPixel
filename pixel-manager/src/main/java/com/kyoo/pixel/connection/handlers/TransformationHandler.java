@@ -46,14 +46,14 @@ public final class TransformationHandler {
               .commandType(ComponentType.MOVEMENT)
               .idToMove(model.getSelectedComponent().get().getId())
               .typeToMove(model.getSelectedComponent().get().getComponentType())
-              .startIdxPosition(model.getIdxPointer().getPosition())
+              .startIdxPosition(model.getPointerCopy())
               .build();
       model.setBeingCreatedComponent(Optional.of(request));
     } else {
       MovementCommandRequest request =
           ((MovementCommandRequest) model.getBeingCreatedComponent().get())
               .toBuilder()
-              .endIdxPosition(model.getIdxPointer().getPosition())
+              .endIdxPosition(model.getPointerCopy())
               .build();
       viewModel.executeCommand(new MoveCommand(model, request));
       model.setBeingCreatedComponent(Optional.empty());
@@ -68,14 +68,14 @@ public final class TransformationHandler {
               .commandType(ComponentType.SCALE)
               .idToScale(model.getSelectedComponent().get().getId())
               .typeToScale(model.getSelectedComponent().get().getComponentType())
-              .startIdxPosition(model.getIdxPointer().getPosition())
+              .startIdxPosition(model.getPointerCopy())
               .build();
       model.setBeingCreatedComponent(Optional.of(request));
     } else {
       ScaleCommandRequest request =
           ((ScaleCommandRequest) model.getBeingCreatedComponent().get())
               .toBuilder()
-              .endIdxPosition(model.getIdxPointer().getPosition())
+              .endIdxPosition(model.getPointerCopy())
               .build();
       viewModel.executeCommand(new ScaleCommand(model, request));
       model.setBeingCreatedComponent(Optional.empty());

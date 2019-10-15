@@ -30,14 +30,14 @@ public final class DrawingCommandHandler {
           DrawSquarePanelCommandRequest.builder()
               .id(model.generateId(ComponentType.SQUARE_PANEL))
               .commandType(ComponentType.SQUARE_PANEL)
-              .startIdxPosition(model.getIdxPointer().getPosition())
+              .startIdxPosition(model.getPointerCopy())
               .build();
       model.setBeingCreatedComponent(Optional.of(request));
     } else {
       DrawSquarePanelCommandRequest request =
           ((DrawSquarePanelCommandRequest) model.getBeingCreatedComponent().get())
               .toBuilder()
-              .endIdxPosition(model.getIdxPointer().getPosition())
+              .endIdxPosition(model.getPointerCopy())
               .build();
       viewModel.executeCommand(new DrawSquarePanelCommand(model, request));
       model.setBeingCreatedComponent(Optional.empty());
@@ -49,7 +49,7 @@ public final class DrawingCommandHandler {
         DrawDriverPortRequest.builder()
             .id(model.generateId(ComponentType.DRIVER_PORT))
             .commandType(ComponentType.DRIVER_PORT)
-            .idxPosition(model.getIdxPointer().getPosition())
+            .idxPosition(model.getPointerCopy())
             .build();
     viewModel.executeCommand(new DrawDriverPortCommand(model, request));
   }
@@ -61,13 +61,13 @@ public final class DrawingCommandHandler {
               .id(model.generateId(ComponentType.LED_PATH))
               .commandType(ComponentType.LED_PATH)
               .idxPositions(
-                  Sets.newLinkedHashSet(Lists.newArrayList(model.getIdxPointer().getPosition())))
+                  Sets.newLinkedHashSet(Lists.newArrayList(model.getPointerCopy())))
               .build();
       model.setBeingCreatedComponent(Optional.of(request));
     } else {
       DrawLedPathCommandRequest request =
           ((DrawLedPathCommandRequest) model.getBeingCreatedComponent().get());
-      request.getIdxPositions().add(model.getIdxPointer().getPosition());
+      request.getIdxPositions().add(model.getPointerCopy());
     }
   }
 }

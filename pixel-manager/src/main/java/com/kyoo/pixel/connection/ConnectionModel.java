@@ -5,7 +5,6 @@ import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.ConnectionComponentManager;
-import com.kyoo.pixel.connection.components.Pointer;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
@@ -27,7 +26,7 @@ public final class ConnectionModel {
   private Optional<ConnectionCommandRequest> beingCreatedComponent;
   private Optional<ConnectionComponent> selectedComponent;
   private Map<ComponentType, Integer> createdComponentsCount;
-  private Pointer idxPointer;
+  private Point pointer;
   private Dimension dimension;
 
   @Inject
@@ -36,14 +35,14 @@ public final class ConnectionModel {
     this.selectedComponent = Optional.empty();
     this.createdComponentsCount = new HashMap<>();
     this.createdComponentsManager = new ConnectionComponentManager();
-    this.idxPointer = new Pointer(new Point(0, 0));
+    this.pointer = new Point(0, 0);
     this.connectionState = ConnectionState.NO_ACTION;
     this.transformationActionState = TransformationAction.MOVE;
     this.dimension = new Dimension();
   }
 
   public void handlePointerMovement(Point canvasPointerPosition) {
-    idxPointer.setLocation(PositionUtils.toIdxPosition(canvasPointerPosition));
+    pointer.setLocation(PositionUtils.toIdxPosition(canvasPointerPosition));
   }
 
   public void addComponent(ConnectionComponent component) {
@@ -75,19 +74,20 @@ public final class ConnectionModel {
     }
   }
 
+  public Point getPointerCopy() {
+    return new Point(pointer);
+  }
+
   public enum ConnectionState {
     NO_ACTION,
     DRAW_SQUARE_PANEL,
     DRAW_LED_PATH,
     DRAW_DRIVER_PORT,
-    DRAW_PANEL_BRIDGE,
   }
-
 
   public enum TransformationAction {
     UNSET,
     MOVE,
     SCALE,
-    ROTATE,
   }
 }

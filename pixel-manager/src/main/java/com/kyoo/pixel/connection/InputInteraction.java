@@ -9,6 +9,7 @@ import lombok.Data;
 public interface InputInteraction {
 
   enum State {
+    UNKNOWN,
     DRAW_SQUARE_PANEL,
     DRAW_DRIVER_PORT,
     DRAW_LED_PATH,
@@ -34,6 +35,7 @@ public interface InputInteraction {
   }
 
   enum PositionState {
+    UNKNOWN,
     MOVED,
     CLICKED,
     DRAGGED,
