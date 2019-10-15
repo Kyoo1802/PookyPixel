@@ -42,6 +42,7 @@ public final class SelectCommand implements ConnectionCommand {
     }
     log.debug("No selection triggered %s", request.getSelectIdxPosition());
     model.setSelectedComponent(Optional.empty());
+    model.setBeingCreatedComponent(Optional.empty());
     return false;
   }
 

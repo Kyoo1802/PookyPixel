@@ -5,6 +5,8 @@ import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel.ConnectionState;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
 import com.kyoo.pixel.connection.InputInteraction.PositionInteraction;
+import com.kyoo.pixel.connection.InputInteraction.PositionSide;
+import com.kyoo.pixel.connection.InputInteraction.PositionState;
 import com.kyoo.pixel.connection.InputInteraction.StateInteraction;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommand;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
@@ -91,21 +93,27 @@ public final class ConnectionViewModel {
   }
 
   public void handleActionInteraction(InputInteraction interaction) {
+    String p = model.getBeingCreatedComponent().isEmpty()? "__":
+        ":"+model.getBeingCreatedComponent().get().getCommandType();
     switch (model.getConnectionState()) {
       case NO_ACTION: {
         switch (getNoActionEvent(interaction)) {
-          case POINTER_MOVE:
           case DRAG:
+            System.out.println("NO_ACTION:DRAG"+p);
+          case POINTER_MOVE:
             model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
             break;
           case PRESS:
+            System.out.println("NO_ACTION:PRESS"+p);
             selectCommandHandler.handleSelectAction();
             transformationHandler.handleTransformation();
             break;
           case RELEASE:
+            System.out.println("NO_ACTION:RELEASE"+p);
             transformationHandler.handleTransformation();
             break;
           case CLICK:
+            System.out.println("NO_ACTION:CLICK"+p);
             selectCommandHandler.handleSelectAction();
             model.setTransformationActionState(TransformationAction.UNSET);
             break;
@@ -175,6 +183,11 @@ public final class ConnectionViewModel {
   private NoActionEvent getNoActionEvent(InputInteraction interaction) {
     if (isPositionInteraction(interaction)) {
       PositionInteraction positionInteraction = getPositionInteraction(interaction);
+      if(positionInteraction.getState() == PositionState.MOVED) {
+        return NoActionEvent.POINTER_MOVE;
+      } else if(positionInteraction.getSide() != PositionSide.LEFT){
+        return NoActionEvent.UNKNOWN;
+      }
       switch (positionInteraction.getState()) {
         case CLICKED:
           return NoActionEvent.CLICK;
