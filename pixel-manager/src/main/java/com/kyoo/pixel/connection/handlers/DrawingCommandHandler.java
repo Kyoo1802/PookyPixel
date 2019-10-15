@@ -9,7 +9,6 @@ import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.Dr
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
-import com.kyoo.pixel.connection.components.commands.DrawLedPathCommand;
 import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
@@ -25,23 +24,7 @@ public final class DrawingCommandHandler {
     this.model = viewModel.getModel();
   }
 
-  public void handleDrawAction() {
-    switch (model.getConnectionActionState()) {
-      case DRAW_SQUARE_PANEL:
-        handleSquarePanelDrawing();
-        break;
-      case DRAW_LED_PATH:
-        handleLedPathDrawing();
-        break;
-      case DRAW_DRIVER_PORT:
-        handleDriverPortDrawing();
-        break;
-      default:
-        log.error("Invalid New draw Action: " + model.getConnectionActionState());
-    }
-  }
-
-  private void handleSquarePanelDrawing() {
+  public void handleSquarePanelDrawing() {
     if (model.thereIsNotComponentBeingCreated()) {
       DrawSquarePanelCommandRequest request =
           DrawSquarePanelCommandRequest.builder()
@@ -61,7 +44,7 @@ public final class DrawingCommandHandler {
     }
   }
 
-  private void handleDriverPortDrawing() {
+  public void handleDriverPortDrawing() {
     DrawDriverPortRequest request =
         DrawDriverPortRequest.builder()
             .id(model.generateId(ComponentType.DRIVER_PORT))
@@ -71,7 +54,7 @@ public final class DrawingCommandHandler {
     viewModel.executeCommand(new DrawDriverPortCommand(model, request));
   }
 
-  private void handleLedPathDrawing() {
+  public void handleLedPathDrawing() {
     if (model.thereIsNotComponentBeingCreated()) {
       DrawLedPathCommandRequest request =
           DrawLedPathCommandRequest.builder()
@@ -83,11 +66,8 @@ public final class DrawingCommandHandler {
       model.setBeingCreatedComponent(Optional.of(request));
     } else {
       DrawLedPathCommandRequest request =
-          ((DrawLedPathCommandRequest) model.getBeingCreatedComponent().get())
-              .toBuilder()
-              .build();
-      viewModel.executeCommand(new DrawLedPathCommand(model, request));
-      model.setBeingCreatedComponent(Optional.empty());
+          ((DrawLedPathCommandRequest) model.getBeingCreatedComponent().get());
+      request.getIdxPositions().add(model.getIdxPointer().getPosition());
     }
   }
 }

@@ -8,6 +8,7 @@ import com.kyoo.pixel.connection.components.ConnectionComponentManager;
 import com.kyoo.pixel.connection.components.Pointer;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.utils.PositionUtils;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +21,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class ConnectionModel {
 
-  private ConnectionAction connectionActionState;
+  private ConnectionState connectionState;
   private TransformationAction transformationActionState;
   private ConnectionComponentManager createdComponentsManager;
   private Optional<ConnectionCommandRequest> beingCreatedComponent;
   private Optional<ConnectionComponent> selectedComponent;
   private Map<ComponentType, Integer> createdComponentsCount;
   private Pointer idxPointer;
+  private Dimension dimension;
 
   @Inject
   public ConnectionModel() {
@@ -35,8 +37,9 @@ public final class ConnectionModel {
     this.createdComponentsCount = new HashMap<>();
     this.createdComponentsManager = new ConnectionComponentManager();
     this.idxPointer = new Pointer(new Point(0, 0));
-    this.connectionActionState = ConnectionAction.NO_ACTION;
+    this.connectionState = ConnectionState.NO_ACTION;
     this.transformationActionState = TransformationAction.MOVE;
+    this.dimension = new Dimension();
   }
 
   public void handlePointerMovement(Point canvasPointerPosition) {
@@ -60,51 +63,19 @@ public final class ConnectionModel {
     return newCount;
   }
 
-  public void unSelectActionState() {
-    connectionActionState = ConnectionAction.NO_ACTION;
-  }
-
-  public void selectDrawSquarePanelState(boolean select) {
-    beingCreatedComponent = Optional.empty();
-    if (select) {
-      connectionActionState = ConnectionAction.DRAW_SQUARE_PANEL;
-    } else {
-      unSelectActionState();
-    }
-  }
-
-  public void selectDrawDriverPortState(boolean select) {
-    beingCreatedComponent = Optional.empty();
-    if (select) {
-      connectionActionState = ConnectionAction.DRAW_DRIVER_PORT;
-    } else {
-      unSelectActionState();
-    }
-  }
-
-  public void selectDrawLedPathState(boolean select) {
-    beingCreatedComponent = Optional.empty();
-    if (select) {
-      connectionActionState = ConnectionAction.DRAW_LED_PATH;
-    } else {
-      unSelectActionState();
-    }
-  }
-
-
   public boolean thereIsNotComponentBeingCreated() {
     return getBeingCreatedComponent().isEmpty();
   }
 
-  public enum MouseState {
-    MOVED,
-    CLICKED,
-    DRAGGED,
-    PRESSED,
-    RELEASED
+  public void setConnectionState(ConnectionState connectionState, boolean value) {
+    if (value) {
+      this.connectionState = connectionState;
+    } else {
+      this.connectionState = ConnectionState.NO_ACTION;
+    }
   }
 
-  public enum ConnectionAction {
+  public enum ConnectionState {
     NO_ACTION,
     DRAW_SQUARE_PANEL,
     DRAW_LED_PATH,

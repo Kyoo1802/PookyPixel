@@ -14,12 +14,6 @@ public final class PositionUtils {
     return new Point(j, i);
   }
 
-  public static Point toRoundPosition(Point mousePosition) {
-    int mouseX2 = toStartCanvas(mousePosition.x);
-    int mouseY2 = toStartCanvas(mousePosition.y);
-    return new Point(mouseX2, mouseY2);
-  }
-
   public static Point toCanvasPosition(Point idxPosition) {
     return toCanvasPosition(idxPosition.y, idxPosition.x);
   }
@@ -30,16 +24,11 @@ public final class PositionUtils {
     return new Point(x, y);
   }
 
-  private static int toStartCanvas(int xy) {
-    int tmpXY = toIdx(xy);
-    return tmpXY * SQUARE_LENGTH + HALF_SQUARE_LENGTH;
-  }
-
   private static int toCanvas(int idx) {
     return SQUARE_LENGTH * idx + HALF_SQUARE_LENGTH;
   }
 
-  private static int toIdx(int xy) {
+  public static int toIdx(int xy) {
     int tmpXY = Math.max(xy - HALF_SQUARE_LENGTH, 0);
     return tmpXY / SQUARE_LENGTH;
   }

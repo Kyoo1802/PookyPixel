@@ -68,13 +68,12 @@ public final class DrawUtils {
         gc.lineTo(points[i].x + PositionUtils.HALF_SQUARE_LENGTH,
             points[i].y + PositionUtils.HALF_SQUARE_LENGTH);
       }
-
     }
     gc.stroke();
   }
 
   public static void drawLed(GraphicsContext gc, String hexColor, Point position) {
-    gc.setFill(Color.web(hexColor));
+//    gc.setFill(Color.web(hexColor));
     gc.fillOval(position.x, position.y, PositionUtils.SQUARE_LENGTH, PositionUtils.SQUARE_LENGTH);
   }
 

@@ -2,19 +2,18 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.kyoo.pixel.connection.ConnectionModel.MouseState;
+import com.kyoo.pixel.connection.ConnectionModel.ConnectionState;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
+import com.kyoo.pixel.connection.InputInteraction.PositionInteraction;
+import com.kyoo.pixel.connection.InputInteraction.StateInteraction;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommand;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
 import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
 import com.kyoo.pixel.connection.handlers.TransformationHandler;
-import java.awt.Point;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
+import com.kyoo.pixel.utils.PositionUtils;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -24,18 +23,8 @@ import lombok.extern.log4j.Log4j2;
 @Getter
 public final class ConnectionViewModel {
 
-  private BooleanProperty createDriverPortSelected =
-      new SimpleBooleanProperty(false);
-  private BooleanProperty createSquarePanelSelected =
-      new SimpleBooleanProperty(false);
-  private BooleanProperty createLedPathSelected =
-      new SimpleBooleanProperty(false);
-  private IntegerProperty canvasWidth =
-      new SimpleIntegerProperty(0);
-  private IntegerProperty canvasHeight =
-      new SimpleIntegerProperty(0);
-  private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>(new Point(0, 0));
-  private ObjectProperty<MouseState> mouseState = new SimpleObjectProperty<>(MouseState.MOVED);
+  private ObjectProperty<ConcurrentLinkedQueue<InputInteraction>> inputInteractions =
+      new SimpleObjectProperty<>(new ConcurrentLinkedQueue<>());
 
   private ConnectionModel model;
   private ConnectionCommandManager commandManager;
@@ -47,59 +36,180 @@ public final class ConnectionViewModel {
   public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager commandManager) {
     this.model = model;
     this.commandManager = commandManager;
-    this.createSquarePanelSelected
-        .addListener(
-            (observable, oldValue, newValue) -> model.selectDrawSquarePanelState(newValue));
-    this.createDriverPortSelected
-        .addListener((observable, oldValue, newValue) -> model.selectDrawDriverPortState(newValue));
-    this.createLedPathSelected
-        .addListener((observable, oldValue, newValue) -> model.selectDrawLedPathState(newValue));
     this.drawingCommandHandler = new DrawingCommandHandler(this);
     this.selectCommandHandler = new SelectCommandHandler(this);
     this.transformationHandler = new TransformationHandler(this);
+    Thread t = new Thread(() -> {
+      while (true) {
+        consumeInteractions();
+        try {
+          Thread.sleep(10);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    });
+    t.start();
   }
 
-  public void handleActions() {
-    switch (model.getConnectionActionState()) {
-      case NO_ACTION:
-        switch (mouseState.get()) {
-          case MOVED:
-          case DRAGGED:
-            model.handlePointerMovement(mousePosition.get());
+  public void consumeInteractions() {
+    while (!inputInteractions.get().isEmpty()) {
+      InputInteraction inputInteraction = inputInteractions.get().poll();
+      log.debug("Consuming input interaction: " + inputInteraction);
+      if (isStateInteraction(inputInteraction)) {
+        handleStateInteraction((StateInteraction) inputInteraction);
+      } else {
+        handleActionInteraction(inputInteraction);
+      }
+    }
+  }
+
+  private void handleStateInteraction(StateInteraction interaction) {
+    switch (interaction.getState()) {
+      case DRAW_SQUARE_PANEL:
+        model.setConnectionState(ConnectionState.DRAW_SQUARE_PANEL,
+            interaction.getBoolValue().get());
+        break;
+      case DRAW_LED_PATH:
+        model.setConnectionState(ConnectionState.DRAW_LED_PATH, interaction.getBoolValue().get());
+        break;
+      case DRAW_DRIVER_PORT:
+        model
+            .setConnectionState(ConnectionState.DRAW_DRIVER_PORT, interaction.getBoolValue().get());
+        break;
+      case RESIZE_WIDTH:
+        model.getDimension().setSize(PositionUtils.toIdx(interaction.getIntValue().get()),
+            model.getDimension().height);
+        break;
+      case RESIZE_HEIGHT:
+        model.getDimension().setSize(model.getDimension().width,
+            PositionUtils.toIdx(interaction.getIntValue().get()));
+        break;
+      default:
+        log.error("Invalid interaction: " + interaction.getState());
+    }
+  }
+
+  public void handleActionInteraction(InputInteraction interaction) {
+    switch (model.getConnectionState()) {
+      case NO_ACTION: {
+        switch (getNoActionEvent(interaction)) {
+          case POINTER_MOVE:
+          case DRAG:
+            model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
             break;
-          case PRESSED:
+          case PRESS:
             selectCommandHandler.handleSelectAction();
             transformationHandler.handleTransformation();
             break;
-          case RELEASED:
+          case RELEASE:
             transformationHandler.handleTransformation();
             break;
-          case CLICKED:
+          case CLICK:
             selectCommandHandler.handleSelectAction();
             model.setTransformationActionState(TransformationAction.UNSET);
             break;
+          default:
+            log.debug("Event not supported for NO_ACTION: " + interaction);
         }
-        break;
+      }
+      break;
       case DRAW_DRIVER_PORT:
-      case DRAW_PANEL_BRIDGE:
-      case DRAW_SQUARE_PANEL:
-      case DRAW_LED_PATH:
-        switch (mouseState.get()) {
-          case CLICKED:
-            drawingCommandHandler.handleDrawAction();
+        switch (getDrawEvent(interaction)) {
+          case DRAW_POINT:
+            drawingCommandHandler.handleDriverPortDrawing();
             break;
-          case MOVED:
-            model.handlePointerMovement(mousePosition.get());
+          case MOVE:
+            model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
             break;
           default:
+            log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
+        }
+        break;
+      case DRAW_SQUARE_PANEL:
+        switch (getDrawEvent(interaction)) {
+          case DRAW_POINT:
+            drawingCommandHandler.handleSquarePanelDrawing();
+            break;
+          case MOVE:
+            model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
+            break;
+          default:
+            log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
+        }
+        break;
+      case DRAW_LED_PATH:
+        switch (getDrawEvent(interaction)) {
+          case DRAW_POINT:
+            drawingCommandHandler.handleLedPathDrawing();
+            break;
+          case MOVE:
+            model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
+            break;
+          default:
+            log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
         }
         break;
       default:
-        log.error("Invalid action to handle: " + model.getConnectionActionState());
+        log.error("Invalid action to handle: " + model.getConnectionState());
     }
+  }
+
+  private DrawEvent getDrawEvent(InputInteraction interaction) {
+    if (isPositionInteraction(interaction)) {
+      PositionInteraction positionInteraction = getPositionInteraction(interaction);
+      switch (positionInteraction.getState()) {
+        case CLICKED:
+          return DrawEvent.DRAW_POINT;
+        case MOVED:
+          return DrawEvent.MOVE;
+      }
+    }
+    return DrawEvent.UNKNOWN;
+  }
+
+  private PositionInteraction getPositionInteraction(InputInteraction interaction) {
+    return (PositionInteraction) interaction;
+  }
+
+  private NoActionEvent getNoActionEvent(InputInteraction interaction) {
+    if (isPositionInteraction(interaction)) {
+      PositionInteraction positionInteraction = getPositionInteraction(interaction);
+      switch (positionInteraction.getState()) {
+        case CLICKED:
+          return NoActionEvent.CLICK;
+        case PRESSED:
+          return NoActionEvent.PRESS;
+        case RELEASED:
+          return NoActionEvent.RELEASE;
+        case MOVED:
+          return NoActionEvent.POINTER_MOVE;
+        case DRAGGED:
+          return NoActionEvent.DRAG;
+      }
+
+    }
+    return NoActionEvent.UNKNOWN;
+  }
+
+  private boolean isPositionInteraction(InputInteraction interaction) {
+    return interaction instanceof PositionInteraction;
+  }
+
+  private boolean isStateInteraction(InputInteraction interaction) {
+    return interaction instanceof StateInteraction;
   }
 
   public void executeCommand(ConnectionCommand command) {
     commandManager.execute(command);
   }
+
+  enum DrawEvent {
+    UNKNOWN, DRAW_POINT, MOVE,
+  }
+
+  enum NoActionEvent {
+    UNKNOWN, POINTER_MOVE, PRESS, RELEASE, CLICK, DRAG
+  }
+
 }

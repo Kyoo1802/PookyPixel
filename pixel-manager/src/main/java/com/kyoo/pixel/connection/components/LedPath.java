@@ -21,7 +21,7 @@ public final class LedPath implements ConnectionComponent {
     this.id = id;
     this.leds = new LinkedHashSet<>();
     Point minXY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    Point maxXY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    Point maxXY = new Point(0, 0);
     for (Point p : leds) {
       minXY.x = Math.min(p.x, minXY.x);
       minXY.y = Math.min(p.y, minXY.y);

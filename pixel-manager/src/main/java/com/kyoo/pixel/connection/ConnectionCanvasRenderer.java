@@ -1,12 +1,16 @@
 package com.kyoo.pixel.connection;
 
+import static javafx.scene.paint.Color.GRAY;
+import static javafx.scene.paint.Color.GREEN;
 import static javafx.scene.paint.Color.WHITE;
+import static javafx.scene.paint.Color.YELLOW;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
@@ -35,8 +39,6 @@ public final class ConnectionCanvasRenderer {
   public ConnectionCanvasRenderer(ConnectionViewModel viewModel,
       ConnectionProperties properties) {
     this.viewModel = viewModel;
-    this.viewModel.getCanvasWidth().addListener(v -> recreateBackground());
-    this.viewModel.getCanvasHeight().addListener(v -> recreateBackground());
     this.model = viewModel.getModel();
     this.properties = properties;
   }
@@ -50,7 +52,9 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void drawBackground(GraphicsContext gc) {
-    if (background != null) {
+    Dimension canvasDimension = PositionUtils.toCanvasDimension(model.getDimension());
+    if (background != null && canvasDimension.width == background.getWidth()
+        && canvasDimension.getHeight() == background.getHeight()) {
       gc.drawImage(SwingFXUtils.toFXImage(background, null), 0, 0);
       return;
     }
@@ -58,12 +62,11 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void recreateBackground() {
-    Dimension canvasDimension = new Dimension(viewModel.getCanvasWidth().get(),
-        viewModel.getCanvasHeight().get());
-    if (canvasDimension.width * canvasDimension.height == 0) {
+    if (model.getDimension().width * model.getDimension().height == 0) {
       return;
     }
 
+    Dimension canvasDimension = PositionUtils.toCanvasDimension(model.getDimension());
     BufferedImage bufferedImage =
         new BufferedImage(canvasDimension.width, canvasDimension.height,
             BufferedImage.TYPE_INT_RGB);
@@ -122,16 +125,16 @@ public final class ConnectionCanvasRenderer {
     ConnectionCommandRequest beingCreatedComponent =
         model.getBeingCreatedComponent().get();
     Point mouseCanvasPosition = PositionUtils
-        .toRoundPosition(viewModel.getMousePosition().get());
+        .toCanvasPosition(model.getIdxPointer().getPosition());
     Point mouseIdxPosition =
         PositionUtils.toIdxPosition(new Point(mouseCanvasPosition.x, mouseCanvasPosition.y));
 
     switch (beingCreatedComponent.getCommandType()) {
       case SQUARE_PANEL: {
-        DrawSquarePanelCommandRequest squarePanelRequest = (DrawSquarePanelCommandRequest) beingCreatedComponent;
+        DrawSquarePanelCommandRequest request = (DrawSquarePanelCommandRequest) beingCreatedComponent;
 
         Point startPosition = PositionUtils.toCanvasPosition(
-            squarePanelRequest.getStartIdxPosition().y, squarePanelRequest.getStartIdxPosition().x);
+            request.getStartIdxPosition().y, request.getStartIdxPosition().x);
 
         DrawUtils.drawLed(gc, properties.getLedStartColor(), startPosition);
 
@@ -141,19 +144,62 @@ public final class ConnectionCanvasRenderer {
         DrawUtils.selectRect(gc, properties.getSelectColor(), startPosition, size);
 
         Dimension dimension =
-            new Dimension(mouseIdxPosition.x - squarePanelRequest.getStartIdxPosition().x + 1,
-                mouseIdxPosition.y - squarePanelRequest.getStartIdxPosition().y + 1);
+            new Dimension(mouseIdxPosition.x - request.getStartIdxPosition().x + 1,
+                mouseIdxPosition.y - request.getStartIdxPosition().y + 1);
         if (dimension.width > 0 && dimension.height > 0) {
           String sizeText = String.format("[%d, %d]", dimension.width, dimension.height);
           DrawUtils.drawSelectText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
         }
       }
       break;
+      case LED_PATH: {
+        DrawLedPathCommandRequest request = (DrawLedPathCommandRequest) beingCreatedComponent;
+
+        Point minPoint = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point maxPoint = new Point(0, 0);
+
+        gc.setStroke(YELLOW);
+        gc.setLineWidth(1);
+        gc.setLineDashes();
+        gc.beginPath();
+        int i = 0;
+        for (Point p : request.getIdxPositions()) {
+          Point startPosition = PositionUtils.toCanvasPosition(p.y, p.x);
+          minPoint.x = Math.min(minPoint.x, startPosition.x);
+          minPoint.y = Math.min(minPoint.y, startPosition.y);
+          maxPoint.x = Math.max(maxPoint.x, startPosition.x);
+          maxPoint.y = Math.max(maxPoint.y, startPosition.y);
+          gc.setStroke(YELLOW);
+          if (i == 0) {
+            gc.moveTo(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
+                startPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
+            gc.setFill(GREEN);
+            DrawUtils.drawLed(gc, properties.getLedOffColor(), startPosition);
+          } else {
+            gc.lineTo(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
+                startPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
+
+            gc.setFill(GRAY);
+            DrawUtils.drawLed(gc, properties.getLedOffColor(), startPosition);
+          }
+          i++;
+        }
+        gc.stroke();
+        Dimension size = new Dimension(
+            maxPoint.x - minPoint.x + PositionUtils.SQUARE_LENGTH,
+            maxPoint.y - minPoint.y + PositionUtils.SQUARE_LENGTH);
+        DrawUtils.selectRect(gc, properties.getSelectColor(), minPoint, size);
+
+        String sizeText = String.format("[%d]", request.getIdxPositions().size());
+        DrawUtils.drawSelectText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
+
+      }
+      break;
       case MOVEMENT: {
-        MovementCommandRequest movementRequest =
+        MovementCommandRequest request =
             (MovementCommandRequest) beingCreatedComponent;
 
-        Point start = PositionUtils.toCanvasPosition(movementRequest.getStartIdxPosition());
+        Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
         Point end = PositionUtils.toCanvasPosition(model.getIdxPointer().getPosition());
         gc.setLineWidth(1);
         gc.setStroke(WHITE);
@@ -162,10 +208,11 @@ public final class ConnectionCanvasRenderer {
       }
       break;
       case SCALE: {
-        ScaleCommandRequest scaleRequest =
+        log.debug("Scale Component");
+        ScaleCommandRequest request =
             (ScaleCommandRequest) beingCreatedComponent;
 
-        Point start = PositionUtils.toCanvasPosition(scaleRequest.getStartIdxPosition());
+        Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
         Point end = PositionUtils.toCanvasPosition(model.getIdxPointer().getPosition());
         gc.setLineWidth(1);
         gc.setStroke(WHITE);
@@ -173,12 +220,14 @@ public final class ConnectionCanvasRenderer {
         gc.strokeLine(start.x, start.y, end.x + PositionUtils.SQUARE_LENGTH,
             end.y + PositionUtils.SQUARE_LENGTH);
 
-        ConnectionComponent selectedComponent = model.getSelectedComponent().get();
+        ConnectionComponent selectedComponent =
+            model.getCreatedComponentsManager().getComponent(request.getTypeToScale(),
+                request.getIdToScale()).get();
         Dimension newDimension =
             new Dimension(selectedComponent.getSize().width + model.getIdxPointer().getPosition().x
-                - scaleRequest.getStartIdxPosition().x,
+                - request.getStartIdxPosition().x,
                 selectedComponent.getSize().height + model.getIdxPointer().getPosition().y
-                    - scaleRequest.getStartIdxPosition().y);
+                    - request.getStartIdxPosition().y);
 
         if (newDimension.width > 0 && newDimension.height > 0) {
           String sizeText = String.format("[%d, %d] = %d", newDimension.width, newDimension.height,
@@ -195,9 +244,9 @@ public final class ConnectionCanvasRenderer {
 
   private void drawMousePointer(GraphicsContext gc) {
     Point mouseSquare = PositionUtils
-        .toRoundPosition(viewModel.getMousePosition().get());
+        .toCanvasPosition(model.getIdxPointer().getPosition());
 
-    switch (model.getConnectionActionState()) {
+    switch (model.getConnectionState()) {
       case NO_ACTION:
         DrawUtils.drawMousePointer(gc, properties.getNoActionColor(), mouseSquare);
         break;
@@ -213,7 +262,7 @@ public final class ConnectionCanvasRenderer {
         DrawUtils.drawTempPort(gc, mouseSquare);
         break;
       default:
-        log.error("Invalid Mouse Pointer (Action): " + model.getConnectionActionState());
+        log.error("Invalid Mouse Pointer (Action): " + model.getConnectionState());
     }
   }
 }
