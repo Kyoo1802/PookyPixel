@@ -140,7 +140,7 @@ public final class ConnectionCanvasRenderer {
 
     switch (model.getConnectionState()) {
       case NO_ACTION:
-        DrawUtils.drawMousePointer(gc, properties.getNoActionColor(), mouseSquare);
+        DrawUtils.drawDefaultPointer(gc, properties, mouseSquare);
         break;
       case DRAW_LED_PATH:
       case DRAW_SQUARE_PANEL:
@@ -151,7 +151,7 @@ public final class ConnectionCanvasRenderer {
         }
         break;
       case DRAW_DRIVER_PORT:
-        DrawUtils.drawDriverPortPointer(gc, mouseSquare);
+        DrawUtils.drawDriverPortPointer(gc, properties, mouseSquare);
         break;
       default:
         log.error("Invalid Mouse Pointer (Action): " + model.getConnectionState());

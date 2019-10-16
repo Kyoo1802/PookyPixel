@@ -20,4 +20,10 @@ public final class ConnectionProperties {
   private String selectColor;
   private String noActionColor;
   private String driverPortColor;
+
+  private int selectWidth;
+  private int ledConnectionPathWidth;
+  private String ledConnectionPathColor;
+  private int mouseWidth;
+  private String mouseColor;
 }

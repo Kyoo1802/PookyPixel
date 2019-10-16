@@ -1,10 +1,5 @@
 package com.kyoo.pixel.utils;
 
-import static javafx.scene.paint.Color.GRAY;
-import static javafx.scene.paint.Color.GREEN;
-import static javafx.scene.paint.Color.WHITE;
-import static javafx.scene.paint.Color.YELLOW;
-
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.DriverPort;
@@ -46,6 +41,7 @@ public final class DrawUtils {
 
   public static void drawSquarePanel(GraphicsContext gc, ConnectionProperties properties,
       SquarePanel sp) {
+    // Draw Leds
     Point points[] = new Point[sp.getLeds().size()];
     int idx = 0;
     for (Led led : sp.getLeds().values()) {
@@ -60,12 +56,13 @@ public final class DrawUtils {
         hexColor = properties.getLedOffColor();
       }
       Point ledPosition = new Point(ledCanvasPosition.x, ledCanvasPosition.y);
-      ;
       points[idx++] = ledPosition;
       drawLed(gc, hexColor, ledPosition);
     }
-    gc.setStroke(YELLOW);
-    gc.setLineWidth(1);
+
+    // Draw Connection Path
+    gc.setStroke(Color.web(properties.getLedConnectionPathColor()));
+    gc.setLineWidth(properties.getLedConnectionPathWidth());
     gc.setLineDashes();
     gc.beginPath();
     for (int i = 0; i < points.length; i++) {
@@ -80,39 +77,49 @@ public final class DrawUtils {
     gc.stroke();
   }
 
-  public static void drawLed(GraphicsContext gc, String hexColor, Point position) {
-    gc.setFill(Color.web(hexColor));
-    gc.fillOval(position.x, position.y, PositionUtils.SQUARE_LENGTH, PositionUtils.SQUARE_LENGTH);
+  public static void drawPort(GraphicsContext gc, ConnectionProperties properties,
+      DriverPort port) {
+    Point canvasPosition = PositionUtils
+        .toCanvasPosition(port.getIdxPosition().y, port.getIdxPosition().x);
+    Dimension canvasDimension = PositionUtils.toCanvasDimension(port.getSize());
+    gc.setFill(Color.web(properties.getDriverPortColor()));
+    gc.fillOval(canvasPosition.x, canvasPosition.y, canvasDimension.width, canvasDimension.height);
   }
 
-  public static void drawMousePointer(GraphicsContext gc, String hexColor, Point position) {
-    gc.setLineWidth(LINE_WIDTH);
-    gc.setStroke(Color.web(hexColor));
+  public static void drawDefaultPointer(GraphicsContext gc, ConnectionProperties properties,
+      Point position) {
+    gc.setLineWidth(properties.getMouseWidth());
+    gc.setStroke(Color.web(properties.getMouseColor()));
     gc.setLineDashes();
     gc.strokeRect(position.x, position.y, PositionUtils.SQUARE_LENGTH + 4,
         PositionUtils.SQUARE_LENGTH + 4);
   }
 
-  public static void drawSelectText(GraphicsContext gc, String hexColor,
-      Point position, String text) {
-    gc.setFill(Color.web(hexColor));
-    gc.fillText(text, position.x + PositionUtils.SQUARE_LENGTH,
-        position.y + PositionUtils.SQUARE_LENGTH);
+  public static void drawDriverPortPointer(GraphicsContext gc, ConnectionProperties properties,
+      Point canvasPosition) {
+    gc.setLineWidth(properties.getMouseWidth());
+    gc.setStroke(Color.web(properties.getMouseColor()));
+    gc.fillOval(canvasPosition.x, canvasPosition.y, 20, 20);
   }
 
-  public static void selectRect(GraphicsContext gc, String hexColor, Point position,
-      Dimension size) {
-    gc.setStroke(Color.web(hexColor));
-    gc.setLineWidth(1);
-    gc.setLineDashes(10);
-    gc.strokeRect(position.x, position.y, size.width, size.height);
+  public static void drawComponentSelection(GraphicsContext gc, ConnectionProperties properties,
+      ConnectionComponent component) {
+    Point startPosition = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
+    Point endPosition = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
+    Dimension size = PositionUtils.toCanvasDimension(component.getSize());
+
+    drawDashedRect(gc, properties.getSelectColor(), startPosition, size);
+    drawResizePoints(gc, properties.getSelectColor(), startPosition, endPosition);
+    drawText(gc, properties.getSelectColor(), endPosition,
+        component.description());
   }
 
-  public static void selectResize(GraphicsContext gc, String hexColor, Point startPosition,
+  public static void drawResizePoints(GraphicsContext gc, String hexColor, Point startPosition,
       Point endPosition) {
     gc.setFill(Color.web(hexColor));
     gc.setLineWidth(1);
     gc.setLineDashes();
+
     gc.fillRect(startPosition.x, startPosition.y, PositionUtils.HALF_SQUARE_LENGTH,
         PositionUtils.HALF_SQUARE_LENGTH);
 
@@ -129,129 +136,129 @@ public final class DrawUtils {
         PositionUtils.HALF_SQUARE_LENGTH);
   }
 
-  public static void drawPort(GraphicsContext gc, ConnectionProperties properties,
-      DriverPort port) {
-    Point canvasPosition = PositionUtils
-        .toCanvasPosition(port.getIdxPosition().y, port.getIdxPosition().x);
-    Dimension canvasDimension = PositionUtils.toCanvasDimension(port.getSize());
-
-    String hexColor = properties.getDriverPortColor();
-    gc.setFill(Color.web(hexColor));
-    gc.fillOval(canvasPosition.x, canvasPosition.y, canvasDimension.width, canvasDimension.height);
-  }
-
-  public static void drawDriverPortPointer(GraphicsContext gc, Point canvasPosition) {
-    gc.fillOval(canvasPosition.x, canvasPosition.y, 20, 20);
-  }
-
-  public static void drawComponentSelection(GraphicsContext gc, ConnectionProperties properties,
-      ConnectionComponent component) {
-    Point startPosition = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
-    Point endPosition = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
-    Dimension size = PositionUtils.toCanvasDimension(component.getSize());
-
-    DrawUtils.selectRect(gc, properties.getSelectColor(), startPosition, size);
-    DrawUtils
-        .selectResize(gc, properties.getSelectColor(), startPosition, endPosition);
-    DrawUtils
-        .drawSelectText(gc, properties.getSelectColor(), endPosition,
-            component.description());
-  }
-
   public static void drawSquarePanelCommand(GraphicsContext gc, ConnectionProperties properties,
       DrawSquarePanelCommandRequest request, Point pointer) {
     Point mouseCanvasPosition = PositionUtils.toCanvasPosition(pointer);
     Point startPosition = PositionUtils.toCanvasPosition(
         request.getStartIdxPosition().y, request.getStartIdxPosition().x);
 
-    DrawUtils.drawLed(gc, properties.getLedStartColor(), startPosition);
+    // Draw first led
+    drawLed(gc, properties.getLedStartColor(), startPosition);
 
+    // Draw component preview
     Dimension size = new Dimension(
         mouseCanvasPosition.x - startPosition.x + PositionUtils.SQUARE_LENGTH,
         mouseCanvasPosition.y - startPosition.y + PositionUtils.SQUARE_LENGTH);
-    DrawUtils.selectRect(gc, properties.getSelectColor(), startPosition, size);
+    drawDashedRect(gc, properties.getSelectColor(), startPosition, size);
 
+    // Draw component info
     Dimension dimension =
         new Dimension(pointer.x - request.getStartIdxPosition().x + 1,
             pointer.y - request.getStartIdxPosition().y + 1);
     if (dimension.width > 0 && dimension.height > 0) {
       String sizeText = String.format("[%d, %d]", dimension.width, dimension.height);
-      DrawUtils.drawSelectText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
+      DrawUtils.drawText(gc, properties.getSelectColor(), mouseCanvasPosition, sizeText);
     }
-
   }
 
   public static void drawLedPathCommand(GraphicsContext gc, ConnectionProperties properties,
       DrawLedPathCommandRequest request, Point pointer) {
+    Point canvasPosition = PositionUtils.toCanvasPosition(pointer);
     Point minPoint = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
     Point maxPoint = new Point(0, 0);
 
-    gc.setStroke(YELLOW);
     gc.setLineWidth(1);
     gc.setLineDashes();
     gc.beginPath();
     int i = 0;
+
+    // Draw Leds
     for (Point p : request.getIdxPositions()) {
       Point startPosition = PositionUtils.toCanvasPosition(p.y, p.x);
       minPoint.x = Math.min(minPoint.x, startPosition.x);
       minPoint.y = Math.min(minPoint.y, startPosition.y);
       maxPoint.x = Math.max(maxPoint.x, startPosition.x);
       maxPoint.y = Math.max(maxPoint.y, startPosition.y);
-      gc.setStroke(YELLOW);
       if (i == 0) {
         gc.moveTo(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
             startPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
-        gc.setFill(GREEN);
-        DrawUtils.drawLed(gc, properties.getLedOffColor(), startPosition);
+        DrawUtils.drawLed(gc, properties.getLedStartColor(), startPosition);
       } else {
         gc.lineTo(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
             startPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
-
-        gc.setFill(GRAY);
         DrawUtils.drawLed(gc, properties.getLedOffColor(), startPosition);
       }
       i++;
     }
+    gc.lineTo(canvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
+        canvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
+    gc.setStroke(Color.web(properties.getLedConnectionPathColor()));
     gc.stroke();
+
+    // Draw component preview
     Dimension size = new Dimension(
         maxPoint.x - minPoint.x + PositionUtils.SQUARE_LENGTH,
         maxPoint.y - minPoint.y + PositionUtils.SQUARE_LENGTH);
-    DrawUtils.selectRect(gc, properties.getSelectColor(), minPoint, size);
+    DrawUtils.drawDashedRect(gc, properties.getSelectColor(), minPoint, size);
 
+    // Draw component info
     String sizeText = String.format("[%d]", request.getIdxPositions().size());
-    DrawUtils.drawSelectText(gc, properties.getSelectColor(), maxPoint, sizeText);
+    DrawUtils.drawText(gc, properties.getSelectColor(), maxPoint, sizeText);
   }
 
   public static void drawMovementCommand(GraphicsContext gc, ConnectionProperties properties,
       MovementCommandRequest request, Point pointer) {
-
+    // Draw Movement line
     Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
     Point end = PositionUtils.toCanvasPosition(pointer);
     gc.setLineWidth(1);
-    gc.setStroke(WHITE);
+    gc.setStroke(Color.web(properties.getSelectColor()));
     gc.setLineDashes(10);
-    gc.strokeLine(start.x, start.y, end.x, end.y);
+    gc.strokeLine(start.x + PositionUtils.HALF_SQUARE_LENGTH,
+        start.y + PositionUtils.HALF_SQUARE_LENGTH,
+        end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);
   }
 
   public static void drawScaleCommand(GraphicsContext gc, ConnectionProperties properties,
       ScaleCommandRequest request, Point pointer, Dimension currentSize) {
 
+    // Draw Scale line
     Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
     Point end = PositionUtils.toCanvasPosition(pointer);
-    gc.setLineWidth(1);
-    gc.setStroke(WHITE);
+    gc.setLineWidth(properties.getSelectWidth());
+    gc.setStroke(Color.web(properties.getSelectColor()));
     gc.setLineDashes(10);
-    gc.strokeLine(start.x, start.y, end.x + PositionUtils.SQUARE_LENGTH,
-        end.y + PositionUtils.SQUARE_LENGTH);
+    gc.strokeLine(start.x + PositionUtils.HALF_SQUARE_LENGTH,
+        start.y + PositionUtils.HALF_SQUARE_LENGTH, end.x + PositionUtils.HALF_SQUARE_LENGTH,
+        end.y + PositionUtils.HALF_SQUARE_LENGTH);
 
+    // Draw scale info
     Dimension newSize =
         new Dimension(currentSize.getSize().width + pointer.x - request.getStartIdxPosition().x,
             currentSize.height + pointer.y - request.getStartIdxPosition().y);
-
     if (newSize.width > 0 && newSize.height > 0) {
       String sizeText = String
           .format("[%d, %d] = %d", newSize.width, newSize.height, newSize.width * newSize.height);
-      DrawUtils.drawSelectText(gc, properties.getSelectColor(), end, sizeText);
+      DrawUtils.drawText(gc, properties.getSelectColor(), end, sizeText);
     }
+  }
+
+  public static void drawLed(GraphicsContext gc, String hexColor, Point position) {
+    gc.setFill(Color.web(hexColor));
+    gc.fillOval(position.x, position.y, PositionUtils.SQUARE_LENGTH, PositionUtils.SQUARE_LENGTH);
+  }
+
+  public static void drawText(GraphicsContext gc, String hexColor, Point position, String text) {
+    gc.setFill(Color.web(hexColor));
+    gc.fillText(text, position.x + PositionUtils.SQUARE_LENGTH,
+        position.y + PositionUtils.SQUARE_LENGTH);
+  }
+
+  public static void drawDashedRect(GraphicsContext gc, String hexColor, Point position,
+      Dimension size) {
+    gc.setStroke(Color.web(hexColor));
+    gc.setLineWidth(1);
+    gc.setLineDashes(10);
+    gc.strokeRect(position.x, position.y, size.width, size.height);
   }
 }
