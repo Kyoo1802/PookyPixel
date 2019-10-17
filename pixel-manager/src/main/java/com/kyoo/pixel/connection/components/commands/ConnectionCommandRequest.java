@@ -50,6 +50,17 @@ public abstract class ConnectionCommandRequest {
   }
 
   @Getter
+  @Builder(toBuilder = true)
+  public static class DrawConnectorPortCommandRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private ComponentType commandType;
+    private Point startIdxPosition;
+    private Point endIdxPosition;
+  }
+
+
+  @Getter
   @ToString
   @Builder(toBuilder = true)
   public static class MovementCommandRequest extends ConnectionCommandRequest {

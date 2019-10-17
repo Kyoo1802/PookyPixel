@@ -2,7 +2,6 @@ package com.kyoo.pixel.connection.components;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.Optional;
 import lombok.Data;
 
 @Data
@@ -26,16 +25,6 @@ public final class DriverPort implements ConnectionComponent {
   }
 
   @Override
-  public boolean internalSelect(int x, int y) {
-    return false;
-  }
-
-  @Override
-  public Optional<ConnectionComponent> internalIntersects(Point position) {
-    return Optional.empty();
-  }
-
-  @Override
   public long getId() {
     return id;
   }
@@ -43,12 +32,6 @@ public final class DriverPort implements ConnectionComponent {
   @Override
   public ComponentType getComponentType() {
     return ComponentType.DRIVER_PORT;
-  }
-
-
-  @Override
-  public CreationType getCreationType() {
-    return CreationType.ONE_POINT;
   }
 
   @Override

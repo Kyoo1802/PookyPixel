@@ -5,9 +5,12 @@ import com.google.common.collect.Sets;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.LedComponent;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawConnectorPortCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
+import com.kyoo.pixel.connection.components.commands.DrawConnectorPortCommand;
 import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
 import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
 import java.util.Optional;
@@ -25,22 +28,22 @@ public final class DrawingCommandHandler {
   }
 
   public void handleSquarePanelDrawing() {
-    if (model.thereIsNotComponentBeingCreated()) {
+    if (model.hasActiveCommandRequest()) {
       DrawSquarePanelCommandRequest request =
           DrawSquarePanelCommandRequest.builder()
               .id(model.generateId(ComponentType.SQUARE_PANEL))
               .commandType(ComponentType.SQUARE_PANEL)
               .startIdxPosition(model.getPointerCopy())
               .build();
-      model.setBeingCreatedComponent(Optional.of(request));
+      model.setActiveCommandRequest(Optional.of(request));
     } else {
       DrawSquarePanelCommandRequest request =
-          ((DrawSquarePanelCommandRequest) model.getBeingCreatedComponent().get())
+          ((DrawSquarePanelCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
               .endIdxPosition(model.getPointerCopy())
               .build();
       viewModel.executeCommand(new DrawSquarePanelCommand(model, request));
-      model.setBeingCreatedComponent(Optional.empty());
+      model.setActiveCommandRequest(Optional.empty());
     }
   }
 
@@ -55,7 +58,7 @@ public final class DrawingCommandHandler {
   }
 
   public void handleLedPathDrawing() {
-    if (model.thereIsNotComponentBeingCreated()) {
+    if (model.hasActiveCommandRequest()) {
       DrawLedPathCommandRequest request =
           DrawLedPathCommandRequest.builder()
               .id(model.generateId(ComponentType.LED_PATH))
@@ -63,11 +66,37 @@ public final class DrawingCommandHandler {
               .idxPositions(
                   Sets.newLinkedHashSet(Lists.newArrayList(model.getPointerCopy())))
               .build();
-      model.setBeingCreatedComponent(Optional.of(request));
+      model.setActiveCommandRequest(Optional.of(request));
     } else {
       DrawLedPathCommandRequest request =
-          ((DrawLedPathCommandRequest) model.getBeingCreatedComponent().get());
+          ((DrawLedPathCommandRequest) model.getActiveCommandRequest().get());
       request.getIdxPositions().add(model.getPointerCopy());
+    }
+  }
+
+  public void handleConnectorPortDrawing() {
+    Optional<LedComponent> component =
+        model.getCreatedComponentsManager().lookupLedComponent(model.getPointer());
+    if (component.isEmpty()) {
+      return;
+    }
+
+    if (model.hasActiveCommandRequest()) {
+      DrawConnectorPortCommandRequest request =
+          DrawConnectorPortCommandRequest.builder()
+              .id(model.generateId(ComponentType.CONNECTOR_PORT))
+              .commandType(ComponentType.CONNECTOR_PORT)
+              .startIdxPosition(component.get().lastLed().getIdxPosition())
+              .build();
+      model.setActiveCommandRequest(Optional.of(request));
+    } else {
+      DrawConnectorPortCommandRequest request =
+          ((DrawConnectorPortCommandRequest) model.getActiveCommandRequest().get())
+              .toBuilder()
+              .endIdxPosition(component.get().lastLed().getIdxPosition())
+              .build();
+      viewModel.executeCommand(new DrawConnectorPortCommand(model, request));
+      model.setActiveCommandRequest(Optional.empty());
     }
   }
 }

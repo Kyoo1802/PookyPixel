@@ -2,9 +2,11 @@ package com.kyoo.pixel.utils;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.ConnectionPort;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.SquarePanel;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawConnectorPortCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
@@ -17,7 +19,6 @@ import javafx.scene.paint.Color;
 
 public final class DrawUtils {
 
-  public static final double LINE_WIDTH = 1;
   public static final int DOT_SIZE = 2;
   public static final double MAX_HORIZONTAL_LEDS = 800;
   public static final double MAX_VERTICAL_LEDS = 600;
@@ -206,9 +207,21 @@ public final class DrawUtils {
     DrawUtils.drawText(gc, properties.getSelectColor(), maxPoint, sizeText);
   }
 
+  public static void drawConnectorPortCommand(GraphicsContext gc, ConnectionProperties properties,
+      DrawConnectorPortCommandRequest request, Point pointer) {
+    Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
+    Point end = PositionUtils.toCanvasPosition(pointer);
+    gc.setLineWidth(1);
+    gc.setStroke(Color.web(properties.getSelectColor()));
+    gc.setLineDashes(10);
+    gc.strokeLine(start.x + PositionUtils.HALF_SQUARE_LENGTH,
+        start.y + PositionUtils.HALF_SQUARE_LENGTH,
+        end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);
+
+  }
+
   public static void drawMovementCommand(GraphicsContext gc, ConnectionProperties properties,
       MovementCommandRequest request, Point pointer) {
-    // Draw Movement line
     Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
     Point end = PositionUtils.toCanvasPosition(pointer);
     gc.setLineWidth(1);
@@ -260,5 +273,16 @@ public final class DrawUtils {
     gc.setLineWidth(1);
     gc.setLineDashes(10);
     gc.strokeRect(position.x, position.y, size.width, size.height);
+  }
+
+  public static void drawConnectorPort(GraphicsContext gc, ConnectionProperties properties, ConnectionPort component) {
+    Point start = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
+    Point end = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
+    gc.setLineWidth(1);
+    gc.setStroke(Color.web(properties.getSelectColor()));
+    gc.setLineDashes(10);
+    gc.strokeLine(start.x + PositionUtils.HALF_SQUARE_LENGTH,
+        start.y + PositionUtils.HALF_SQUARE_LENGTH,
+        end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);
   }
 }

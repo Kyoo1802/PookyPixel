@@ -23,7 +23,7 @@ public final class ConnectionModel {
   private ConnectionState connectionState;
   private TransformationAction transformationActionState;
   private ConnectionComponentManager createdComponentsManager;
-  private Optional<ConnectionCommandRequest> beingCreatedComponent;
+  private Optional<ConnectionCommandRequest> activeCommandRequest;
   private Optional<ConnectionComponent> selectedComponent;
   private Map<ComponentType, Integer> createdComponentsCount;
   private Point pointer;
@@ -31,7 +31,7 @@ public final class ConnectionModel {
 
   @Inject
   public ConnectionModel() {
-    this.beingCreatedComponent = Optional.empty();
+    this.activeCommandRequest = Optional.empty();
     this.selectedComponent = Optional.empty();
     this.createdComponentsCount = new HashMap<>();
     this.createdComponentsManager = new ConnectionComponentManager();
@@ -62,8 +62,8 @@ public final class ConnectionModel {
     return newCount;
   }
 
-  public boolean thereIsNotComponentBeingCreated() {
-    return getBeingCreatedComponent().isEmpty();
+  public boolean hasActiveCommandRequest() {
+    return getActiveCommandRequest().isEmpty();
   }
 
   public void setConnectionState(ConnectionState connectionState, boolean value) {
@@ -83,6 +83,7 @@ public final class ConnectionModel {
     DRAW_SQUARE_PANEL,
     DRAW_LED_PATH,
     DRAW_DRIVER_PORT,
+    DRAW_CONNECTOR_PORT,
   }
 
   public enum TransformationAction {

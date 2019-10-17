@@ -32,6 +32,8 @@ public class ConnectionView implements Initializable {
   @FXML
   private ToggleButton createDriverPortBtn;
   @FXML
+  private ToggleButton createConnectorBtn;
+  @FXML
   private Canvas canvas;
 
   private ConnectionViewModel viewModel;
@@ -45,6 +47,7 @@ public class ConnectionView implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+
     // Initialize event listeners
     canvas.setFocusTraversable(true);
     canvas.onMouseMovedProperty().set(e -> handleMouseInteraction(e, PositionState.MOVED));
@@ -61,6 +64,7 @@ public class ConnectionView implements Initializable {
     handleStateInteraction(createSquarePanelBtn.isSelected(), State.DRAW_SQUARE_PANEL);
     handleStateInteraction(createLedPathBtn.isSelected(), State.DRAW_LED_PATH);
     handleStateInteraction(createDriverPortBtn.isSelected(), State.DRAW_DRIVER_PORT);
+    handleStateInteraction(createConnectorBtn.isSelected(), State.DRAW_CONNECTOR_PORT);
 
     // Initialize property listeners
     canvas.widthProperty()
@@ -74,6 +78,8 @@ public class ConnectionView implements Initializable {
             State.DRAW_SQUARE_PANEL));
     createLedPathBtn.selectedProperty().addListener(
         (observable, oldValue, newValue) -> handleStateInteraction(newValue, State.DRAW_LED_PATH));
+    createConnectorBtn.selectedProperty().addListener(
+        (observable, oldValue, newValue) -> handleStateInteraction(newValue, State.DRAW_CONNECTOR_PORT));
     createDriverPortBtn.selectedProperty().addListener(
         (observable, oldValue, newValue) -> handleStateInteraction(newValue,
             State.DRAW_DRIVER_PORT));
@@ -87,6 +93,7 @@ public class ConnectionView implements Initializable {
     };
     timer.start();
   }
+
 
   private void handleStateInteraction(Object value, State state) {
     StateInteraction interaction = new StateInteraction();

@@ -23,6 +23,7 @@
           <ToggleButton text="Sp" fx:id="createSquarePanelBtn"/>
           <ToggleButton text="Dp" fx:id="createDriverPortBtn"/>
           <ToggleButton text="Lp" fx:id="createLedPathBtn"/>
+          <ToggleButton text="Lp" fx:id="createConnectorBtn"/>
         </FlowPane>
       </top>
     </BorderPane>

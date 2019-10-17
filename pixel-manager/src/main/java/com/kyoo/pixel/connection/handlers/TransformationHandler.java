@@ -39,7 +39,7 @@ public final class TransformationHandler {
 
 
   private void handleMovement() {
-    if (model.thereIsNotComponentBeingCreated()) {
+    if (model.hasActiveCommandRequest()) {
       MovementCommandRequest request =
           MovementCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
@@ -48,20 +48,20 @@ public final class TransformationHandler {
               .typeToMove(model.getSelectedComponent().get().getComponentType())
               .startIdxPosition(model.getPointerCopy())
               .build();
-      model.setBeingCreatedComponent(Optional.of(request));
+      model.setActiveCommandRequest(Optional.of(request));
     } else {
       MovementCommandRequest request =
-          ((MovementCommandRequest) model.getBeingCreatedComponent().get())
+          ((MovementCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
               .endIdxPosition(model.getPointerCopy())
               .build();
       viewModel.executeCommand(new MoveCommand(model, request));
-      model.setBeingCreatedComponent(Optional.empty());
+      model.setActiveCommandRequest(Optional.empty());
     }
   }
 
   private void handleScale() {
-    if (model.thereIsNotComponentBeingCreated()) {
+    if (model.hasActiveCommandRequest()) {
       ScaleCommandRequest request =
           ScaleCommandRequest.builder()
               .id(model.generateId(ComponentType.SCALE))
@@ -70,15 +70,15 @@ public final class TransformationHandler {
               .typeToScale(model.getSelectedComponent().get().getComponentType())
               .startIdxPosition(model.getPointerCopy())
               .build();
-      model.setBeingCreatedComponent(Optional.of(request));
+      model.setActiveCommandRequest(Optional.of(request));
     } else {
       ScaleCommandRequest request =
-          ((ScaleCommandRequest) model.getBeingCreatedComponent().get())
+          ((ScaleCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
               .endIdxPosition(model.getPointerCopy())
               .build();
       viewModel.executeCommand(new ScaleCommand(model, request));
-      model.setBeingCreatedComponent(Optional.empty());
+      model.setActiveCommandRequest(Optional.empty());
     }
   }
 }

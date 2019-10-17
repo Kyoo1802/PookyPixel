@@ -4,11 +4,10 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import lombok.Data;
 
 @Data
-public final class LedPath implements ConnectionComponent {
+public final class LedPath implements ConnectionComponent, LedComponent {
 
   private long id;
   private LinkedHashSet<Led> leds;
@@ -48,11 +47,6 @@ public final class LedPath implements ConnectionComponent {
   }
 
   @Override
-  public boolean internalSelect(int x, int y) {
-    return false;
-  }
-
-  @Override
   public ComponentType getComponentType() {
     return ComponentType.LED_PATH;
   }
@@ -63,18 +57,8 @@ public final class LedPath implements ConnectionComponent {
   }
 
   @Override
-  public Optional<ConnectionComponent> internalIntersects(Point position) {
-    return Optional.empty();
-  }
-
-  @Override
   public long getId() {
     return id;
-  }
-
-  @Override
-  public CreationType getCreationType() {
-    return CreationType.MULTI_POINT;
   }
 
   @Override
@@ -99,5 +83,15 @@ public final class LedPath implements ConnectionComponent {
   @Override
   public String description() {
     return String.format("id: %d, size: %s ", id, size);
+  }
+
+  @Override
+  public Led firstLed() {
+    return first;
+  }
+
+  @Override
+  public Led lastLed() {
+    return last;
   }
 }

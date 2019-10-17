@@ -13,6 +13,7 @@ public interface InputInteraction {
     DRAW_SQUARE_PANEL,
     DRAW_DRIVER_PORT,
     DRAW_LED_PATH,
+    DRAW_CONNECTOR_PORT,
     RESIZE_WIDTH,
     RESIZE_HEIGHT,
   }

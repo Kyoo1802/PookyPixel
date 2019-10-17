@@ -2,9 +2,11 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.ConnectionPort;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawConnectorPortCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
@@ -88,6 +90,9 @@ public final class ConnectionCanvasRenderer {
           case DRIVER_PORT:
             DrawUtils.drawPort(gc, properties, (DriverPort) component);
             break;
+          case CONNECTOR_PORT:
+            DrawUtils.drawConnectorPort(gc, properties, (ConnectionPort) component);
+            break;
           default:
             log.error("Invalid component to draw: " + component.getComponentType());
         }
@@ -102,11 +107,11 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void currentComponent(GraphicsContext gc) {
-    if (model.getBeingCreatedComponent().isEmpty()) {
+    if (model.getActiveCommandRequest().isEmpty()) {
       return;
     }
 
-    ConnectionCommandRequest component = model.getBeingCreatedComponent().get();
+    ConnectionCommandRequest component = model.getActiveCommandRequest().get();
 
     switch (component.getCommandType()) {
       case SQUARE_PANEL:
@@ -116,6 +121,11 @@ public final class ConnectionCanvasRenderer {
       case LED_PATH:
         DrawUtils.drawLedPathCommand(gc, properties, (DrawLedPathCommandRequest) component,
             model.getPointer());
+        break;
+      case CONNECTOR_PORT:
+        DrawUtils
+            .drawConnectorPortCommand(gc, properties, (DrawConnectorPortCommandRequest) component,
+                model.getPointer());
         break;
       case MOVEMENT:
         DrawUtils.drawMovementCommand(gc, properties, (MovementCommandRequest) component,
@@ -144,12 +154,13 @@ public final class ConnectionCanvasRenderer {
         break;
       case DRAW_LED_PATH:
       case DRAW_SQUARE_PANEL:
-        if (model.getBeingCreatedComponent().isEmpty()) {
+        if (model.getActiveCommandRequest().isEmpty()) {
           DrawUtils.drawLed(gc, properties.getLedStartColor(), mouseSquare);
         } else {
           DrawUtils.drawLed(gc, properties.getLedEndColor(), mouseSquare);
         }
         break;
+      case DRAW_CONNECTOR_PORT:
       case DRAW_DRIVER_PORT:
         DrawUtils.drawDriverPortPointer(gc, properties, mouseSquare);
         break;

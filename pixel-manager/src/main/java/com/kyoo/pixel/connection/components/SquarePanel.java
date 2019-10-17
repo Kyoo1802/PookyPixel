@@ -3,16 +3,17 @@ package com.kyoo.pixel.connection.components;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedHashMap;
-import java.util.Optional;
 import lombok.Data;
 
 @Data
-public final class SquarePanel implements ConnectionComponent {
+public final class SquarePanel implements ConnectionComponent, LedComponent {
 
   private Point startIdxPosition;
   private Point endIdxPosition;
   private LinkedHashMap<Point, Led> leds;
   private long id;
+  private Led first;
+  private Led last;
 
   public SquarePanel(long id, Point startIdxPosition, Point endIdxPosition) {
     this.id = id;
@@ -29,23 +30,8 @@ public final class SquarePanel implements ConnectionComponent {
   }
 
   @Override
-  public boolean internalSelect(int x, int y) {
-    return leds.containsKey(new Point(x, y));
-  }
-
-  @Override
   public ComponentType getComponentType() {
     return ComponentType.SQUARE_PANEL;
-  }
-
-  @Override
-  public Optional<ConnectionComponent> internalIntersects(Point position) {
-    return Optional.empty();
-  }
-
-  @Override
-  public CreationType getCreationType() {
-    return CreationType.TWO_POINTS;
   }
 
   public void createLeds() {
@@ -53,7 +39,13 @@ public final class SquarePanel implements ConnectionComponent {
       for (int j = startIdxPosition.x; j <= endIdxPosition.x; j++) {
         int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x + endIdxPosition.x - j;
         Point ledPoint = new Point(tmpJ, i);
-        this.leds.put(ledPoint, new Led(ledPoint, this));
+        Led led = new Led(ledPoint, this);
+        this.leds.put(ledPoint, led);
+        if (first == null) {
+          first = led;
+        }
+        last = led;
+
       }
     }
   }
@@ -81,17 +73,28 @@ public final class SquarePanel implements ConnectionComponent {
     LinkedHashMap<Point, Led> newLeds = new LinkedHashMap<>();
     int newWidth = endIdxPosition.x + addDimension.width;
     int newHeight = endIdxPosition.y + addDimension.height;
+    Led tempFirst = null;
+    Led tempLast = null;
     for (int i = startIdxPosition.y, pair = 0; i <= newHeight; i++, pair++) {
       for (int j = startIdxPosition.x; j <= newWidth; j++) {
         int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x + newWidth - j;
         Point ledPoint = new Point(tmpJ, i);
+        Led led;
         if (this.leds.containsKey(ledPoint)) {
-          newLeds.put(leds.get(ledPoint).getIdxPosition(), this.leds.get(ledPoint));
+          led = this.leds.get(ledPoint);
+          newLeds.put(led.getIdxPosition(), led);
         } else {
-          newLeds.put(ledPoint, new Led(ledPoint, this));
+          led = new Led(ledPoint, this);
+          newLeds.put(ledPoint, led);
         }
+        if (tempFirst == null) {
+          tempFirst = led;
+        }
+        tempLast = led;
       }
     }
+    this.first = tempFirst;
+    this.last = tempLast;
     this.leds.clear();
     this.leds.putAll(newLeds);
     this.endIdxPosition.setLocation(newWidth, newHeight);
@@ -130,5 +133,15 @@ public final class SquarePanel implements ConnectionComponent {
     int w = getEndIdxPosition().x - getStartIdxPosition().x + 1;
     int h = getEndIdxPosition().y - getStartIdxPosition().y + 1;
     return String.format("[%d, %d] = %d", w, h, w * h);
+  }
+
+  @Override
+  public Led firstLed() {
+    return first;
+  }
+
+  @Override
+  public Led lastLed() {
+    return last;
   }
 }

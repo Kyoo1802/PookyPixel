@@ -2,11 +2,16 @@ package com.kyoo.pixel.connection.components;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.Optional;
 
-public class LedBridge implements ConnectionComponent {
+public class ConnectionPort implements ConnectionComponent {
 
-  public LedBridge(long id, Point mousePoint) {
+  private long id;
+  private Point startIdxPosition;
+  private Point endIdxPosition;
+  public ConnectionPort(long id, Point startIdxPosition, Point endIdxPosition) {
+    this.id = id;
+    this.startIdxPosition = startIdxPosition;
+    this.endIdxPosition = endIdxPosition;
   }
 
   @Override
@@ -15,43 +20,29 @@ public class LedBridge implements ConnectionComponent {
   }
 
   @Override
-  public boolean internalSelect(int x, int y) {
-    return false;
-  }
-
-  @Override
   public ComponentType getComponentType() {
-    return null;
-  }
-
-  @Override
-  public Optional<ConnectionComponent> internalIntersects(Point position) {
-    return Optional.empty();
+    return ComponentType.CONNECTOR_PORT;
   }
 
   @Override
   public long getId() {
-    return 0;
-  }
-
-  @Override
-  public CreationType getCreationType() {
-    return null;
+    return id;
   }
 
   @Override
   public Point getStartIdxPosition() {
-    return null;
+    return startIdxPosition;
   }
 
   @Override
   public Point getEndIdxPosition() {
-    return null;
+    return endIdxPosition;
   }
 
   @Override
   public Dimension getSize() {
-    return null;
+    return new Dimension(endIdxPosition.x - startIdxPosition.x + 1,
+        endIdxPosition.y - startIdxPosition.y + 1);
   }
 
   @Override

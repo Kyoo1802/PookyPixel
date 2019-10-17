@@ -2,7 +2,6 @@ package com.kyoo.pixel.connection.components;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.Optional;
 
 public final class Led implements ConnectionComponent {
 
@@ -25,28 +24,13 @@ public final class Led implements ConnectionComponent {
   }
 
   @Override
-  public boolean internalSelect(int x, int y) {
-    return false;
-  }
-
-  @Override
   public ComponentType getComponentType() {
     return ComponentType.LED_PATH;
   }
 
   @Override
-  public Optional<ConnectionComponent> internalIntersects(Point position) {
-    return Optional.empty();
-  }
-
-  @Override
   public long getId() {
     return 0;
-  }
-
-  @Override
-  public CreationType getCreationType() {
-    return CreationType.ONE_POINT;
   }
 
   @Override

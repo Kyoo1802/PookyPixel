@@ -40,24 +40,15 @@ public final class ConnectionComponentManager {
     return Optional.empty();
   }
 
-  public Optional<Led> lookup(ComponentType componentType, Point point) {
-    switch (componentType) {
-      case LED_PATH:
-        if (components.containsKey(ComponentType.SQUARE_PANEL)) {
-          for (ConnectionComponent panelComponent : components
-              .get(ComponentType.SQUARE_PANEL).values()) {
-            if (panelComponent.intersects(point.x, point.y)) {
-              Optional<ConnectionComponent> internalComponent =
-                  panelComponent.internalIntersects(point);
-              if (internalComponent.isPresent()) {
-                return Optional.of((Led) internalComponent.get());
-              }
-            }
-          }
+  public Optional<LedComponent> lookupLedComponent(Point point) {
+    for (Map<Long, ConnectionComponent> ck : components.values()) {
+      for (ConnectionComponent c : ck.values()) {
+        if (c instanceof LedComponent && c.intersects(point.x, point.y)) {
+          return Optional.of((LedComponent) c);
         }
-        break;
-      default:
+      }
     }
     return Optional.empty();
   }
+
 }

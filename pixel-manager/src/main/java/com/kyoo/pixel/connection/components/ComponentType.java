@@ -5,7 +5,7 @@ public enum ComponentType {
   DRIVER_PORT,
   SQUARE_PANEL,
   LED_PATH,
-  PANEL_BRIDGE,
+  CONNECTOR_PORT,
   LED,
   SELECT,
   MOVEMENT,

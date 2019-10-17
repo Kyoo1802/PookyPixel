@@ -79,6 +79,11 @@ public final class ConnectionViewModel {
         model
             .setConnectionState(ConnectionState.DRAW_DRIVER_PORT, interaction.getBoolValue().get());
         break;
+      case DRAW_CONNECTOR_PORT:
+        model
+            .setConnectionState(ConnectionState.DRAW_CONNECTOR_PORT,
+                interaction.getBoolValue().get());
+        break;
       case RESIZE_WIDTH:
         model.getDimension().setSize(PositionUtils.toIdx(interaction.getIntValue().get()),
             model.getDimension().height);
@@ -132,6 +137,18 @@ public final class ConnectionViewModel {
         switch (getDrawEvent(interaction)) {
           case DRAW_POINT:
             drawingCommandHandler.handleSquarePanelDrawing();
+            break;
+          case MOVE:
+            model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
+            break;
+          default:
+            log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
+        }
+        break;
+      case DRAW_CONNECTOR_PORT:
+        switch (getDrawEvent(interaction)) {
+          case DRAW_POINT:
+            drawingCommandHandler.handleConnectorPortDrawing();
             break;
           case MOVE:
             model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
