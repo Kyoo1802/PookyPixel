@@ -8,6 +8,7 @@ public class LedBridge implements ConnectionComponent {
   private long id;
   private LedComponent startComponent;
   private LedComponent endComponent;
+
   public LedBridge(long id, LedComponent startIdxPosition, LedComponent endIdxPosition) {
     this.id = id;
     this.startComponent = startIdxPosition;

@@ -9,8 +9,10 @@ public interface LedComponent {
   Led lastLed();
 
   Optional<LedBridge> getStartBridge();
+
   void setStartBridge(Optional<LedBridge> bridge);
 
   Optional<LedBridge> getEndBridge();
+
   void setEndBridge(Optional<LedBridge> bridge);
 }

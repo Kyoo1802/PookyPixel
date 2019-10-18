@@ -6,12 +6,12 @@ import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.LedComponent;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
-import com.kyoo.pixel.connection.components.commands.DrawLedBridgeCommand;
 import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
+import com.kyoo.pixel.connection.components.commands.DrawLedBridgeCommand;
 import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
@@ -82,7 +82,7 @@ public final class DrawingCommandHandler {
     }
 
     if (model.hasActiveCommandRequest()) {
-      if(component.get().getStartBridge().isPresent()){
+      if (component.get().getStartBridge().isPresent()) {
         return;
       }
       DrawLedBridgeCommandRequest request =
@@ -93,7 +93,7 @@ public final class DrawingCommandHandler {
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
-      if(component.get().getEndBridge().isPresent()){
+      if (component.get().getEndBridge().isPresent()) {
         return;
       }
       DrawLedBridgeCommandRequest request =

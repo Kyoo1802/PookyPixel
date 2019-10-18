@@ -79,7 +79,8 @@ public class ConnectionView implements Initializable {
     createLedPathBtn.selectedProperty().addListener(
         (observable, oldValue, newValue) -> handleStateInteraction(newValue, State.DRAW_LED_PATH));
     createConnectorBtn.selectedProperty().addListener(
-        (observable, oldValue, newValue) -> handleStateInteraction(newValue, State.DRAW_CONNECTOR_PORT));
+        (observable, oldValue, newValue) -> handleStateInteraction(newValue,
+            State.DRAW_CONNECTOR_PORT));
     createDriverPortBtn.selectedProperty().addListener(
         (observable, oldValue, newValue) -> handleStateInteraction(newValue,
             State.DRAW_DRIVER_PORT));
