@@ -14,6 +14,7 @@ import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
 import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
 import com.kyoo.pixel.connection.handlers.TransformationHandler;
 import com.kyoo.pixel.utils.PositionUtils;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -81,7 +82,7 @@ public final class ConnectionViewModel {
         break;
       case DRAW_CONNECTOR_PORT:
         model
-            .setConnectionState(ConnectionState.DRAW_CONNECTOR_PORT,
+            .setConnectionState(ConnectionState.DRAW_LED_BRIDGE,
                 interaction.getBoolValue().get());
         break;
       case RESIZE_WIDTH:
@@ -95,6 +96,7 @@ public final class ConnectionViewModel {
       default:
         log.error("Invalid interaction: " + interaction.getState());
     }
+    model.setActiveCommandRequest(Optional.empty());
   }
 
   private void handleActionInteraction(InputInteraction interaction) {
@@ -145,10 +147,10 @@ public final class ConnectionViewModel {
             log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
         }
         break;
-      case DRAW_CONNECTOR_PORT:
+      case DRAW_LED_BRIDGE:
         switch (getDrawEvent(interaction)) {
           case DRAW_POINT:
-            drawingCommandHandler.handleConnectorPortDrawing();
+            drawingCommandHandler.handleLedBridgeDrawing();
             break;
           case MOVE:
             model.handlePointerMovement(getPositionInteraction(interaction).getPosition());

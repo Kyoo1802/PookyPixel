@@ -39,6 +39,7 @@ public class ConnectionModule extends AbstractModule {
     cp.ledConnectionPathWidth(
         Integer.parseInt(properties.getProperty("connection.renderer.connectionpath.width")));
     cp.ledConnectionPathColor(properties.getProperty("connection.renderer.connectionpath.color"));
+    cp.bridgeColor(properties.getProperty("connection.renderer.bridge.color"));
     cp.mouseColor(properties.getProperty("connection.renderer.mouse.color"));
     cp.mouseWidth(Integer.parseInt(properties.getProperty("connection.renderer.mouse.width")));
 

@@ -20,7 +20,7 @@ public final class ConnectionProperties {
   private String selectColor;
   private String noActionColor;
   private String driverPortColor;
-
+  private String bridgeColor;
   private int selectWidth;
   private int ledConnectionPathWidth;
   private String ledConnectionPathColor;

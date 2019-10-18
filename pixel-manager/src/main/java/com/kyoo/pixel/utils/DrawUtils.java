@@ -2,11 +2,11 @@ package com.kyoo.pixel.utils;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.ConnectionPort;
+import com.kyoo.pixel.connection.components.LedBridge;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.SquarePanel;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawConnectorPortCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
@@ -207,17 +207,16 @@ public final class DrawUtils {
     DrawUtils.drawText(gc, properties.getSelectColor(), maxPoint, sizeText);
   }
 
-  public static void drawConnectorPortCommand(GraphicsContext gc, ConnectionProperties properties,
-      DrawConnectorPortCommandRequest request, Point pointer) {
-    Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
+  public static void drawLedBridgeCommand(GraphicsContext gc, ConnectionProperties properties,
+      DrawLedBridgeCommandRequest request, Point pointer) {
+    Point start = PositionUtils.toCanvasPosition(request.getStartComponent().lastLed().getIdxPosition());
     Point end = PositionUtils.toCanvasPosition(pointer);
-    gc.setLineWidth(1);
-    gc.setStroke(Color.web(properties.getSelectColor()));
-    gc.setLineDashes(10);
+    gc.setLineWidth(2);
+    gc.setStroke(Color.web(properties.getBridgeColor()));
+    gc.setLineDashes();
     gc.strokeLine(start.x + PositionUtils.HALF_SQUARE_LENGTH,
         start.y + PositionUtils.HALF_SQUARE_LENGTH,
         end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);
-
   }
 
   public static void drawMovementCommand(GraphicsContext gc, ConnectionProperties properties,
@@ -275,12 +274,12 @@ public final class DrawUtils {
     gc.strokeRect(position.x, position.y, size.width, size.height);
   }
 
-  public static void drawConnectorPort(GraphicsContext gc, ConnectionProperties properties, ConnectionPort component) {
+  public static void drawLedBridge(GraphicsContext gc, ConnectionProperties properties, LedBridge component) {
     Point start = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
     Point end = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
-    gc.setLineWidth(1);
-    gc.setStroke(Color.web(properties.getSelectColor()));
-    gc.setLineDashes(10);
+    gc.setLineWidth(2);
+    gc.setStroke(Color.web(properties.getBridgeColor()));
+    gc.setLineDashes();
     gc.strokeLine(start.x + PositionUtils.HALF_SQUARE_LENGTH,
         start.y + PositionUtils.HALF_SQUARE_LENGTH,
         end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);

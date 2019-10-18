@@ -2,6 +2,7 @@ package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
+import com.kyoo.pixel.connection.components.LedComponent;
 import java.awt.Point;
 import java.util.LinkedHashSet;
 import lombok.Builder;
@@ -51,12 +52,12 @@ public abstract class ConnectionCommandRequest {
 
   @Getter
   @Builder(toBuilder = true)
-  public static class DrawConnectorPortCommandRequest extends ConnectionCommandRequest {
+  public static class DrawLedBridgeCommandRequest extends ConnectionCommandRequest {
 
     private long id;
     private ComponentType commandType;
-    private Point startIdxPosition;
-    private Point endIdxPosition;
+    private LedComponent startComponent;
+    private LedComponent endComponent;
   }
 
 

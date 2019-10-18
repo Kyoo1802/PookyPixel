@@ -3,6 +3,7 @@ package com.kyoo.pixel.connection.components;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 import lombok.Data;
 
 @Data
@@ -14,12 +15,16 @@ public final class SquarePanel implements ConnectionComponent, LedComponent {
   private long id;
   private Led first;
   private Led last;
+  private Optional<LedBridge> startBridge;
+  private Optional<LedBridge> endBridge;
 
   public SquarePanel(long id, Point startIdxPosition, Point endIdxPosition) {
     this.id = id;
     this.leds = new LinkedHashMap<>();
     this.startIdxPosition = startIdxPosition;
     this.endIdxPosition = endIdxPosition;
+    this.startBridge = Optional.empty();
+    this.endBridge = Optional.empty();
     createLeds();
   }
 

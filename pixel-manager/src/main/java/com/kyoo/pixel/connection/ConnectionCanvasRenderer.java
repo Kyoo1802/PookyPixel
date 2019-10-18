@@ -2,11 +2,11 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.ConnectionPort;
+import com.kyoo.pixel.connection.components.LedBridge;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawConnectorPortCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
@@ -90,8 +90,8 @@ public final class ConnectionCanvasRenderer {
           case DRIVER_PORT:
             DrawUtils.drawPort(gc, properties, (DriverPort) component);
             break;
-          case CONNECTOR_PORT:
-            DrawUtils.drawConnectorPort(gc, properties, (ConnectionPort) component);
+          case LED_BRIDGE:
+            DrawUtils.drawLedBridge(gc, properties, (LedBridge) component);
             break;
           default:
             log.error("Invalid component to draw: " + component.getComponentType());
@@ -122,9 +122,9 @@ public final class ConnectionCanvasRenderer {
         DrawUtils.drawLedPathCommand(gc, properties, (DrawLedPathCommandRequest) component,
             model.getPointer());
         break;
-      case CONNECTOR_PORT:
+      case LED_BRIDGE:
         DrawUtils
-            .drawConnectorPortCommand(gc, properties, (DrawConnectorPortCommandRequest) component,
+            .drawLedBridgeCommand(gc, properties, (DrawLedBridgeCommandRequest) component,
                 model.getPointer());
         break;
       case MOVEMENT:
@@ -160,7 +160,7 @@ public final class ConnectionCanvasRenderer {
           DrawUtils.drawLed(gc, properties.getLedEndColor(), mouseSquare);
         }
         break;
-      case DRAW_CONNECTOR_PORT:
+      case DRAW_LED_BRIDGE:
       case DRAW_DRIVER_PORT:
         DrawUtils.drawDriverPortPointer(gc, properties, mouseSquare);
         break;

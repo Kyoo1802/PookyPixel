@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import lombok.Data;
 
 @Data
@@ -15,10 +16,14 @@ public final class LedPath implements ConnectionComponent, LedComponent {
   private Led first;
   private Led last;
   private Dimension size;
+  private Optional<LedBridge> startBridge;
+  private Optional<LedBridge> endBridge;
 
   public LedPath(long id, Collection<Point> leds) {
     this.id = id;
     this.leds = new LinkedHashSet<>();
+    this.startBridge = Optional.empty();
+    this.endBridge = Optional.empty();
     Point minXY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
     Point maxXY = new Point(0, 0);
     for (Point p : leds) {

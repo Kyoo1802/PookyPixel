@@ -3,15 +3,15 @@ package com.kyoo.pixel.connection.components;
 import java.awt.Dimension;
 import java.awt.Point;
 
-public class ConnectionPort implements ConnectionComponent {
+public class LedBridge implements ConnectionComponent {
 
   private long id;
-  private Point startIdxPosition;
-  private Point endIdxPosition;
-  public ConnectionPort(long id, Point startIdxPosition, Point endIdxPosition) {
+  private LedComponent startComponent;
+  private LedComponent endComponent;
+  public LedBridge(long id, LedComponent startIdxPosition, LedComponent endIdxPosition) {
     this.id = id;
-    this.startIdxPosition = startIdxPosition;
-    this.endIdxPosition = endIdxPosition;
+    this.startComponent = startIdxPosition;
+    this.endComponent = endIdxPosition;
   }
 
   @Override
@@ -21,7 +21,7 @@ public class ConnectionPort implements ConnectionComponent {
 
   @Override
   public ComponentType getComponentType() {
-    return ComponentType.CONNECTOR_PORT;
+    return ComponentType.LED_BRIDGE;
   }
 
   @Override
@@ -31,18 +31,18 @@ public class ConnectionPort implements ConnectionComponent {
 
   @Override
   public Point getStartIdxPosition() {
-    return startIdxPosition;
+    return startComponent.lastLed().getIdxPosition();
   }
 
   @Override
   public Point getEndIdxPosition() {
-    return endIdxPosition;
+    return endComponent.firstLed().getIdxPosition();
   }
 
   @Override
   public Dimension getSize() {
-    return new Dimension(endIdxPosition.x - startIdxPosition.x + 1,
-        endIdxPosition.y - startIdxPosition.y + 1);
+    return new Dimension(getEndIdxPosition().x - getStartIdxPosition().x + 1,
+        getEndIdxPosition().y - getStartIdxPosition().y + 1);
   }
 
   @Override
