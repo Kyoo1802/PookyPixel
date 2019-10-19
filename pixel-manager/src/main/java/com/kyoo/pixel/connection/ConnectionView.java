@@ -127,6 +127,5 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
     interaction.setKey(KeyboardKey.from(event.getCode()));
     viewModel.getInputInteractions().get().add(interaction);
     log.debug("Keyboard interaction: {}", interaction);
-
   }
 }

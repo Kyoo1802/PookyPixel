@@ -147,6 +147,10 @@ public final class ConnectionViewModel {
           case MOVE:
             model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
             break;
+          case CANCEL:
+            model.setActiveCommandRequest(Optional.empty());
+            model.setSelectedComponent(Optional.empty());
+            break;
           default:
             log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
         }
@@ -159,6 +163,10 @@ public final class ConnectionViewModel {
             break;
           case MOVE:
             model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
+            break;
+          case CANCEL:
+            model.setActiveCommandRequest(Optional.empty());
+            model.setSelectedComponent(Optional.empty());
             break;
           default:
             log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
@@ -174,6 +182,10 @@ public final class ConnectionViewModel {
             break;
           case FINISH_DRAW:
             drawingCommandHandler.handleLedPathDrawing(true);
+            break;
+          case CANCEL:
+            model.setActiveCommandRequest(Optional.empty());
+            model.setSelectedComponent(Optional.empty());
             break;
           default:
             log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
@@ -199,6 +211,8 @@ public final class ConnectionViewModel {
         switch (keyboardInteraction.getKey()) {
           case ENTER:
             return DrawEvent.FINISH_DRAW;
+          case ESCAPE:
+            return DrawEvent.CANCEL;
         }
       }
     }
@@ -255,11 +269,11 @@ public final class ConnectionViewModel {
   }
 
   enum DrawEvent {
-    UNKNOWN, DRAW_POINT, MOVE, FINISH_DRAW
+    UNKNOWN, DRAW_POINT, MOVE, FINISH_DRAW, CANCEL,
   }
 
   enum NoActionEvent {
-    UNKNOWN, POINTER_MOVE, PRESS, RELEASE, CLICK, DRAG
+    UNKNOWN, POINTER_MOVE, PRESS, RELEASE, CLICK, DRAG, CANCEL,
   }
 
 }
