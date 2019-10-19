@@ -22,6 +22,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -40,6 +41,8 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
   private ToggleButton createBridgeBtn;
   @FXML
   private Canvas canvas;
+  @FXML
+  private StackPane connectionUI;
 
   @Inject
   public ConnectionView(ConnectionViewModel viewModel, ConnectionCanvasRenderer canvasRenderer,
@@ -68,12 +71,16 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
     handleStateInteraction(createBridgeBtn.isSelected(), State.DRAW_CONNECTOR_PORT);
 
     // Initialize property listeners
-    canvas.widthProperty()
-        .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
-            State.RESIZE_WIDTH));
-    canvas.heightProperty()
-        .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
-            State.RESIZE_HEIGHT));
+    connectionUI.widthProperty()
+        .addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.intValue()));
+    connectionUI.widthProperty()
+        .addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.intValue()));
+//    canvas.widthProperty()
+//        .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
+//            State.RESIZE_WIDTH));
+//    canvas.heightProperty()
+//        .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
+//            State.RESIZE_HEIGHT));
     createSquarePanelBtn.selectedProperty()
         .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
             State.DRAW_SQUARE_PANEL));
@@ -108,6 +115,8 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
       interaction.setBoolValue(Optional.of((Boolean) value));
     } else if (value instanceof Integer) {
       interaction.setIntValue(Optional.of((Integer) value));
+    } else if (value instanceof Double) {
+      interaction.setIntValue(Optional.of(((Double) value).intValue()));
     }
     viewModel.getInputInteractions().get().add(interaction);
     log.debug("State [{}] on {}", state, interaction);

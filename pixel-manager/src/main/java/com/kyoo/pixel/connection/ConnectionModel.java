@@ -38,7 +38,7 @@ public final class ConnectionModel {
     this.pointer = new Point(0, 0);
     this.connectionState = ConnectionState.NO_ACTION;
     this.transformationActionState = TransformationAction.MOVE;
-    this.dimension = new Dimension();
+    this.dimension = new Dimension(400, 400);
   }
 
   public void handlePointerMovement(Point canvasPointerPosition) {

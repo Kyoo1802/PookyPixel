@@ -23,6 +23,7 @@ import java.util.Optional;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.WritableImage;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -31,6 +32,7 @@ public final class ConnectionCanvasRenderer {
   private ConnectionModel model;
   private BufferedImage background;
   private ConnectionProperties properties;
+  private WritableImage fxBackground;
 
   @Inject
   public ConnectionCanvasRenderer(ConnectionViewModel viewModel,
@@ -51,15 +53,14 @@ public final class ConnectionCanvasRenderer {
     Dimension canvasDimension = PositionUtils.toCanvasDimension(model.getDimension());
 
     // If there is a background image and canvas dimension hasn't change, draw the background image
-    if (background != null && canvasDimension.width == background.getWidth()
-        && canvasDimension.getHeight() == background.getHeight()) {
+    if (fxBackground != null) {
       log.debug("Draw background");
-      gc.drawImage(SwingFXUtils.toFXImage(background, null), 0, 0);
+      gc.drawImage(fxBackground, 0, 0);
       return;
     } else {
       log.debug("Recreate background: " + model.getDimension());
       recreateBackground();
-      gc.drawImage(SwingFXUtils.toFXImage(background, null), 0, 0);
+      gc.drawImage(fxBackground, 0, 0);
     }
   }
 
@@ -79,6 +80,7 @@ public final class ConnectionCanvasRenderer {
     graphics2D.dispose();
 
     background = bufferedImage;
+    fxBackground = SwingFXUtils.toFXImage(background, null);
   }
 
   private void createdComponents(GraphicsContext gc) {

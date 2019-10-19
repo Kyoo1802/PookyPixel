@@ -23,12 +23,13 @@
 <?import javafx.scene.text.Font?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
   minHeight="-Infinity"
-  minWidth="-Infinity" prefHeight="483.0" prefWidth="821.0"
+  minWidth="-Infinity" prefWidth="800.0" prefHeight="600.0"
+  fx:controller="com.kyoo.pixel.manager.ManagerView"
   xmlns="http://javafx.com/javafx/11.0.1">
   <center>
     <SplitPane BorderPane.alignment="CENTER" dividerPositions="0.3, 0.7">
       <items>
-        <Accordion prefHeight="401.0" prefWidth="161.0">
+        <Accordion prefHeight="401.0" prefWidth="161.0" maxWidth="200">
           <panes>
             <TitledPane collapsible="false" prefHeight="401.0" prefWidth="221.0" text="Proyecto">
               <content>
@@ -41,14 +42,11 @@
             </TitledPane>
           </panes>
         </Accordion>
-        <Accordion>
-          <panes>
-            <TitledPane collapsible="false" text="Propiedades"/>
-          </panes>
-        </Accordion>
         <TabPane prefHeight="401.0" prefWidth="129.0" side="BOTTOM">
           <tabs>
-            <Tab text="Conexion"/>
+            <Tab text="Conexion">
+              <fx:include source="connectionUI.fxml"></fx:include>
+            </Tab>
             <Tab text="Efectos">
               <content>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -76,6 +74,11 @@
             </Tab>
           </tabs>
         </TabPane>
+        <Accordion prefHeight="401.0" prefWidth="161.0" maxWidth="200">
+          <panes>
+            <TitledPane collapsible="false" text="Propiedades"/>
+          </panes>
+        </Accordion>
       </items>
     </SplitPane>
   </center>
@@ -86,12 +89,12 @@
           <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="28.0">
               <children>
-                <Button layoutX="-18.0" layoutY="18.0" mnemonicParsing="false" rotate="-90.0"
+                <ToggleButton layoutX="-18.0" layoutY="18.0" mnemonicParsing="false" rotate="-90.0"
                   text="Proyecto">
                   <font>
                     <Font size="10.0"/>
                   </font>
-                </Button>
+                </ToggleButton>
               </children>
             </AnchorPane>
           </content>
@@ -106,12 +109,12 @@
           <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="30.0">
               <children>
-                <Button layoutX="-12.0" layoutY="27.0" mnemonicParsing="false" rotate="-90.0"
+                <ToggleButton layoutX="-12.0" layoutY="27.0" mnemonicParsing="false" rotate="-90.0"
                   text="Propiedades">
                   <font>
                     <Font size="10.0"/>
                   </font>
-                </Button>
+                </ToggleButton>
               </children>
             </AnchorPane>
           </content>

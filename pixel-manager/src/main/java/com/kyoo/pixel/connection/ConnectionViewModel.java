@@ -103,14 +103,6 @@ public final class ConnectionViewModel {
             .setConnectionState(ConnectionState.DRAW_LED_BRIDGE,
                 interaction.getBoolValue().get());
         break;
-      case RESIZE_WIDTH:
-        model.getDimension().setSize(PositionUtils.toIdx(interaction.getIntValue().get()),
-            model.getDimension().height);
-        break;
-      case RESIZE_HEIGHT:
-        model.getDimension().setSize(model.getDimension().width,
-            PositionUtils.toIdx(interaction.getIntValue().get()));
-        break;
       default:
         log.error("Invalid interaction: " + interaction.getState());
     }
