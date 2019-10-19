@@ -37,9 +37,8 @@ public final class TransformationHandler {
     }
   }
 
-
   private void handleMovement() {
-    if (model.hasActiveCommandRequest()) {
+    if (!model.hasActiveCommandRequest()) {
       MovementCommandRequest request =
           MovementCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
@@ -61,7 +60,7 @@ public final class TransformationHandler {
   }
 
   private void handleScale() {
-    if (model.hasActiveCommandRequest()) {
+    if (!model.hasActiveCommandRequest()) {
       ScaleCommandRequest request =
           ScaleCommandRequest.builder()
               .id(model.generateId(ComponentType.SCALE))

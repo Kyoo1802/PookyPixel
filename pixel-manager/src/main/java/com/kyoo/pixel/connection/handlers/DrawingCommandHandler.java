@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
@@ -12,6 +13,7 @@ import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.Dr
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
 import com.kyoo.pixel.connection.components.commands.DrawLedBridgeCommand;
+import com.kyoo.pixel.connection.components.commands.DrawLedPathCommand;
 import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +30,7 @@ public final class DrawingCommandHandler {
   }
 
   public void handleSquarePanelDrawing() {
-    if (model.hasActiveCommandRequest()) {
+    if (!model.hasActiveCommandRequest()) {
       DrawSquarePanelCommandRequest request =
           DrawSquarePanelCommandRequest.builder()
               .id(model.generateId(ComponentType.SQUARE_PANEL))
@@ -57,20 +59,30 @@ public final class DrawingCommandHandler {
     viewModel.executeCommand(new DrawDriverPortCommand(model, request));
   }
 
-  public void handleLedPathDrawing() {
-    if (model.hasActiveCommandRequest()) {
+  public void handleLedPathDrawing(boolean hasFinished) {
+    if (!model.hasActiveCommandRequest()) {
       DrawLedPathCommandRequest request =
           DrawLedPathCommandRequest.builder()
               .id(model.generateId(ComponentType.LED_PATH))
               .commandType(ComponentType.LED_PATH)
               .idxPositions(
-                  Sets.newLinkedHashSet(Lists.newArrayList(model.getPointerCopy())))
+                  Sets.newLinkedHashSet(Lists.newArrayList(new Led(model.getPointerCopy()))))
               .build();
       model.setActiveCommandRequest(Optional.of(request));
+    } else if (!hasFinished) {
+      DrawLedPathCommandRequest request =
+          (DrawLedPathCommandRequest) model.getActiveCommandRequest().get();
+      Optional<Led> ledInSamePosition =
+          request.getIdxPositions().parallelStream()
+              .filter(led -> led.getIdxPosition().equals(model.getPointer())).findAny();
+      if (ledInSamePosition.isEmpty()) {
+        request.getIdxPositions().add(new Led(model.getPointerCopy()));
+      }
     } else {
       DrawLedPathCommandRequest request =
-          ((DrawLedPathCommandRequest) model.getActiveCommandRequest().get());
-      request.getIdxPositions().add(model.getPointerCopy());
+          (DrawLedPathCommandRequest) model.getActiveCommandRequest().get();
+      viewModel.executeCommand(new DrawLedPathCommand(model, request));
+      model.setActiveCommandRequest(Optional.empty());
     }
   }
 
@@ -81,7 +93,7 @@ public final class DrawingCommandHandler {
       return;
     }
 
-    if (model.hasActiveCommandRequest()) {
+    if (!model.hasActiveCommandRequest()) {
       if (component.get().getStartBridge().isPresent()) {
         return;
       }

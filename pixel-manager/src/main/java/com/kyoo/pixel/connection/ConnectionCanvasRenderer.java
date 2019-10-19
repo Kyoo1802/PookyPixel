@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.LedBridge;
+import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
@@ -81,7 +82,6 @@ public final class ConnectionCanvasRenderer {
     for (Map<Long, ConnectionComponent> components :
         model.getCreatedComponentsManager().getComponents().values()) {
       for (ConnectionComponent component : components.values()) {
-
         // Draw Component
         switch (component.getComponentType()) {
           case SQUARE_PANEL:
@@ -93,10 +93,13 @@ public final class ConnectionCanvasRenderer {
           case LED_BRIDGE:
             DrawUtils.drawLedBridge(gc, properties, (LedBridge) component);
             break;
+          case LED_PATH:
+            DrawUtils.drawLedPath(gc, properties, (LedPath) component,
+                model.getPointer());
+            break;
           default:
             log.error("Invalid component to draw: " + component.getComponentType());
         }
-
         // Draw Selection
         Optional<ConnectionComponent> selectedComponent = model.getSelectedComponent();
         if (selectedComponent.isPresent() && selectedComponent.get() == component) {

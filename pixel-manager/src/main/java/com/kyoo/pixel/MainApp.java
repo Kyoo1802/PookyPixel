@@ -14,7 +14,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MainApp extends Application {
 
-  public static final Injector injector = Guice.createInjector(new ConnectionModule(),
+  public static final Injector injector = Guice.createInjector(
+      new CommonModule(),
+      new ConnectionModule(),
       new VisualizerModule());
 
   public static void main(String[] args) {
@@ -29,12 +31,11 @@ public class MainApp extends Application {
     GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
 
     Parent root = loader.load(getClass().getResource("ui/connectionUI.fxml"));
-
     Scene scene = new Scene(root);
     scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
-
     stage.setTitle("JavaFX and Gradle");
     stage.setScene(scene);
+    scene.setOnKeyReleased(injector.getInstance(MainReleaseKeyHandler.class));
     stage.show();
   }
 

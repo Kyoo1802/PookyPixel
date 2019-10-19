@@ -9,6 +9,10 @@ public final class Led implements ConnectionComponent {
   private final ConnectionComponent parentComponent;
   private Point position;
 
+  public Led(Point position) {
+    this(position, null);
+  }
+
   public Led(Point position, ConnectionComponent parentComponent) {
     this.position = position;
     this.parentComponent = parentComponent;
@@ -59,6 +63,11 @@ public final class Led implements ConnectionComponent {
 
   @Override
   public String description() {
+    return position.toString();
+  }
+
+  @Override
+  public String toString() {
     return position.toString();
   }
 }

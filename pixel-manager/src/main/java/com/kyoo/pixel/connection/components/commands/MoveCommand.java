@@ -3,6 +3,7 @@ package com.kyoo.pixel.connection.components.commands;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.Led;
+import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import java.awt.Point;
@@ -65,6 +66,26 @@ public final class MoveCommand implements ConnectionCommand {
             component.getStartIdxPosition().y + movement.y);
         component.getEndIdxPosition().setLocation(component.getEndIdxPosition().x + movement.x,
             component.getEndIdxPosition().y + movement.y);
+        break;
+      case DRIVER_PORT:
+        component.getStartIdxPosition().setLocation(component.getStartIdxPosition().x + movement.x,
+            component.getStartIdxPosition().y + movement.y);
+        component.getEndIdxPosition().setLocation(component.getEndIdxPosition().x + movement.x,
+            component.getEndIdxPosition().y + movement.y);
+        break;
+      case LED_PATH:
+        LedPath lp = (LedPath) component;
+        for (Led led : lp.getLeds()) {
+          led.getIdxPosition().setLocation(led.getIdxPosition().x + movement.x,
+              led.getIdxPosition().y + movement.y);
+        }
+        component.getStartIdxPosition().setLocation(component.getStartIdxPosition().x + movement.x,
+            component.getStartIdxPosition().y + movement.y);
+        component.getEndIdxPosition().setLocation(component.getEndIdxPosition().x + movement.x,
+            component.getEndIdxPosition().y + movement.y);
+        break;
+      default:
+        log.error("Invalid movement for component: " + component.getComponentType());
     }
   }
 }

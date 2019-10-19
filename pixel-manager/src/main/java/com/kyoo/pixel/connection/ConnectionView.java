@@ -1,6 +1,7 @@
 package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
+import com.kyoo.pixel.MainReleaseKeyHandler;
 import com.kyoo.pixel.connection.InputInteraction.KeyboardInteraction;
 import com.kyoo.pixel.connection.InputInteraction.KeyboardKey;
 import com.kyoo.pixel.connection.InputInteraction.KeyboardState;
@@ -14,17 +15,21 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class ConnectionView implements Initializable {
+public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
 
+  private final ConnectionViewModel viewModel;
+  private final ConnectionCanvasRenderer canvasRenderer;
+  private final MainReleaseKeyHandler keyboardHandler;
   @FXML
   private ToggleButton createSquarePanelBtn;
   @FXML
@@ -32,17 +37,17 @@ public class ConnectionView implements Initializable {
   @FXML
   private ToggleButton createDriverPortBtn;
   @FXML
-  private ToggleButton createConnectorBtn;
+  private ToggleButton createBridgeBtn;
   @FXML
   private Canvas canvas;
 
-  private ConnectionViewModel viewModel;
-  private ConnectionCanvasRenderer canvasRenderer;
-
   @Inject
-  public ConnectionView(ConnectionViewModel viewModel, ConnectionCanvasRenderer canvasRenderer) {
+  public ConnectionView(ConnectionViewModel viewModel, ConnectionCanvasRenderer canvasRenderer,
+      MainReleaseKeyHandler keyboardHandler) {
     this.viewModel = viewModel;
     this.canvasRenderer = canvasRenderer;
+    this.keyboardHandler = keyboardHandler;
+    this.keyboardHandler.attachListener(this);
   }
 
   @Override
@@ -50,13 +55,12 @@ public class ConnectionView implements Initializable {
 
     // Initialize event listeners
     canvas.setFocusTraversable(true);
+    canvas.requestFocus();
     canvas.onMouseMovedProperty().set(e -> handleMouseInteraction(e, PositionState.MOVED));
     canvas.onMouseClickedProperty().set(e -> handleMouseInteraction(e, PositionState.CLICKED));
     canvas.onMousePressedProperty().set(e -> handleMouseInteraction(e, PositionState.PRESSED));
     canvas.onMouseReleasedProperty().set(e -> handleMouseInteraction(e, PositionState.RELEASED));
     canvas.onMouseDraggedProperty().set(e -> handleMouseInteraction(e, PositionState.DRAGGED));
-    canvas.onKeyReleasedProperty()
-        .set(e -> handleKeyInteraction(e.getCode(), KeyboardState.RELEASED));
 
     // Initialize properties
     handleStateInteraction((int) canvas.getWidth(), State.RESIZE_WIDTH);
@@ -64,7 +68,7 @@ public class ConnectionView implements Initializable {
     handleStateInteraction(createSquarePanelBtn.isSelected(), State.DRAW_SQUARE_PANEL);
     handleStateInteraction(createLedPathBtn.isSelected(), State.DRAW_LED_PATH);
     handleStateInteraction(createDriverPortBtn.isSelected(), State.DRAW_DRIVER_PORT);
-    handleStateInteraction(createConnectorBtn.isSelected(), State.DRAW_CONNECTOR_PORT);
+    handleStateInteraction(createBridgeBtn.isSelected(), State.DRAW_CONNECTOR_PORT);
 
     // Initialize property listeners
     canvas.widthProperty()
@@ -78,7 +82,7 @@ public class ConnectionView implements Initializable {
             State.DRAW_SQUARE_PANEL));
     createLedPathBtn.selectedProperty().addListener(
         (observable, oldValue, newValue) -> handleStateInteraction(newValue, State.DRAW_LED_PATH));
-    createConnectorBtn.selectedProperty().addListener(
+    createBridgeBtn.selectedProperty().addListener(
         (observable, oldValue, newValue) -> handleStateInteraction(newValue,
             State.DRAW_CONNECTOR_PORT));
     createDriverPortBtn.selectedProperty().addListener(
@@ -94,7 +98,6 @@ public class ConnectionView implements Initializable {
     };
     timer.start();
   }
-
 
   private void handleStateInteraction(Object value, State state) {
     StateInteraction interaction = new StateInteraction();
@@ -114,14 +117,16 @@ public class ConnectionView implements Initializable {
     interaction.setPosition(new Point((int) e.getX(), (int) e.getY()));
     interaction.setSide(PositionSide.from(e.getButton()));
     viewModel.getInputInteractions().get().add(interaction);
-    log.debug("Mouse [{}] on {}", state, interaction);
+    log.debug("Mouse interaction: {}", interaction);
   }
 
-  private void handleKeyInteraction(KeyCode code, KeyboardState state) {
+  @Override
+  public void handle(KeyEvent event) {
     KeyboardInteraction interaction = new KeyboardInteraction();
-    interaction.setState(state);
-    interaction.setKey(KeyboardKey.from(code));
+    interaction.setState(KeyboardState.RELEASED);
+    interaction.setKey(KeyboardKey.from(event.getCode()));
     viewModel.getInputInteractions().get().add(interaction);
-    log.debug("Keyboard [{}] on {}", state, code.getName());
+    log.debug("Keyboard interaction: {}", interaction);
+
   }
 }

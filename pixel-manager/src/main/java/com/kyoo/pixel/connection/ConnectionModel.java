@@ -63,7 +63,7 @@ public final class ConnectionModel {
   }
 
   public boolean hasActiveCommandRequest() {
-    return getActiveCommandRequest().isEmpty();
+    return getActiveCommandRequest().isPresent();
   }
 
   public void setConnectionState(ConnectionState connectionState, boolean value) {

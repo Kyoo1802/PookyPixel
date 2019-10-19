@@ -52,12 +52,18 @@ public interface InputInteraction {
 
   enum KeyboardKey {
     UNKNOWN,
-    ENTER;
+    ENTER,
+    ESCAPE,
+    DELETE;
 
     public static KeyboardKey from(KeyCode code) {
       switch (code) {
         case ENTER:
           return ENTER;
+        case ESCAPE:
+          return ESCAPE;
+        case DELETE:
+          return DELETE;
         default:
           return UNKNOWN;
       }

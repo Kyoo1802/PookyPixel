@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel.ConnectionState;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
+import com.kyoo.pixel.connection.InputInteraction.KeyboardInteraction;
+import com.kyoo.pixel.connection.InputInteraction.KeyboardState;
 import com.kyoo.pixel.connection.InputInteraction.PositionInteraction;
 import com.kyoo.pixel.connection.InputInteraction.PositionSide;
 import com.kyoo.pixel.connection.InputInteraction.PositionState;
@@ -125,6 +127,7 @@ public final class ConnectionViewModel {
       break;
       case DRAW_DRIVER_PORT:
         switch (getDrawEvent(interaction)) {
+          case FINISH_DRAW:
           case DRAW_POINT:
             drawingCommandHandler.handleDriverPortDrawing();
             break;
@@ -137,6 +140,7 @@ public final class ConnectionViewModel {
         break;
       case DRAW_SQUARE_PANEL:
         switch (getDrawEvent(interaction)) {
+          case FINISH_DRAW:
           case DRAW_POINT:
             drawingCommandHandler.handleSquarePanelDrawing();
             break;
@@ -149,6 +153,7 @@ public final class ConnectionViewModel {
         break;
       case DRAW_LED_BRIDGE:
         switch (getDrawEvent(interaction)) {
+          case FINISH_DRAW:
           case DRAW_POINT:
             drawingCommandHandler.handleLedBridgeDrawing();
             break;
@@ -162,10 +167,13 @@ public final class ConnectionViewModel {
       case DRAW_LED_PATH:
         switch (getDrawEvent(interaction)) {
           case DRAW_POINT:
-            drawingCommandHandler.handleLedPathDrawing();
+            drawingCommandHandler.handleLedPathDrawing(false);
             break;
           case MOVE:
             model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
+            break;
+          case FINISH_DRAW:
+            drawingCommandHandler.handleLedPathDrawing(true);
             break;
           default:
             log.debug("Event not supported for DRAW_DRIVER_PORT: " + interaction);
@@ -185,13 +193,18 @@ public final class ConnectionViewModel {
         case MOVED:
           return DrawEvent.MOVE;
       }
+    } else if (isKeyboardInteraction(interaction)) {
+      KeyboardInteraction keyboardInteraction = getKeyboardInteraction(interaction);
+      if (keyboardInteraction.getState() == KeyboardState.RELEASED) {
+        switch (keyboardInteraction.getKey()) {
+          case ENTER:
+            return DrawEvent.FINISH_DRAW;
+        }
+      }
     }
     return DrawEvent.UNKNOWN;
   }
 
-  private PositionInteraction getPositionInteraction(InputInteraction interaction) {
-    return (PositionInteraction) interaction;
-  }
 
   private NoActionEvent getNoActionEvent(InputInteraction interaction) {
     if (isPositionInteraction(interaction)) {
@@ -217,6 +230,18 @@ public final class ConnectionViewModel {
     return NoActionEvent.UNKNOWN;
   }
 
+  private PositionInteraction getPositionInteraction(InputInteraction interaction) {
+    return (PositionInteraction) interaction;
+  }
+
+  private KeyboardInteraction getKeyboardInteraction(InputInteraction interaction) {
+    return (KeyboardInteraction) interaction;
+  }
+
+  private boolean isKeyboardInteraction(InputInteraction interaction) {
+    return interaction instanceof KeyboardInteraction;
+  }
+
   private boolean isPositionInteraction(InputInteraction interaction) {
     return interaction instanceof PositionInteraction;
   }
@@ -230,7 +255,7 @@ public final class ConnectionViewModel {
   }
 
   enum DrawEvent {
-    UNKNOWN, DRAW_POINT, MOVE,
+    UNKNOWN, DRAW_POINT, MOVE, FINISH_DRAW
   }
 
   enum NoActionEvent {

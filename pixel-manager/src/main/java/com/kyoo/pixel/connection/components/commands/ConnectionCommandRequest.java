@@ -2,6 +2,7 @@ package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
+import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedComponent;
 import java.awt.Point;
 import java.util.LinkedHashSet;
@@ -38,7 +39,7 @@ public abstract class ConnectionCommandRequest {
 
     private long id;
     private ComponentType commandType;
-    private LinkedHashSet<Point> idxPositions;
+    private LinkedHashSet<Led> idxPositions;
   }
 
   @Getter

@@ -12,33 +12,33 @@ public final class LedPath implements ConnectionComponent, LedComponent {
 
   private long id;
   private LinkedHashSet<Led> leds;
-  private Point startPosition;
   private Led first;
   private Led last;
-  private Dimension size;
+  private Point minPoint;
+  private Point maxPoint;
   private Optional<LedBridge> startBridge;
   private Optional<LedBridge> endBridge;
 
-  public LedPath(long id, Collection<Point> leds) {
+  public LedPath(long id, Collection<Led> ledsInput) {
     this.id = id;
     this.leds = new LinkedHashSet<>();
     this.startBridge = Optional.empty();
     this.endBridge = Optional.empty();
-    Point minXY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    Point maxXY = new Point(0, 0);
-    for (Point p : leds) {
-      minXY.x = Math.min(p.x, minXY.x);
-      minXY.y = Math.min(p.y, minXY.y);
-      maxXY.x = Math.max(p.x, maxXY.x);
-      maxXY.y = Math.max(p.y, maxXY.y);
-      Led led = new Led(p, this);
+    minPoint = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    maxPoint = new Point(0, 0);
+    for (Led led : ledsInput) {
+      Point p = led.getIdxPosition();
+      minPoint.x = Math.min(p.x, minPoint.x);
+      minPoint.y = Math.min(p.y, minPoint.y);
+      maxPoint.x = Math.max(p.x, maxPoint.x);
+      maxPoint.y = Math.max(p.y, maxPoint.y);
+      Led newLed = new Led(p, this);
       if (first == null) {
-        first = led;
+        first = newLed;
       }
-      last = led;
-      this.leds.add(led);
+      last = newLed;
+      this.leds.add(newLed);
     }
-    size = new Dimension(maxXY.x - minXY.x, maxXY.y - maxXY.y);
   }
 
   @Override
@@ -58,7 +58,7 @@ public final class LedPath implements ConnectionComponent, LedComponent {
 
   @Override
   public Point getStartIdxPosition() {
-    return first.getIdxPosition();
+    return minPoint;
   }
 
   @Override
@@ -68,12 +68,13 @@ public final class LedPath implements ConnectionComponent, LedComponent {
 
   @Override
   public Point getEndIdxPosition() {
-    return last.getIdxPosition();
+    return maxPoint;
   }
 
   @Override
   public Dimension getSize() {
-    return size;
+    return new Dimension(getEndIdxPosition().x - getStartIdxPosition().x + 1,
+        getEndIdxPosition().y - getStartIdxPosition().y + 1);
   }
 
   @Override
@@ -87,7 +88,7 @@ public final class LedPath implements ConnectionComponent, LedComponent {
 
   @Override
   public String description() {
-    return String.format("id: %d, size: %s ", id, size);
+    return String.format("id: %d, size: %s ", id, getSize());
   }
 
   @Override

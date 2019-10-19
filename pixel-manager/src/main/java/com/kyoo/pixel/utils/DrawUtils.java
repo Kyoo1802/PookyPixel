@@ -5,6 +5,7 @@ import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedBridge;
+import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
@@ -14,6 +15,8 @@ import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.Sc
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.Collection;
+import java.util.Optional;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -164,7 +167,16 @@ public final class DrawUtils {
 
   public static void drawLedPathCommand(GraphicsContext gc, ConnectionProperties properties,
       DrawLedPathCommandRequest request, Point pointer) {
-    Point canvasPosition = PositionUtils.toCanvasPosition(pointer);
+    drawLedPath(gc, properties, request.getIdxPositions(), Optional.of(pointer));
+  }
+
+  public static void drawLedPath(GraphicsContext gc, ConnectionProperties properties,
+      LedPath component, Point pointer) {
+    drawLedPath(gc, properties, component.getLeds(), Optional.empty());
+  }
+
+  public static void drawLedPath(GraphicsContext gc, ConnectionProperties properties,
+      Collection<Led> ledPath, Optional<Point> pointer) {
     Point minPoint = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
     Point maxPoint = new Point(0, 0);
 
@@ -174,7 +186,8 @@ public final class DrawUtils {
     int i = 0;
 
     // Draw Leds
-    for (Point p : request.getIdxPositions()) {
+    for (Led led : ledPath) {
+      Point p = led.getIdxPosition();
       Point startPosition = PositionUtils.toCanvasPosition(p.y, p.x);
       minPoint.x = Math.min(minPoint.x, startPosition.x);
       minPoint.y = Math.min(minPoint.y, startPosition.y);
@@ -191,20 +204,25 @@ public final class DrawUtils {
       }
       i++;
     }
-    gc.lineTo(canvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
-        canvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
+    if (pointer.isPresent()) {
+      Point canvasPosition = PositionUtils.toCanvasPosition(pointer.get());
+      gc.lineTo(canvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
+          canvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
+    }
     gc.setStroke(Color.web(properties.getLedConnectionPathColor()));
     gc.stroke();
 
-    // Draw component preview
-    Dimension size = new Dimension(
-        maxPoint.x - minPoint.x + PositionUtils.SQUARE_LENGTH,
-        maxPoint.y - minPoint.y + PositionUtils.SQUARE_LENGTH);
-    DrawUtils.drawDashedRect(gc, properties.getSelectColor(), minPoint, size);
+    if (pointer.isPresent()) {
+      // Draw component preview
+      Dimension size = new Dimension(
+          maxPoint.x - minPoint.x + PositionUtils.SQUARE_LENGTH,
+          maxPoint.y - minPoint.y + PositionUtils.SQUARE_LENGTH);
+      DrawUtils.drawDashedRect(gc, properties.getSelectColor(), minPoint, size);
 
-    // Draw component info
-    String sizeText = String.format("[%d]", request.getIdxPositions().size());
-    DrawUtils.drawText(gc, properties.getSelectColor(), maxPoint, sizeText);
+      // Draw component info
+      String sizeText = String.format("[%d]", ledPath.size());
+      DrawUtils.drawText(gc, properties.getSelectColor(), maxPoint, sizeText);
+    }
   }
 
   public static void drawLedBridgeCommand(GraphicsContext gc, ConnectionProperties properties,
