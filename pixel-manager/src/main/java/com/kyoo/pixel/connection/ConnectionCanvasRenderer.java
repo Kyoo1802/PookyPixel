@@ -53,10 +53,13 @@ public final class ConnectionCanvasRenderer {
     // If there is a background image and canvas dimension hasn't change, draw the background image
     if (background != null && canvasDimension.width == background.getWidth()
         && canvasDimension.getHeight() == background.getHeight()) {
+      log.debug("Draw background");
       gc.drawImage(SwingFXUtils.toFXImage(background, null), 0, 0);
       return;
     } else {
+      log.debug("Recreate background: " + model.getDimension());
       recreateBackground();
+      gc.drawImage(SwingFXUtils.toFXImage(background, null), 0, 0);
     }
   }
 

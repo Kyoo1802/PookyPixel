@@ -18,6 +18,7 @@ import com.kyoo.pixel.connection.handlers.TransformationHandler;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
@@ -30,12 +31,14 @@ public final class ConnectionViewModel {
 
   private ObjectProperty<ConcurrentLinkedQueue<InputInteraction>> inputInteractions =
       new SimpleObjectProperty<>(new ConcurrentLinkedQueue<>());
+  private AtomicBoolean needsRender = new AtomicBoolean(true);
 
   private ConnectionModel model;
   private ConnectionCommandManager commandManager;
   private DrawingCommandHandler drawingCommandHandler;
   private SelectCommandHandler selectCommandHandler;
   private TransformationHandler transformationHandler;
+  private Thread t;
 
   @Inject
   public ConnectionViewModel(ConnectionModel model, ConnectionCommandManager commandManager) {
@@ -44,7 +47,7 @@ public final class ConnectionViewModel {
     this.drawingCommandHandler = new DrawingCommandHandler(this);
     this.selectCommandHandler = new SelectCommandHandler(this);
     this.transformationHandler = new TransformationHandler(this);
-    Thread t = new Thread(() -> {
+    t = new Thread(() -> {
       while (true) {
         consumeInteractions();
         try {
@@ -54,19 +57,32 @@ public final class ConnectionViewModel {
         }
       }
     });
+  }
+
+  public void start() {
     t.start();
   }
 
   public void consumeInteractions() {
-    while (!inputInteractions.get().isEmpty()) {
-      InputInteraction inputInteraction = inputInteractions.get().poll();
+    while (hasPendingInteractions()) {
+      InputInteraction inputInteraction = inputInteractions.get().peek();
       log.debug("Consuming input interaction: " + inputInteraction);
       if (isStateInteraction(inputInteraction)) {
         handleStateInteraction((StateInteraction) inputInteraction);
       } else {
         handleActionInteraction(inputInteraction);
       }
+      needsRender(true);
+      inputInteractions.get().poll();
     }
+  }
+
+  public boolean needsRender(boolean v) {
+    return needsRender.getAndSet(v);
+  }
+
+  public boolean hasPendingInteractions() {
+    return !inputInteractions.get().isEmpty();
   }
 
   private void handleStateInteraction(StateInteraction interaction) {

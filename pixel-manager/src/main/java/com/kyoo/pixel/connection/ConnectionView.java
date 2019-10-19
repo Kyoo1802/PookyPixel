@@ -52,10 +52,7 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-
     // Initialize event listeners
-    canvas.setFocusTraversable(true);
-    canvas.requestFocus();
     canvas.onMouseMovedProperty().set(e -> handleMouseInteraction(e, PositionState.MOVED));
     canvas.onMouseClickedProperty().set(e -> handleMouseInteraction(e, PositionState.CLICKED));
     canvas.onMousePressedProperty().set(e -> handleMouseInteraction(e, PositionState.PRESSED));
@@ -89,11 +86,16 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
         (observable, oldValue, newValue) -> handleStateInteraction(newValue,
             State.DRAW_DRIVER_PORT));
 
-    // Initialize animation Handler
+    // Initialize animation
+    viewModel.start();
+    canvasRenderer.render(canvas);
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(long now) {
-        canvasRenderer.render(canvas);
+        if (viewModel.needsRender(false)) {
+          canvasRenderer.render(canvas);
+
+        }
       }
     };
     timer.start();

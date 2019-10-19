@@ -27,10 +27,9 @@ public class MainApp extends Application {
   @Override
   public void start(Stage stage) {
     log.info("Starting your application.");
-
     GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
 
-    Parent root = loader.load(getClass().getResource("ui/connectionUI.fxml"));
+    Parent root = loader.load(getClass().getResource("ui/managerUI.fxml"));
     Scene scene = new Scene(root);
     scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
     stage.setTitle("JavaFX and Gradle");
