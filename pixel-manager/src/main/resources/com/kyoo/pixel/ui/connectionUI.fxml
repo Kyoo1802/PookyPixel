@@ -2,16 +2,23 @@
 
 <?language javascript?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="connectionUI" style="-fx-background-color: YELLOW;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kyoo.pixel.connection.ConnectionView">
+<StackPane fx:id="connectionUI" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kyoo.pixel.connection.ConnectionView">
   <children>
     <BorderPane>
       <center>
-        <Canvas fx:id="canvas" height="497.0" width="810.0" BorderPane.alignment="CENTER" />
+            <ScrollPane fx:id="test" fitToHeight="true" fitToWidth="true"
+              BorderPane.alignment="CENTER"
+              hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" maxWidth="Infinity" maxHeight="Infinity">
+               <content>
+                 <Canvas fx:id="canvas" height="4000.0" width="3000.0" />
+               </content>
+            </ScrollPane>
       </center>
       <top>
         <FlowPane BorderPane.alignment="CENTER">

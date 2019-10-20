@@ -5,7 +5,7 @@ import java.awt.Point;
 
 public final class PositionUtils {
 
-  public static final int SQUARE_LENGTH = 20;
+  public static final int SQUARE_LENGTH = 6;
   public static final int HALF_SQUARE_LENGTH = SQUARE_LENGTH / 2;
 
   public static Point toIdxPosition(Point mousePosition) {

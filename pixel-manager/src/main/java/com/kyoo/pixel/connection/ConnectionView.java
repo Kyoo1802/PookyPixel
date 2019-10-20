@@ -19,6 +19,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -44,6 +46,9 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
   @FXML
   private StackPane connectionUI;
 
+  @FXML
+  private ScrollPane test;
+
   @Inject
   public ConnectionView(ConnectionViewModel viewModel, ConnectionCanvasRenderer canvasRenderer,
       MainReleaseKeyHandler keyboardHandler) {
@@ -55,6 +60,13 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+    test.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+//    test.setMinViewportWidth(2000);
+//    test.setMinViewportHeight(2000);
+    test.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+//    test.setMinSize(2000,2000);
+//    test.setMaxSize(2000,2000);
+    test.setContent(canvas);
     // Initialize event listeners
     canvas.onMouseMovedProperty().set(e -> handleMouseInteraction(e, PositionState.MOVED));
     canvas.onMouseClickedProperty().set(e -> handleMouseInteraction(e, PositionState.CLICKED));
@@ -71,16 +83,6 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
     handleStateInteraction(createBridgeBtn.isSelected(), State.DRAW_CONNECTOR_PORT);
 
     // Initialize property listeners
-    connectionUI.widthProperty()
-        .addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.intValue()));
-    connectionUI.widthProperty()
-        .addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.intValue()));
-//    canvas.widthProperty()
-//        .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
-//            State.RESIZE_WIDTH));
-//    canvas.heightProperty()
-//        .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
-//            State.RESIZE_HEIGHT));
     createSquarePanelBtn.selectedProperty()
         .addListener((observable, oldValue, newValue) -> handleStateInteraction(newValue,
             State.DRAW_SQUARE_PANEL));
@@ -101,7 +103,6 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
       public void handle(long now) {
         if (viewModel.needsRender(false)) {
           canvasRenderer.render(canvas);
-
         }
       }
     };
