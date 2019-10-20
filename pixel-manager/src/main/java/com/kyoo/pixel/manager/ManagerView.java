@@ -30,12 +30,15 @@ public class ManagerView  implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
-    TreeItem<String> rootItem = new TreeItem<> ("Proyecto");
+    TreeItem<String> rootItem = new TreeItem<> ("KyooCon");
     TreeItem<String> conexion = new TreeItem<> ("Conexion");
     rootItem.getChildren().add(conexion);
-    TreeItem<String> escenas = new TreeItem<> ("Escenas");
+    TreeItem<String> escenas = new TreeItem<> ("Visualizador");
     rootItem.getChildren().add(escenas);
     TreeItem<String> efectos = new TreeItem<> ("Efectos");
+    efectos.getChildren().add(new TreeItem<> ("Estrellas"));
+    efectos.getChildren().add(new TreeItem<> ("Fuego"));
+    efectos.getChildren().add(new TreeItem<> ("Nombre"));
     rootItem.getChildren().add(efectos);
     rootItem.setExpanded(true);
     proyectoTv.setShowRoot(true);

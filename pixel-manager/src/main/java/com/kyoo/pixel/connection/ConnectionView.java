@@ -44,10 +44,7 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
   @FXML
   private Canvas canvas;
   @FXML
-  private StackPane connectionUI;
-
-  @FXML
-  private ScrollPane test;
+  private ScrollPane canvasScroll;
 
   @Inject
   public ConnectionView(ConnectionViewModel viewModel, ConnectionCanvasRenderer canvasRenderer,
@@ -60,13 +57,10 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    test.setHbarPolicy(ScrollBarPolicy.ALWAYS);
-//    test.setMinViewportWidth(2000);
-//    test.setMinViewportHeight(2000);
-    test.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-//    test.setMinSize(2000,2000);
-//    test.setMaxSize(2000,2000);
-    test.setContent(canvas);
+    canvasScroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+    canvasScroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+    canvasScroll.setContent(canvas);
+
     // Initialize event listeners
     canvas.onMouseMovedProperty().set(e -> handleMouseInteraction(e, PositionState.MOVED));
     canvas.onMouseClickedProperty().set(e -> handleMouseInteraction(e, PositionState.CLICKED));

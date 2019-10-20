@@ -26,16 +26,15 @@
   <center>
     <SplitPane dividerPositions="0.3, 0.7" BorderPane.alignment="CENTER">
       <items>
-        <Accordion fx:id="accordion2" maxWidth="200" prefHeight="401.0" prefWidth="161.0">
+        <Accordion fx:id="accordion2" maxWidth="150">
                <panes>
-                  <TitledPane fx:id="pane2" collapsible="false" prefHeight="400.0" prefWidth="200.0" text="test">
+                  <TitledPane fx:id="pane2" collapsible="false" text="Proyecto">
                      <content>
-                        <ScrollPane prefHeight="400.0" prefWidth="200.0" style="-fx-background-color: red;">
+                        <ScrollPane>
                            <content>
-                             <FlowPane maxHeight="400">
-                               <TreeView fx:id="proyectoTv" prefHeight="100.0" prefWidth="200.0" />
+                             <FlowPane>
+                               <TreeView fx:id="proyectoTv"/>
                              </FlowPane>
-                             <TreeView fx:id="proyectoTv2" prefHeight="200.0" prefWidth="200.0" />
                            </content>
                         </ScrollPane>
                      </content>

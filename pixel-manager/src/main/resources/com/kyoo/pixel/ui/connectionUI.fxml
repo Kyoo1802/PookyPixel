@@ -12,7 +12,7 @@
   <children>
     <BorderPane>
       <center>
-            <ScrollPane fx:id="test" fitToHeight="true" fitToWidth="true"
+            <ScrollPane fx:id="canvasScroll" fitToHeight="true" fitToWidth="true"
               BorderPane.alignment="CENTER"
               hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" maxWidth="Infinity" maxHeight="Infinity">
                <content>
