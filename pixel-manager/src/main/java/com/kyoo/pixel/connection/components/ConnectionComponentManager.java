@@ -1,5 +1,6 @@
 package com.kyoo.pixel.connection.components;
 
+import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
 import java.awt.Point;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,7 +44,7 @@ public final class ConnectionComponentManager {
   public Optional<SelectableComponent> lookupSelectableComponent(Point point) {
     for (Map<Long, SelectableComponent> ck : components.values()) {
       for (SelectableComponent c : ck.values()) {
-        if (c.intersects(point.x, point.y)) {
+        if (c.select(point.x, point.y) != SelectedSide.NONE) {
           return Optional.of(c);
         }
       }
@@ -54,7 +55,7 @@ public final class ConnectionComponentManager {
   public Optional<ConnectionComponent> lookupConnectionComponent(Point point) {
     for (Map<Long, SelectableComponent> ck : components.values()) {
       for (SelectableComponent c : ck.values()) {
-        if (c instanceof ConnectionComponent && c.intersects(point.x, point.y)) {
+        if (c instanceof ConnectionComponent && c.select(point.x, point.y) != SelectedSide.NONE) {
           return Optional.of((ConnectionComponent) c);
         }
       }

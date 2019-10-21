@@ -1,17 +1,17 @@
 package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.connection.components.Bridge;
-import com.kyoo.pixel.connection.components.DriverPort;
-import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SelectableComponent;
-import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
+import com.kyoo.pixel.connection.components.impl.Bridge;
+import com.kyoo.pixel.connection.components.impl.DriverPort;
+import com.kyoo.pixel.connection.components.impl.LedPath;
+import com.kyoo.pixel.connection.components.impl.SquarePanel;
 import com.kyoo.pixel.utils.DrawUtils;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;

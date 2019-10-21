@@ -1,20 +1,21 @@
 package com.kyoo.pixel.connection.components;
 
+import com.kyoo.pixel.connection.components.impl.Bridge;
 import java.util.Optional;
-import javax.annotation.Nullable;
 
 public interface ConnectionComponent extends SelectableComponent {
 
   Optional<Bridge> getStartBridge();
 
-  void setStartBridge(@Nullable Bridge bridge);
+  void setStartBridge(Optional<Bridge> bridge);
 
   Optional<Bridge> getEndBridge();
 
-  void setEndBridge(@Nullable Bridge bridge);
+  void setEndBridge(Optional<Bridge> bridge);
 
-  enum ComponentSide {
+  enum SelectedSide {
     NONE,
+    CENTER,
     UPPER,
     UPPER_LEFT,
     LEFT,

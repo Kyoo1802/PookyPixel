@@ -1,8 +1,8 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
+import com.kyoo.pixel.connection.components.impl.DriverPort;
 import java.awt.Dimension;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;

@@ -2,6 +2,7 @@ package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
+import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
 import java.util.Map;
@@ -24,8 +25,9 @@ public final class SelectCommand implements ConnectionCommand {
     for (Map<Long, SelectableComponent> components :
         model.getCreatedComponentsManager().getComponents().values()) {
       for (SelectableComponent component : components.values()) {
-        if (component
-            .intersects(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y)) {
+        SelectedSide selectedSide = component
+            .select(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
+        if (selectedSide != SelectedSide.NONE) {
           model.setSelectedComponent(Optional.of(component));
           model.setTransformationActionState(TransformationAction.MOVE);
           log.debug("Selection triggered %s", request.getSelectIdxPosition());

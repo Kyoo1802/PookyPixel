@@ -1,8 +1,8 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
+import com.kyoo.pixel.connection.components.impl.LedPath;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 

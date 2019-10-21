@@ -1,12 +1,20 @@
-package com.kyoo.pixel.connection.components;
+package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import java.awt.Dimension;
 import java.awt.Point;
+import lombok.Getter;
 
 public final class Led implements SelectableComponent {
 
   private static final Dimension LED_DIMENSION = new Dimension(1, 1);
-
+  @Getter
+  private final ComponentType componentType;
+  @Getter
+  private SelectedSide selectedSide;
   private Point position;
 
   public Led(Point position) {
@@ -15,6 +23,8 @@ public final class Led implements SelectableComponent {
 
   public Led(Point position, ConnectionComponent parentComponent) {
     this.position = position;
+    this.selectedSide = SelectedSide.NONE;
+    this.componentType = ComponentType.LED;
   }
 
   @Override
@@ -23,8 +33,13 @@ public final class Led implements SelectableComponent {
   }
 
   @Override
-  public boolean intersects(int x, int y) {
-    return position.x == x && position.y == y;
+  public SelectedSide select(int x, int y) {
+    return position.x == x && position.y == y ? setSelectedSide(SelectedSide.CENTER) :
+        setSelectedSide(SelectedSide.NONE);
+  }
+
+  private SelectedSide setSelectedSide(SelectedSide selectedSide) {
+    return this.selectedSide = selectedSide;
   }
 
   @Override
@@ -40,11 +55,6 @@ public final class Led implements SelectableComponent {
   @Override
   public Dimension getSize() {
     return LED_DIMENSION;
-  }
-
-  @Override
-  public ComponentType getComponentType() {
-    return ComponentType.LED;
   }
 
   @Override

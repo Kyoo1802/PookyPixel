@@ -1,23 +1,39 @@
-package com.kyoo.pixel.connection.components;
+package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.LedComponent;
+import com.kyoo.pixel.connection.components.ScalableComponent;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedHashMap;
 import java.util.Optional;
-import javax.annotation.Nullable;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public final class SquarePanel implements LedComponent, ScalableComponent {
 
+  @Getter
+  private final ComponentType componentType;
+  @Getter
   private Point startIdxPosition;
+  @Getter
   private Point endIdxPosition;
-  private LinkedHashMap<Point, Led> leds;
+  @Getter
   private long id;
-  private Led first;
-  private Led last;
+  @Getter
+  private Led firstLed;
+  @Getter
+  private Led lastLed;
+  @Setter
+  @Getter
   private Optional<Bridge> startBridge;
+  @Setter
+  @Getter
   private Optional<Bridge> endBridge;
+  @Getter
+  private SelectedSide selectedSide;
+  @Getter
+  private LinkedHashMap<Point, Led> leds;
 
   public SquarePanel(long id, Point startIdxPosition, Point endIdxPosition) {
     this.id = id;
@@ -26,18 +42,45 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
     this.endIdxPosition = endIdxPosition;
     this.startBridge = Optional.empty();
     this.endBridge = Optional.empty();
+    this.selectedSide = SelectedSide.NONE;
+    this.componentType = ComponentType.SQUARE_PANEL;
     createLeds();
   }
 
   @Override
-  public long getId() {
-    return id;
+  public SelectedSide select(int x, int y) {
+    if (startIdxPosition.x <= x && x <= endIdxPosition.x && startIdxPosition.y <= y
+        && y <= endIdxPosition.y) {
+      if (startIdxPosition.x <= x && x <= startIdxPosition.x) {
+        if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
+          return setSelectedSide(SelectedSide.UPPER_LEFT);
+        } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return setSelectedSide(SelectedSide.BOTTOM_LEFT);
+        } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return setSelectedSide(SelectedSide.LEFT);
+        }
+      } else if (endIdxPosition.x <= x && x <= endIdxPosition.x) {
+        if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
+          return setSelectedSide(SelectedSide.UPPER_RIGHT);
+        } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return setSelectedSide(SelectedSide.BOTTOM_RIGHT);
+        } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return setSelectedSide(SelectedSide.RIGHT);
+        }
+      } else if (startIdxPosition.x <= x && x <= endIdxPosition.x) {
+        if (startIdxPosition.y <= y && y == startIdxPosition.y) {
+          return setSelectedSide(SelectedSide.UPPER);
+        } else if (endIdxPosition.y <= y && y == endIdxPosition.y) {
+          return setSelectedSide(SelectedSide.BOTTOM);
+        }
+      }
+      return setSelectedSide(SelectedSide.CENTER);
+    }
+    return setSelectedSide(SelectedSide.NONE);
   }
 
-  @Override
-  public boolean intersects(int x, int y) {
-    return startIdxPosition.x <= x && x <= endIdxPosition.x && startIdxPosition.y <= y
-        && y <= endIdxPosition.y;
+  private SelectedSide setSelectedSide(SelectedSide selectedSide) {
+    return this.selectedSide = selectedSide;
   }
 
   public void createLeds() {
@@ -47,21 +90,13 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
         Point ledPoint = new Point(tmpJ, i);
         Led led = new Led(ledPoint, this);
         this.leds.put(ledPoint, led);
-        if (first == null) {
-          first = led;
+        if (firstLed == null) {
+          firstLed = led;
         }
-        last = led;
+        lastLed = led;
 
       }
     }
-  }
-
-  public Point getStartIdxPosition() {
-    return startIdxPosition;
-  }
-
-  public Point getEndIdxPosition() {
-    return endIdxPosition;
   }
 
   @Override
@@ -95,54 +130,11 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
         tempLast = led;
       }
     }
-    this.first = tempFirst;
-    this.last = tempLast;
+    this.firstLed = tempFirst;
+    this.lastLed = tempLast;
     this.leds.clear();
     this.leds.putAll(newLeds);
     this.endIdxPosition.setLocation(newWidth, newHeight);
-  }
-
-  @Override
-  public ComponentSide scaleIntersection(int x, int y) {
-    if (startIdxPosition.x <= x && x <= startIdxPosition.x) {
-      if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
-        return ComponentSide.UPPER_LEFT;
-      } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
-        return ComponentSide.BOTTOM_LEFT;
-      } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
-        return ComponentSide.LEFT;
-      }
-    } else if (endIdxPosition.x <= x && x <= endIdxPosition.x) {
-      if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
-        return ComponentSide.UPPER_RIGHT;
-      } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
-        return ComponentSide.BOTTOM_RIGHT;
-      } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
-        return ComponentSide.RIGHT;
-      }
-    } else if (startIdxPosition.x <= x && x <= endIdxPosition.x) {
-      if (startIdxPosition.y <= y && y == startIdxPosition.y) {
-        return ComponentSide.UPPER;
-      } else if (endIdxPosition.y <= y && y == endIdxPosition.y) {
-        return ComponentSide.BOTTOM;
-      }
-    }
-    return ComponentSide.NONE;
-  }
-
-  @Override
-  public ComponentType getComponentType() {
-    return ComponentType.SQUARE_PANEL;
-  }
-
-  @Override
-  public void setStartBridge(@Nullable Bridge bridge) {
-    startBridge = Optional.ofNullable(bridge);
-  }
-
-  @Override
-  public void setEndBridge(@Nullable Bridge bridge) {
-    endBridge = Optional.ofNullable(bridge);
   }
 
   @Override
@@ -150,15 +142,5 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
     int w = getEndIdxPosition().x - getStartIdxPosition().x + 1;
     int h = getEndIdxPosition().y - getStartIdxPosition().y + 1;
     return String.format("[%d, %d] = %d", w, h, w * h);
-  }
-
-  @Override
-  public Led getFirstLed() {
-    return first;
-  }
-
-  @Override
-  public Led getLastLed() {
-    return last;
   }
 }

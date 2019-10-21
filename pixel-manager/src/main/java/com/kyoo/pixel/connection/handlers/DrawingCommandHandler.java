@@ -6,7 +6,6 @@ import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
@@ -15,6 +14,7 @@ import com.kyoo.pixel.connection.components.commands.DrawBridgeCommand;
 import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
 import com.kyoo.pixel.connection.components.commands.DrawLedPathCommand;
 import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
+import com.kyoo.pixel.connection.components.impl.Led;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 

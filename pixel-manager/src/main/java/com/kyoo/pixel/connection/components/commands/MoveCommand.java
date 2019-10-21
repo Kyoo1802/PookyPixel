@@ -1,11 +1,11 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.components.Led;
-import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SelectableComponent;
-import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
+import com.kyoo.pixel.connection.components.impl.Led;
+import com.kyoo.pixel.connection.components.impl.LedPath;
+import com.kyoo.pixel.connection.components.impl.SquarePanel;
 import java.awt.Point;
 import java.util.Map.Entry;
 import java.util.Optional;

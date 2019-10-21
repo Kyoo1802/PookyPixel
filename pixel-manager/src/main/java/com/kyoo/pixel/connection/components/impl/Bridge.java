@@ -1,5 +1,9 @@
-package com.kyoo.pixel.connection.components;
+package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import java.awt.Dimension;
 import java.awt.Point;
 
@@ -16,8 +20,13 @@ public class Bridge implements SelectableComponent {
   }
 
   @Override
-  public boolean intersects(int x, int y) {
-    return false;
+  public SelectedSide select(int x, int y) {
+    return SelectedSide.NONE; // TODO (Kyoo): Implement bridge selection
+  }
+
+  @Override
+  public SelectedSide getSelectedSide() {
+    return SelectedSide.NONE;
   }
 
   @Override

@@ -1,5 +1,6 @@
 package com.kyoo.pixel.connection.components;
 
+import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
 import java.awt.Dimension;
 import java.awt.Point;
 
@@ -7,7 +8,7 @@ public interface SelectableComponent {
 
   long getId();
 
-  boolean intersects(int x, int y);
+  SelectedSide select(int x, int y);
 
   Point getStartIdxPosition();
 
@@ -16,6 +17,8 @@ public interface SelectableComponent {
   Dimension getSize();
 
   ComponentType getComponentType();
+
+  SelectedSide getSelectedSide();
 
   String description();
 }

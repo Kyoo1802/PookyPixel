@@ -2,8 +2,8 @@ package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
-import com.kyoo.pixel.connection.components.Led;
+import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
+import com.kyoo.pixel.connection.components.impl.Led;
 import java.awt.Point;
 import java.util.LinkedHashSet;
 import lombok.Builder;
@@ -84,7 +84,7 @@ public abstract class ConnectionCommandRequest {
     private ComponentType commandType;
     private long idToScale;
     private ComponentType typeToScale;
-    private ComponentSide cornerToScale;
+    private SelectedSide cornerToScale;
     private Point startIdxPosition;
     private Point endIdxPosition;
     private int scaleSize;

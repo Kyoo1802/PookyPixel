@@ -1,18 +1,18 @@
 package com.kyoo.pixel.utils;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
-import com.kyoo.pixel.connection.components.Bridge;
-import com.kyoo.pixel.connection.components.DriverPort;
-import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedComponent;
-import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SelectableComponent;
-import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
+import com.kyoo.pixel.connection.components.impl.Bridge;
+import com.kyoo.pixel.connection.components.impl.DriverPort;
+import com.kyoo.pixel.connection.components.impl.Led;
+import com.kyoo.pixel.connection.components.impl.LedPath;
+import com.kyoo.pixel.connection.components.impl.SquarePanel;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -85,7 +85,7 @@ public final class DrawUtils {
   public static void drawPort(GraphicsContext gc, ConnectionProperties properties,
       DriverPort port) {
     Point canvasPosition = PositionUtils
-        .toCanvasPosition(port.getIdxPosition().y, port.getIdxPosition().x);
+        .toCanvasPosition(port.getStartIdxPosition().y, port.getStartIdxPosition().x);
     Dimension canvasDimension = PositionUtils.toCanvasDimension(port.getSize());
     gc.setFill(Color.web(properties.getDriverPortColor()));
     gc.fillOval(canvasPosition.x, canvasPosition.y, canvasDimension.width, canvasDimension.height);
