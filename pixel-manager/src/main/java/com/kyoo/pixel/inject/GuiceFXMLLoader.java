@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -24,7 +25,8 @@ public class GuiceFXMLLoader {
   // Load some FXML file, using the supplied Controller, and return the
   // instance of the initialized controller...?
   public Parent load(URL url) {
-    FXMLLoader loader = new FXMLLoader(url);
+    FXMLLoader loader = new FXMLLoader(url,
+        injector.getInstance(ResourceBundle.class));
     loader.setControllerFactory(controllerClass -> {
       if (controllerClass == null) {
         return null;

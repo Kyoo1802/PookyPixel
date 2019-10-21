@@ -50,8 +50,6 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void drawBackground(GraphicsContext gc) {
-    Dimension canvasDimension = PositionUtils.toCanvasDimension(model.getDimension());
-
     // If there is a background image and canvas dimension hasn't change, draw the background image
     if (fxBackground != null) {
       log.debug("Draw background");
