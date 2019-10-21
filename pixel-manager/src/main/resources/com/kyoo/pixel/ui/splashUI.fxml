@@ -5,19 +5,22 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kyoo.pixel.manager.SplashUIView">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.manager.SplashUIView">
   <children>
-    <Button fx:id="button" layoutX="129.0" layoutY="173.0" onAction="#handleButtonAction" text="Start Progress" />
+    <Button layoutX="129.0" layoutY="173.0" onAction="#handleButtonAction" text="Start Progress"
+      fx:id="button"/>
 
-    <Label fx:id="label" layoutX="23.0" layoutY="135.0" minHeight="16" minWidth="65.0" prefHeight="17.0" prefWidth="224.0" />
-
-    <ProgressBar fx:id="progressBar" layoutX="23.0" layoutY="111.0" prefHeight="18.0" prefWidth="305.0" progress="0.0" />
+    <Label layoutX="23.0" layoutY="135.0" minHeight="16" minWidth="65.0" prefHeight="17.0"
+      prefWidth="224.0" fx:id="label"/>
 
     <Label layoutX="23.0" layoutY="78.0" text="%splash.status">
       <font>
-        <Font name="System Bold" size="16.0" />
+        <Font name="System Bold" size="16.0"/>
       </font>
     </Label>
+
+    <ProgressBar layoutX="23.0" layoutY="111.0" prefHeight="18.0" prefWidth="305.0"
+      progress="0.0" fx:id="progressBar"/>
   </children>
 </AnchorPane>

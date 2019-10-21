@@ -21,30 +21,36 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kyoo.pixel.manager.ManagerView">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+  minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
+  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.manager.ManagerView">
   <center>
-    <SplitPane dividerPositions="0.3, 0.7" BorderPane.alignment="CENTER">
+    <SplitPane BorderPane.alignment="CENTER" dividerPositions="0.3, 0.7">
       <items>
-        <Accordion fx:id="accordion2" maxWidth="150">
-               <panes>
-                  <TitledPane fx:id="pane2" collapsible="false" text="Proyecto">
-                     <content>
-                        <ScrollPane>
-                           <content>
-                             <FlowPane>
-                               <TreeView fx:id="proyectoTv"/>
-                             </FlowPane>
-                           </content>
-                        </ScrollPane>
-                     </content>
-                  </TitledPane>
-               </panes>
+        <Accordion maxWidth="150" fx:id="accordion2">
+          <panes>
+            <TitledPane collapsible="false" text="Proyecto" fx:id="pane2">
+              <content>
+                <ScrollPane>
+                  <content>
+                    <FlowPane>
+                      <TreeView fx:id="proyectoTv"/>
+                    </FlowPane>
+                  </content>
+                </ScrollPane>
+              </content>
+            </TitledPane>
+          </panes>
+        </Accordion>
+        <Accordion maxWidth="200" prefHeight="401.0" prefWidth="161.0">
+          <panes>
+            <TitledPane collapsible="false" text="Propiedades"/>
+          </panes>
         </Accordion>
         <TabPane prefHeight="401.0" prefWidth="129.0" side="BOTTOM">
           <tabs>
             <Tab text="Conexion">
-              <fx:include source="connectionUI.fxml" />
+              <fx:include source="connectionUI.fxml"/>
             </Tab>
             <Tab text="Efectos">
               <content>
@@ -52,15 +58,18 @@
                   <children>
                     <BorderPane>
                       <bottom>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="292.0" BorderPane.alignment="CENTER_RIGHT">
+                        <HBox BorderPane.alignment="CENTER_RIGHT" alignment="CENTER_RIGHT" prefHeight="30.0"
+                          prefWidth="292.0">
                           <children>
-                            <Label minWidth="53.0" prefHeight="17.0" text="Frames:" />
-                            <TextField editable="false" prefHeight="27.0" prefWidth="70.0" text="123" />
+                            <Label minWidth="53.0" prefHeight="17.0" text="Frames:"/>
+                            <TextField editable="false" prefHeight="27.0" prefWidth="70.0"
+                              text="123"/>
                           </children>
                         </HBox>
                       </bottom>
                       <center>
-                        <ScrollPane prefHeight="354.0" prefWidth="292.0" BorderPane.alignment="CENTER" />
+                        <ScrollPane BorderPane.alignment="CENTER" prefHeight="354.0"
+                          prefWidth="292.0"/>
                       </center>
                     </BorderPane>
                   </children>
@@ -69,24 +78,20 @@
             </Tab>
           </tabs>
         </TabPane>
-        <Accordion maxWidth="200" prefHeight="401.0" prefWidth="161.0">
-          <panes>
-            <TitledPane collapsible="false" text="Propiedades" />
-          </panes>
-        </Accordion>
       </items>
     </SplitPane>
   </center>
   <left>
-    <HBox prefHeight="403.0" BorderPane.alignment="CENTER">
+    <HBox BorderPane.alignment="CENTER" prefHeight="403.0">
       <children>
         <ScrollPane hbarPolicy="NEVER" prefHeight="403.0" prefWidth="30.0" vbarPolicy="NEVER">
           <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="28.0">
               <children>
-                <ToggleButton layoutX="-18.0" layoutY="18.0" mnemonicParsing="false" rotate="-90.0" text="Proyecto">
+                <ToggleButton layoutX="-18.0" layoutY="18.0" mnemonicParsing="false" rotate="-90.0"
+                  text="Proyecto">
                   <font>
-                    <Font size="10.0" />
+                    <Font size="10.0"/>
                   </font>
                 </ToggleButton>
               </children>
@@ -97,15 +102,16 @@
     </HBox>
   </left>
   <right>
-    <HBox prefHeight="403.0" BorderPane.alignment="CENTER">
+    <HBox BorderPane.alignment="CENTER" prefHeight="403.0">
       <children>
         <ScrollPane hbarPolicy="NEVER" prefHeight="403.0" prefWidth="27.0" vbarPolicy="NEVER">
           <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="30.0">
               <children>
-                <ToggleButton layoutX="-12.0" layoutY="27.0" mnemonicParsing="false" rotate="-90.0" text="Propiedades">
+                <ToggleButton layoutX="-12.0" layoutY="27.0" mnemonicParsing="false" rotate="-90.0"
+                  text="Propiedades">
                   <font>
-                    <Font size="10.0" />
+                    <Font size="10.0"/>
                   </font>
                 </ToggleButton>
               </children>
@@ -116,43 +122,46 @@
     </HBox>
   </right>
   <top>
-    <VBox prefHeight="65.0" prefWidth="749.0" BorderPane.alignment="CENTER">
+    <VBox BorderPane.alignment="CENTER" prefHeight="65.0" prefWidth="749.0">
       <children>
         <BorderPane>
           <center>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="108.0" text="Cabina 3 x 3" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="108.0"
+              text="Cabina 3 x 3"/>
           </center>
           <left>
-            <Hyperlink contentDisplay="CENTER" prefHeight="25.0" prefWidth="83.0" text="Pooky Pixel" BorderPane.alignment="CENTER" />
+            <Hyperlink BorderPane.alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="83.0"
+              text="Pooky Pixel"/>
           </left>
           <right>
-            <ImageView fitHeight="25.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+            <ImageView BorderPane.alignment="CENTER" fitHeight="25.0" fitWidth="43.0" pickOnBounds="true"
+              preserveRatio="true"/>
           </right>
         </BorderPane>
         <FlowPane prefHeight="27.0" prefWidth="749.0">
           <children>
-            <FlowPane prefHeight="27.0" prefWidth="200.0" />
-            <Separator orientation="VERTICAL" prefHeight="18.0" prefWidth="0.0" />
-            <ToolBar prefHeight="40.0" prefWidth="146.0" style="-fx-background-color: transparent;">
+            <FlowPane prefHeight="27.0" prefWidth="200.0"/>
+            <Separator orientation="VERTICAL" prefHeight="18.0" prefWidth="0.0"/>
+            <ToolBar style="-fx-background-color: transparent;" prefHeight="40.0" prefWidth="146.0">
               <items>
-                <Button mnemonicParsing="false" text="A" />
-                <Button mnemonicParsing="false" text="B" />
-                <Button mnemonicParsing="false" text="C" />
-                <Button mnemonicParsing="false" text="D" />
+                <Button mnemonicParsing="false" text="A"/>
+                <Button mnemonicParsing="false" text="B"/>
+                <Button mnemonicParsing="false" text="C"/>
+                <Button mnemonicParsing="false" text="D"/>
               </items>
             </ToolBar>
-            <ToolBar prefHeight="40.0" prefWidth="146.0" style="-fx-background-color: transparent;">
+            <ToolBar style="-fx-background-color: transparent;" prefHeight="40.0" prefWidth="146.0">
               <items>
-                <Button mnemonicParsing="false" text="D" />
-                <Button mnemonicParsing="false" text="E" />
-                <Button mnemonicParsing="false" text="F" />
-                <Button mnemonicParsing="false" text="G" />
+                <Button mnemonicParsing="false" text="D"/>
+                <Button mnemonicParsing="false" text="E"/>
+                <Button mnemonicParsing="false" text="F"/>
+                <Button mnemonicParsing="false" text="G"/>
               </items>
             </ToolBar>
-            <ToolBar prefHeight="40.0" prefWidth="164.0" style="-fx-background-color: transparent;">
+            <ToolBar style="-fx-background-color: transparent;" prefHeight="40.0" prefWidth="164.0">
               <items>
-                <Button mnemonicParsing="false" text="D" />
-                <ToggleButton mnemonicParsing="false" text="Conectar" />
+                <Button mnemonicParsing="false" text="D"/>
+                <ToggleButton mnemonicParsing="false" text="Conectar"/>
               </items>
             </ToolBar>
           </children>

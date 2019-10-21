@@ -15,7 +15,6 @@ import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
 import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
 import com.kyoo.pixel.connection.handlers.TransformationHandler;
-import com.kyoo.pixel.utils.PositionUtils;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;

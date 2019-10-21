@@ -10,18 +10,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 
 public class SplashUIView implements Initializable {
+
+  Task copyWorker;
   @FXML
   private Label label;
   @FXML
   private ProgressBar progressBar;
 
-  Task copyWorker;
-
   @FXML
   private void handleButtonAction(ActionEvent event) {
     progressBar.setProgress(0.0);
     progressBar.progressProperty().bind(copyWorker.progressProperty());
-    copyWorker.messageProperty().addListener((observable, oldValue, newValue) -> label.setText(newValue));
+    copyWorker.messageProperty()
+        .addListener((observable, oldValue, newValue) -> label.setText(newValue));
     new Thread(copyWorker).start();
   }
 

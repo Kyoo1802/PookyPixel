@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?language javascript?>
+
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
-
-<StackPane fx:id="connectionUI" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kyoo.pixel.connection.ConnectionView">
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
+  fx:controller="com.kyoo.pixel.connection.ConnectionView" fx:id="connectionUI">
   <children>
     <BorderPane>
       <center>
-            <ScrollPane fx:id="canvasScroll" fitToHeight="true" fitToWidth="true"
-              BorderPane.alignment="CENTER"
-              hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" maxWidth="Infinity" maxHeight="Infinity">
-               <content>
-                 <Canvas fx:id="canvas" height="4000.0" width="3000.0" />
-               </content>
-            </ScrollPane>
+        <ScrollPane BorderPane.alignment="CENTER" fitToHeight="true" fitToWidth="true"
+          hbarPolicy="ALWAYS"
+          maxHeight="Infinity" maxWidth="Infinity" vbarPolicy="ALWAYS" fx:id="canvasScroll">
+          <content>
+            <Canvas height="4000.0" width="3000.0" fx:id="canvas"/>
+          </content>
+        </ScrollPane>
       </center>
       <top>
         <FlowPane BorderPane.alignment="CENTER">
-          <ToggleButton fx:id="createSquarePanelBtn" text="Sp" />
-          <ToggleButton fx:id="createDriverPortBtn" text="Dp" />
-          <ToggleButton fx:id="createLedPathBtn" text="Lp" />
-          <ToggleButton fx:id="createBridgeBtn" text="B" />
+          <ToggleButton text="Sp" fx:id="createSquarePanelBtn"/>
+          <ToggleButton text="Dp" fx:id="createDriverPortBtn"/>
+          <ToggleButton text="Lp" fx:id="createLedPathBtn"/>
+          <ToggleButton text="B" fx:id="createBridgeBtn"/>
         </FlowPane>
       </top>
     </BorderPane>
