@@ -4,12 +4,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel.ConnectionState;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
-import com.kyoo.pixel.connection.InputInteraction.KeyboardInteraction;
-import com.kyoo.pixel.connection.InputInteraction.KeyboardState;
-import com.kyoo.pixel.connection.InputInteraction.PositionInteraction;
-import com.kyoo.pixel.connection.InputInteraction.PositionSide;
-import com.kyoo.pixel.connection.InputInteraction.PositionState;
-import com.kyoo.pixel.connection.InputInteraction.StateInteraction;
+import com.kyoo.pixel.connection.InputInteractions.ActionStateInteractions;
+import com.kyoo.pixel.connection.InputInteractions.KeyboardInteractions;
+import com.kyoo.pixel.connection.InputInteractions.KeyboardState;
+import com.kyoo.pixel.connection.InputInteractions.PositionButtonSide;
+import com.kyoo.pixel.connection.InputInteractions.PositionInteractions;
+import com.kyoo.pixel.connection.InputInteractions.PositionState;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommand;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
@@ -28,7 +28,7 @@ import lombok.extern.log4j.Log4j2;
 @Getter
 public final class ConnectionViewModel {
 
-  private ObjectProperty<ConcurrentLinkedQueue<InputInteraction>> inputInteractions =
+  private ObjectProperty<ConcurrentLinkedQueue<InputInteractions>> inputInteractions =
       new SimpleObjectProperty<>(new ConcurrentLinkedQueue<>());
   private AtomicBoolean needsRender = new AtomicBoolean(true);
 
@@ -64,15 +64,15 @@ public final class ConnectionViewModel {
 
   public void consumeInteractions() {
     while (hasPendingInteractions()) {
-      InputInteraction inputInteraction = inputInteractions.get().peek();
-      log.debug("Consuming input interaction: " + inputInteraction);
-      if (isStateInteraction(inputInteraction)) {
-        handleStateInteraction((StateInteraction) inputInteraction);
+      InputInteractions inputInteractions = this.inputInteractions.get().peek();
+      log.debug("Consuming input interaction: " + inputInteractions);
+      if (isStateInteraction(inputInteractions)) {
+        handleStateInteraction((ActionStateInteractions) inputInteractions);
       } else {
-        handleActionInteraction(inputInteraction);
+        handleActionInteraction(inputInteractions);
       }
       needsRender(true);
-      inputInteractions.get().poll();
+      this.inputInteractions.get().poll();
     }
   }
 
@@ -84,8 +84,8 @@ public final class ConnectionViewModel {
     return !inputInteractions.get().isEmpty();
   }
 
-  private void handleStateInteraction(StateInteraction interaction) {
-    switch (interaction.getState()) {
+  private void handleStateInteraction(ActionStateInteractions interaction) {
+    switch (interaction.getActionState()) {
       case DRAW_SQUARE_PANEL:
         model.setConnectionState(ConnectionState.DRAW_SQUARE_PANEL,
             interaction.getBoolValue().get());
@@ -103,12 +103,12 @@ public final class ConnectionViewModel {
                 interaction.getBoolValue().get());
         break;
       default:
-        log.error("Invalid interaction: " + interaction.getState());
+        log.error("Invalid interaction: " + interaction.getActionState());
     }
     model.setActiveCommandRequest(Optional.empty());
   }
 
-  private void handleActionInteraction(InputInteraction interaction) {
+  private void handleActionInteraction(InputInteractions interaction) {
     switch (model.getConnectionState()) {
       case NO_ACTION: {
         switch (getNoActionEvent(interaction)) {
@@ -203,9 +203,9 @@ public final class ConnectionViewModel {
     }
   }
 
-  private DrawEvent getDrawEvent(InputInteraction interaction) {
+  private DrawEvent getDrawEvent(InputInteractions interaction) {
     if (isPositionInteraction(interaction)) {
-      PositionInteraction positionInteraction = getPositionInteraction(interaction);
+      PositionInteractions positionInteraction = getPositionInteraction(interaction);
       switch (positionInteraction.getState()) {
         case CLICKED:
           return DrawEvent.DRAW_POINT;
@@ -213,7 +213,7 @@ public final class ConnectionViewModel {
           return DrawEvent.MOVE;
       }
     } else if (isKeyboardInteraction(interaction)) {
-      KeyboardInteraction keyboardInteraction = getKeyboardInteraction(interaction);
+      KeyboardInteractions keyboardInteraction = getKeyboardInteraction(interaction);
       if (keyboardInteraction.getState() == KeyboardState.RELEASED) {
         switch (keyboardInteraction.getKey()) {
           case ENTER:
@@ -226,12 +226,12 @@ public final class ConnectionViewModel {
     return DrawEvent.UNKNOWN;
   }
 
-  private NoActionEvent getNoActionEvent(InputInteraction interaction) {
+  private NoActionEvent getNoActionEvent(InputInteractions interaction) {
     if (isPositionInteraction(interaction)) {
-      PositionInteraction positionInteraction = getPositionInteraction(interaction);
+      PositionInteractions positionInteraction = getPositionInteraction(interaction);
       if (positionInteraction.getState() == PositionState.MOVED) {
         return NoActionEvent.POINTER_MOVE;
-      } else if (positionInteraction.getSide() != PositionSide.LEFT) {
+      } else if (positionInteraction.getSide() != PositionButtonSide.LEFT) {
         return NoActionEvent.UNKNOWN;
       }
       switch (positionInteraction.getState()) {
@@ -250,24 +250,24 @@ public final class ConnectionViewModel {
     return NoActionEvent.UNKNOWN;
   }
 
-  private PositionInteraction getPositionInteraction(InputInteraction interaction) {
-    return (PositionInteraction) interaction;
+  private PositionInteractions getPositionInteraction(InputInteractions interaction) {
+    return (PositionInteractions) interaction;
   }
 
-  private KeyboardInteraction getKeyboardInteraction(InputInteraction interaction) {
-    return (KeyboardInteraction) interaction;
+  private KeyboardInteractions getKeyboardInteraction(InputInteractions interaction) {
+    return (KeyboardInteractions) interaction;
   }
 
-  private boolean isKeyboardInteraction(InputInteraction interaction) {
-    return interaction instanceof KeyboardInteraction;
+  private boolean isKeyboardInteraction(InputInteractions interaction) {
+    return interaction instanceof KeyboardInteractions;
   }
 
-  private boolean isPositionInteraction(InputInteraction interaction) {
-    return interaction instanceof PositionInteraction;
+  private boolean isPositionInteraction(InputInteractions interaction) {
+    return interaction instanceof PositionInteractions;
   }
 
-  private boolean isStateInteraction(InputInteraction interaction) {
-    return interaction instanceof StateInteraction;
+  private boolean isStateInteraction(InputInteractions interaction) {
+    return interaction instanceof ActionStateInteractions;
   }
 
   public void executeCommand(ConnectionCommand command) {

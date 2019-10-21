@@ -6,9 +6,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import lombok.Data;
 
-public interface InputInteraction {
+public interface InputInteractions {
 
-  enum State {
+  enum ActionState {
     UNKNOWN,
     DRAW_SQUARE_PANEL,
     DRAW_DRIVER_PORT,
@@ -18,12 +18,12 @@ public interface InputInteraction {
     RESIZE_HEIGHT,
   }
 
-  enum PositionSide {
+  enum PositionButtonSide {
     UNKNOWN,
     LEFT,
     RIGHT;
 
-    public static PositionSide from(MouseButton button) {
+    public static PositionButtonSide from(MouseButton button) {
       switch (button) {
         case PRIMARY:
           return LEFT;
@@ -71,23 +71,23 @@ public interface InputInteraction {
   }
 
   @Data
-  class StateInteraction implements InputInteraction {
+  class ActionStateInteractions implements InputInteractions {
 
-    private State state;
+    private ActionState actionState;
     private Optional<Boolean> boolValue;
     private Optional<Integer> intValue;
   }
 
   @Data
-  class PositionInteraction implements InputInteraction {
+  class PositionInteractions implements InputInteractions {
 
     private PositionState state;
-    private PositionSide side;
+    private PositionButtonSide side;
     private Point position;
   }
 
   @Data
-  class KeyboardInteraction implements InputInteraction {
+  class KeyboardInteractions implements InputInteractions {
 
     private KeyboardState state;
     private KeyboardKey key;

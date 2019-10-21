@@ -9,9 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 /**
- * Uses Guice to inject model state. Basically you create an instance of GuiceFXMLLoader supplying
- * an Injector, and then call load. The load method takes the FXML file to load, and the controller
- * to create and associate with the FXML file.
+ * Uses Guice to inject model actionState. Basically you create an instance of GuiceFXMLLoader
+ * supplying an Injector, and then call load. The load method takes the FXML file to load, and the
+ * controller to create and associate with the FXML file.
  */
 public class GuiceFXMLLoader {
 
