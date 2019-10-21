@@ -1,13 +1,13 @@
 package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.DriverPort;
-import com.kyoo.pixel.connection.components.LedBridge;
+import com.kyoo.pixel.connection.components.Bridge;
 import com.kyoo.pixel.connection.components.LedPath;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
@@ -82,9 +82,9 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void createdComponents(GraphicsContext gc) {
-    for (Map<Long, ConnectionComponent> components :
+    for (Map<Long, SelectableComponent> components :
         model.getCreatedComponentsManager().getComponents().values()) {
-      for (ConnectionComponent component : components.values()) {
+      for (SelectableComponent component : components.values()) {
         // Draw Component
         switch (component.getComponentType()) {
           case SQUARE_PANEL:
@@ -93,8 +93,8 @@ public final class ConnectionCanvasRenderer {
           case DRIVER_PORT:
             DrawUtils.drawPort(gc, properties, (DriverPort) component);
             break;
-          case LED_BRIDGE:
-            DrawUtils.drawLedBridge(gc, properties, (LedBridge) component);
+          case BRIDGE:
+            DrawUtils.drawBridge(gc, properties, (Bridge) component);
             break;
           case LED_PATH:
             DrawUtils.drawLedPath(gc, properties, (LedPath) component,
@@ -104,7 +104,7 @@ public final class ConnectionCanvasRenderer {
             log.error("Invalid component to draw: " + component.getComponentType());
         }
         // Draw Selection
-        Optional<ConnectionComponent> selectedComponent = model.getSelectedComponent();
+        Optional<SelectableComponent> selectedComponent = model.getSelectedComponent();
         if (selectedComponent.isPresent() && selectedComponent.get() == component) {
           DrawUtils.drawComponentSelection(gc, properties, component);
         }
@@ -128,9 +128,9 @@ public final class ConnectionCanvasRenderer {
         DrawUtils.drawLedPathCommand(gc, properties, (DrawLedPathCommandRequest) component,
             model.getPointer());
         break;
-      case LED_BRIDGE:
+      case BRIDGE:
         DrawUtils
-            .drawLedBridgeCommand(gc, properties, (DrawLedBridgeCommandRequest) component,
+            .drawBridgeCommand(gc, properties, (DrawBridgeCommandRequest) component,
                 model.getPointer());
         break;
       case MOVEMENT:
@@ -139,8 +139,7 @@ public final class ConnectionCanvasRenderer {
         break;
       case SCALE:
         ScaleCommandRequest request = (ScaleCommandRequest) component;
-
-        ConnectionComponent selectedComponent =
+        SelectableComponent selectedComponent =
             model.getCreatedComponentsManager().getComponent(request.getTypeToScale(),
                 request.getIdToScale()).get();
         DrawUtils.drawScaleCommand(gc, properties, request, model.getPointer(),

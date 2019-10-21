@@ -2,6 +2,8 @@ package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.ScalableComponent;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
 import java.awt.Dimension;
 import java.util.Optional;
@@ -29,26 +31,28 @@ public final class ScaleCommand implements ConnectionCommand {
   }
 
   public boolean doScale(boolean isInverse) {
-    Optional<ConnectionComponent> component =
+    Optional<SelectableComponent> component =
         model.getCreatedComponentsManager().getComponent(request.getTypeToScale(),
             request.getIdToScale());
-
-    if (component.isPresent()) {
-      Dimension scale =
-          new Dimension(request.getEndIdxPosition().x - request.getStartIdxPosition().x,
-              request.getEndIdxPosition().y - request.getStartIdxPosition().y);
-      scale = isInverse ? invert(scale) : scale;
-      if (isValidScale(component.get(), scale)) {
-        scale(component.get(), scale);
-      } else {
-        log.debug("Invalid  scale %s", scale);
-      }
+    if (component.isEmpty() || !(component.get() instanceof ScalableComponent)) {
+      return false;
     }
+    ScalableComponent scalableComponent = (ScalableComponent) component.get();
+    Dimension scale =
+        new Dimension(request.getEndIdxPosition().x - request.getStartIdxPosition().x,
+            request.getEndIdxPosition().y - request.getStartIdxPosition().y);
+    scale = isInverse ? invert(scale) : scale;
+    if (isValidScale(scalableComponent, scale)) {
+      scalableComponent.addDimension(scale);
+    } else {
+      log.debug("Invalid  scale %s", scale);
+    }
+
     log.debug("No component selected to scale %s", request);
     return false;
   }
 
-  private boolean isValidScale(ConnectionComponent component, Dimension scale) {
+  private boolean isValidScale(ScalableComponent component, Dimension scale) {
     Dimension d = component.getSize();
     return d.width + scale.width > 0 && d.height + scale.height > 0;
   }
@@ -56,9 +60,5 @@ public final class ScaleCommand implements ConnectionCommand {
   private Dimension invert(Dimension scale) {
     scale.setSize(-scale.width, -scale.height);
     return scale;
-  }
-
-  private void scale(ConnectionComponent component, Dimension scale) {
-    component.addDimension(scale);
   }
 }

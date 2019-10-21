@@ -1,27 +1,21 @@
 package com.kyoo.pixel.connection.components;
 
+import com.kyoo.pixel.connection.components.commands.SelectCommand;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public interface ConnectionComponent {
+public interface ConnectionComponent extends SelectableComponent {
 
-  boolean intersects(int x, int y);
+  Optional<Bridge> getStartBridge();
 
-  long getId();
+  Optional<Bridge> getEndBridge();
 
-  ComponentType getComponentType();
+  void setStartBridge(@Nullable Bridge bridge);
 
-  Point getStartIdxPosition();
-
-  Point getEndIdxPosition();
-
-  Dimension getSize();
-
-  void addDimension(Dimension scale);
-
-  ComponentSide scaleIntersection(int x, int y);
-
-  String description();
+  void setEndBridge(@Nullable Bridge bridge);
 
   enum ComponentSide {
     NONE,

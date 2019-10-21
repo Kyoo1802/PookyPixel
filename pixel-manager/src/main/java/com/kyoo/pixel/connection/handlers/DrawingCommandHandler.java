@@ -5,14 +5,15 @@ import com.google.common.collect.Sets;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.Led;
-import com.kyoo.pixel.connection.components.LedComponent;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
-import com.kyoo.pixel.connection.components.commands.DrawLedBridgeCommand;
+import com.kyoo.pixel.connection.components.commands.DrawBridgeCommand;
 import com.kyoo.pixel.connection.components.commands.DrawLedPathCommand;
 import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
 import java.util.Optional;
@@ -74,7 +75,7 @@ public final class DrawingCommandHandler {
           (DrawLedPathCommandRequest) model.getActiveCommandRequest().get();
       Optional<Led> ledInSamePosition =
           request.getIdxPositions().parallelStream()
-              .filter(led -> led.getIdxPosition().equals(model.getPointer())).findAny();
+              .filter(led -> led.getStartIdxPosition().equals(model.getPointer())).findAny();
       if (ledInSamePosition.isEmpty()) {
         request.getIdxPositions().add(new Led(model.getPointerCopy()));
       }
@@ -86,34 +87,38 @@ public final class DrawingCommandHandler {
     }
   }
 
-  public void handleLedBridgeDrawing() {
-    Optional<LedComponent> component =
-        model.getCreatedComponentsManager().lookupLedComponent(model.getPointer());
+  public void handleBridgeDrawing() {
+    Optional<ConnectionComponent> component =
+        model.getCreatedComponentsManager().lookupConnectionComponent(model.getPointer());
     if (component.isEmpty()) {
       return;
     }
 
-    if (!model.hasActiveCommandRequest()) {
+    if (!model.hasActiveCommandRequest()) { // First Interaction
       if (component.get().getStartBridge().isPresent()) {
         return;
       }
-      DrawLedBridgeCommandRequest request =
-          DrawLedBridgeCommandRequest.builder()
-              .id(model.generateId(ComponentType.LED_BRIDGE))
-              .commandType(ComponentType.LED_BRIDGE)
+      DrawBridgeCommandRequest request =
+          DrawBridgeCommandRequest.builder()
+              .id(model.generateId(ComponentType.BRIDGE))
+              .commandType(ComponentType.BRIDGE)
               .startComponent(component.get())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
-      if (component.get().getEndBridge().isPresent()) {
+      DrawBridgeCommandRequest request =
+          ((DrawBridgeCommandRequest) model.getActiveCommandRequest().get());
+      // Avoid adding end bridge to a Led component which already contains an end bridge, and also
+      // avoid adding a bridge to the component itself.
+      if (component.get().getEndBridge().isPresent() ||
+          request.getStartComponent() == component.get()) {
         return;
       }
-      DrawLedBridgeCommandRequest request =
-          ((DrawLedBridgeCommandRequest) model.getActiveCommandRequest().get())
-              .toBuilder()
-              .endComponent(component.get())
-              .build();
-      viewModel.executeCommand(new DrawLedBridgeCommand(model, request));
+      request = request
+          .toBuilder()
+          .endComponent(component.get())
+          .build();
+      viewModel.executeCommand(new DrawBridgeCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }

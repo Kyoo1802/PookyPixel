@@ -1,6 +1,7 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
 import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedComponent;
@@ -53,12 +54,12 @@ public abstract class ConnectionCommandRequest {
 
   @Getter
   @Builder(toBuilder = true)
-  public static class DrawLedBridgeCommandRequest extends ConnectionCommandRequest {
+  public static class DrawBridgeCommandRequest extends ConnectionCommandRequest {
 
     private long id;
     private ComponentType commandType;
-    private LedComponent startComponent;
-    private LedComponent endComponent;
+    private ConnectionComponent startComponent;
+    private ConnectionComponent endComponent;
   }
 
 

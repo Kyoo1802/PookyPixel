@@ -5,19 +5,20 @@ import java.awt.Point;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Optional;
+import javax.annotation.Nullable;
 import lombok.Data;
 
 @Data
-public final class LedPath implements ConnectionComponent, LedComponent {
+public final class LedPath implements LedComponent {
 
   private long id;
   private LinkedHashSet<Led> leds;
-  private Led first;
-  private Led last;
+  private Led firstLed;
+  private Led lastLed;
   private Point minPoint;
   private Point maxPoint;
-  private Optional<LedBridge> startBridge;
-  private Optional<LedBridge> endBridge;
+  private Optional<Bridge> startBridge;
+  private Optional<Bridge> endBridge;
 
   public LedPath(long id, Collection<Led> ledsInput) {
     this.id = id;
@@ -27,18 +28,23 @@ public final class LedPath implements ConnectionComponent, LedComponent {
     minPoint = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
     maxPoint = new Point(0, 0);
     for (Led led : ledsInput) {
-      Point p = led.getIdxPosition();
+      Point p = led.getStartIdxPosition();
       minPoint.x = Math.min(p.x, minPoint.x);
       minPoint.y = Math.min(p.y, minPoint.y);
       maxPoint.x = Math.max(p.x, maxPoint.x);
       maxPoint.y = Math.max(p.y, maxPoint.y);
       Led newLed = new Led(p, this);
-      if (first == null) {
-        first = newLed;
+      if (firstLed == null) {
+        firstLed = newLed;
       }
-      last = newLed;
+      lastLed = newLed;
       this.leds.add(newLed);
     }
+  }
+
+  @Override
+  public long getId() {
+    return id;
   }
 
   @Override
@@ -52,18 +58,8 @@ public final class LedPath implements ConnectionComponent, LedComponent {
   }
 
   @Override
-  public ComponentType getComponentType() {
-    return ComponentType.LED_PATH;
-  }
-
-  @Override
   public Point getStartIdxPosition() {
     return minPoint;
-  }
-
-  @Override
-  public long getId() {
-    return id;
   }
 
   @Override
@@ -78,26 +74,32 @@ public final class LedPath implements ConnectionComponent, LedComponent {
   }
 
   @Override
-  public void addDimension(Dimension addDimension) {
+  public ComponentType getComponentType() {
+    return ComponentType.SQUARE_PANEL;
   }
 
   @Override
-  public ComponentSide scaleIntersection(int x, int y) {
-    return ComponentSide.NONE;
+  public Led getFirstLed() {
+    return firstLed;
+  }
+
+  @Override
+  public Led getLastLed() {
+    return lastLed;
+  }
+
+  @Override
+  public void setStartBridge(@Nullable Bridge bridge) {
+    startBridge = Optional.ofNullable(bridge);
+  }
+
+  @Override
+  public void setEndBridge(@Nullable Bridge bridge) {
+    endBridge = Optional.ofNullable(bridge);
   }
 
   @Override
   public String description() {
     return String.format("id: %d, size: %s ", id, getSize());
-  }
-
-  @Override
-  public Led firstLed() {
-    return first;
-  }
-
-  @Override
-  public Led lastLed() {
-    return last;
   }
 }

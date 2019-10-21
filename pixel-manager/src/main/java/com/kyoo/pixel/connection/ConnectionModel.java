@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.ConnectionComponentManager;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
@@ -24,7 +25,7 @@ public final class ConnectionModel {
   private TransformationAction transformationActionState;
   private ConnectionComponentManager createdComponentsManager;
   private Optional<ConnectionCommandRequest> activeCommandRequest;
-  private Optional<ConnectionComponent> selectedComponent;
+  private Optional<SelectableComponent> selectedComponent;
   private Map<ComponentType, Integer> createdComponentsCount;
   private Point pointer;
   private Dimension dimension;
@@ -45,7 +46,7 @@ public final class ConnectionModel {
     pointer.setLocation(PositionUtils.toIdxPosition(canvasPointerPosition));
   }
 
-  public void addComponent(ConnectionComponent component) {
+  public void addComponent(SelectableComponent component) {
     createdComponentsManager.addComponent(component);
   }
 

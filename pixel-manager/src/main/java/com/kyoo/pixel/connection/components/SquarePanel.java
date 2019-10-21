@@ -4,10 +4,11 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedHashMap;
 import java.util.Optional;
+import javax.annotation.Nullable;
 import lombok.Data;
 
 @Data
-public final class SquarePanel implements ConnectionComponent, LedComponent {
+public final class SquarePanel implements LedComponent, ScalableComponent {
 
   private Point startIdxPosition;
   private Point endIdxPosition;
@@ -15,8 +16,8 @@ public final class SquarePanel implements ConnectionComponent, LedComponent {
   private long id;
   private Led first;
   private Led last;
-  private Optional<LedBridge> startBridge;
-  private Optional<LedBridge> endBridge;
+  private Optional<Bridge> startBridge;
+  private Optional<Bridge> endBridge;
 
   public SquarePanel(long id, Point startIdxPosition, Point endIdxPosition) {
     this.id = id;
@@ -29,14 +30,14 @@ public final class SquarePanel implements ConnectionComponent, LedComponent {
   }
 
   @Override
-  public boolean intersects(int x, int y) {
-    return startIdxPosition.x <= x && x <= endIdxPosition.x && startIdxPosition.y <= y
-        && y <= endIdxPosition.y;
+  public long getId() {
+    return id;
   }
 
   @Override
-  public ComponentType getComponentType() {
-    return ComponentType.SQUARE_PANEL;
+  public boolean intersects(int x, int y) {
+    return startIdxPosition.x <= x && x <= endIdxPosition.x && startIdxPosition.y <= y
+        && y <= endIdxPosition.y;
   }
 
   public void createLeds() {
@@ -53,10 +54,6 @@ public final class SquarePanel implements ConnectionComponent, LedComponent {
 
       }
     }
-  }
-
-  public long getId() {
-    return id;
   }
 
   public Point getStartIdxPosition() {
@@ -87,7 +84,7 @@ public final class SquarePanel implements ConnectionComponent, LedComponent {
         Led led;
         if (this.leds.containsKey(ledPoint)) {
           led = this.leds.get(ledPoint);
-          newLeds.put(led.getIdxPosition(), led);
+          newLeds.put(led.getStartIdxPosition(), led);
         } else {
           led = new Led(ledPoint, this);
           newLeds.put(ledPoint, led);
@@ -134,6 +131,21 @@ public final class SquarePanel implements ConnectionComponent, LedComponent {
   }
 
   @Override
+  public ComponentType getComponentType() {
+    return ComponentType.SQUARE_PANEL;
+  }
+
+  @Override
+  public void setStartBridge(@Nullable Bridge bridge) {
+    startBridge = Optional.ofNullable(bridge);
+  }
+
+  @Override
+  public void setEndBridge(@Nullable Bridge bridge) {
+    endBridge = Optional.ofNullable(bridge);
+  }
+
+  @Override
   public String description() {
     int w = getEndIdxPosition().x - getStartIdxPosition().x + 1;
     int h = getEndIdxPosition().y - getStartIdxPosition().y + 1;
@@ -141,12 +153,12 @@ public final class SquarePanel implements ConnectionComponent, LedComponent {
   }
 
   @Override
-  public Led firstLed() {
+  public Led getFirstLed() {
     return first;
   }
 
   @Override
-  public Led lastLed() {
+  public Led getLastLed() {
     return last;
   }
 }

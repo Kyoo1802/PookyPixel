@@ -1,13 +1,14 @@
 package com.kyoo.pixel.utils;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
-import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.Led;
-import com.kyoo.pixel.connection.components.LedBridge;
+import com.kyoo.pixel.connection.components.Bridge;
+import com.kyoo.pixel.connection.components.LedComponent;
 import com.kyoo.pixel.connection.components.LedPath;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.SquarePanel;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedBridgeCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
@@ -50,7 +51,7 @@ public final class DrawUtils {
     int idx = 0;
     for (Led led : sp.getLeds().values()) {
       Point ledCanvasPosition = PositionUtils
-          .toCanvasPosition(led.getIdxPosition().y, led.getIdxPosition().x);
+          .toCanvasPosition(led.getStartIdxPosition().y, led.getStartIdxPosition().x);
       String hexColor;
       if (idx == 0) {
         hexColor = properties.getLedStartColor();
@@ -107,7 +108,7 @@ public final class DrawUtils {
   }
 
   public static void drawComponentSelection(GraphicsContext gc, ConnectionProperties properties,
-      ConnectionComponent component) {
+      SelectableComponent component) {
     Point startPosition = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
     Point endPosition = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
     Dimension size = PositionUtils.toCanvasDimension(component.getSize());
@@ -187,7 +188,7 @@ public final class DrawUtils {
 
     // Draw Leds
     for (Led led : ledPath) {
-      Point p = led.getIdxPosition();
+      Point p = led.getStartIdxPosition();
       Point startPosition = PositionUtils.toCanvasPosition(p.y, p.x);
       minPoint.x = Math.min(minPoint.x, startPosition.x);
       minPoint.y = Math.min(minPoint.y, startPosition.y);
@@ -225,10 +226,13 @@ public final class DrawUtils {
     }
   }
 
-  public static void drawLedBridgeCommand(GraphicsContext gc, ConnectionProperties properties,
-      DrawLedBridgeCommandRequest request, Point pointer) {
-    Point start = PositionUtils
-        .toCanvasPosition(request.getStartComponent().lastLed().getIdxPosition());
+  public static void drawBridgeCommand(GraphicsContext gc, ConnectionProperties properties,
+      DrawBridgeCommandRequest request, Point pointer) {
+    Point start =  request.getStartComponent() instanceof LedComponent?
+        ((LedComponent) request.getStartComponent()).getLastLed().getStartIdxPosition()
+        :request.getStartComponent().getStartIdxPosition();
+    start = PositionUtils.toCanvasPosition(start);
+
     Point end = PositionUtils.toCanvasPosition(pointer);
     gc.setLineWidth(2);
     gc.setStroke(Color.web(properties.getBridgeColor()));
@@ -293,8 +297,8 @@ public final class DrawUtils {
     gc.strokeRect(position.x, position.y, size.width, size.height);
   }
 
-  public static void drawLedBridge(GraphicsContext gc, ConnectionProperties properties,
-      LedBridge component) {
+  public static void drawBridge(GraphicsContext gc, ConnectionProperties properties,
+      Bridge component) {
     Point start = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
     Point end = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
     gc.setLineWidth(2);

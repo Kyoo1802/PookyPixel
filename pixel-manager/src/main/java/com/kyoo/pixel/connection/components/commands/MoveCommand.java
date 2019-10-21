@@ -4,6 +4,7 @@ import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedPath;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.SquarePanel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import java.awt.Point;
@@ -33,7 +34,7 @@ public final class MoveCommand implements ConnectionCommand {
   }
 
   private boolean doMove(boolean isInverse) {
-    Optional<ConnectionComponent> component =
+    Optional<SelectableComponent> component =
         model.getCreatedComponentsManager().getComponent(request.getTypeToMove(),
             request.getIdToMove());
 
@@ -55,7 +56,7 @@ public final class MoveCommand implements ConnectionCommand {
     return movement;
   }
 
-  private void move(ConnectionComponent component, Point movement) {
+  private void move(SelectableComponent component, Point movement) {
     switch (component.getComponentType()) {
       case SQUARE_PANEL:
         SquarePanel sp = (SquarePanel) component;
@@ -76,8 +77,8 @@ public final class MoveCommand implements ConnectionCommand {
       case LED_PATH:
         LedPath lp = (LedPath) component;
         for (Led led : lp.getLeds()) {
-          led.getIdxPosition().setLocation(led.getIdxPosition().x + movement.x,
-              led.getIdxPosition().y + movement.y);
+          led.getStartIdxPosition().setLocation(led.getStartIdxPosition().x + movement.x,
+              led.getStartIdxPosition().y + movement.y);
         }
         component.getStartIdxPosition().setLocation(component.getStartIdxPosition().x + movement.x,
             component.getStartIdxPosition().y + movement.y);

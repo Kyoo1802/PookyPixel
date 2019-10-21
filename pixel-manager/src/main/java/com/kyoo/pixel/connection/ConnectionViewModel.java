@@ -166,7 +166,7 @@ public final class ConnectionViewModel {
         switch (getDrawEvent(interaction)) {
           case FINISH_DRAW:
           case DRAW_POINT:
-            drawingCommandHandler.handleLedBridgeDrawing();
+            drawingCommandHandler.handleBridgeDrawing();
             break;
           case MOVE:
             model.handlePointerMovement(getPositionInteraction(interaction).getPosition());
@@ -225,7 +225,6 @@ public final class ConnectionViewModel {
     }
     return DrawEvent.UNKNOWN;
   }
-
 
   private NoActionEvent getNoActionEvent(InputInteraction interaction) {
     if (isPositionInteraction(interaction)) {

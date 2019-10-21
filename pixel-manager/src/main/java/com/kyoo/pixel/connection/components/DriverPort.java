@@ -2,6 +2,7 @@ package com.kyoo.pixel.connection.components;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.Optional;
 import lombok.Data;
 
 @Data
@@ -10,6 +11,7 @@ public final class DriverPort implements ConnectionComponent {
   private long id;
   private Point idxPosition;
   private Point endPosition;
+  private Optional<Bridge> startBridge;
 
   public DriverPort(long id, Point idxPosition, Dimension size) {
     this.id = id;
@@ -18,20 +20,15 @@ public final class DriverPort implements ConnectionComponent {
   }
 
   @Override
-  public boolean intersects(int x, int y) {
-    Dimension size = getSize();
-    return idxPosition.x <= x && x <= idxPosition.x + size.width && idxPosition.y <= y
-        && y <= idxPosition.y + size.height;
-  }
-
-  @Override
   public long getId() {
     return id;
   }
 
   @Override
-  public ComponentType getComponentType() {
-    return ComponentType.DRIVER_PORT;
+  public boolean intersects(int x, int y) {
+    Dimension size = getSize();
+    return idxPosition.x <= x && x <= idxPosition.x + size.width && idxPosition.y <= y
+        && y <= idxPosition.y + size.height;
   }
 
   @Override
@@ -50,12 +47,28 @@ public final class DriverPort implements ConnectionComponent {
   }
 
   @Override
-  public void addDimension(Dimension addDimension) {
+  public Optional<Bridge> getStartBridge() {
+    return Optional.empty();
   }
 
   @Override
-  public ComponentSide scaleIntersection(int x, int y) {
-    return ComponentSide.NONE;
+  public Optional<Bridge> getEndBridge() {
+    return Optional.empty();
+  }
+
+  @Override
+  public void setStartBridge(Bridge bridge) {
+    startBridge = Optional.of(bridge);
+  }
+
+  @Override
+  public void setEndBridge(Bridge bridge) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public ComponentType getComponentType() {
+    return ComponentType.DRIVER_PORT;
   }
 
   @Override

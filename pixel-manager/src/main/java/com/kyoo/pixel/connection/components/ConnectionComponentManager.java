@@ -10,13 +10,13 @@ import lombok.Getter;
 @Getter
 public final class ConnectionComponentManager {
 
-  private Map<ComponentType, Map<Long, ConnectionComponent>> components;
+  private Map<ComponentType, Map<Long, SelectableComponent>> components;
 
   public ConnectionComponentManager() {
     components = new ConcurrentHashMap<>();
   }
 
-  public synchronized void addComponent(ConnectionComponent component) {
+  public synchronized void addComponent(SelectableComponent component) {
     if (!components.containsKey(component.getComponentType())) {
       components.put(component.getComponentType(), new LinkedHashMap<>());
     }
@@ -32,19 +32,30 @@ public final class ConnectionComponentManager {
     }
   }
 
-  public Optional<ConnectionComponent> getComponent(ComponentType type, long id) {
-    Map<Long, ConnectionComponent> componentsByType = getComponents().get(type);
+  public Optional<SelectableComponent> getComponent(ComponentType type, long id) {
+    Map<Long, SelectableComponent> componentsByType = getComponents().get(type);
     if (componentsByType != null && componentsByType.containsKey(id)) {
       return Optional.of(componentsByType.get(id));
     }
     return Optional.empty();
   }
 
-  public Optional<LedComponent> lookupLedComponent(Point point) {
-    for (Map<Long, ConnectionComponent> ck : components.values()) {
-      for (ConnectionComponent c : ck.values()) {
-        if (c instanceof LedComponent && c.intersects(point.x, point.y)) {
-          return Optional.of((LedComponent) c);
+  public Optional<SelectableComponent> lookupSelectableComponent(Point point) {
+    for (Map<Long, SelectableComponent> ck : components.values()) {
+      for (SelectableComponent c : ck.values()) {
+        if (c.intersects(point.x, point.y)) {
+          return Optional.of(c);
+        }
+      }
+    }
+    return Optional.empty();
+  }
+
+  public Optional<ConnectionComponent> lookupConnectionComponent(Point point) {
+    for (Map<Long, SelectableComponent> ck : components.values()) {
+      for (SelectableComponent c : ck.values()) {
+        if (c instanceof ConnectionComponent && c.intersects(point.x, point.y)) {
+          return Optional.of((ConnectionComponent) c);
         }
       }
     }

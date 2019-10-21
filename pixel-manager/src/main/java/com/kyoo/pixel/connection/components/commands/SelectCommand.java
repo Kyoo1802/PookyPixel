@@ -4,6 +4,7 @@ import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.ConnectionComponent.ComponentSide;
+import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
 import java.util.Map;
 import java.util.Optional;
@@ -22,24 +23,18 @@ public final class SelectCommand implements ConnectionCommand {
 
   @Override
   public boolean execute() {
-    for (Map<Long, ConnectionComponent> components :
+    for (Map<Long, SelectableComponent> components :
         model.getCreatedComponentsManager().getComponents().values()) {
-      for (ConnectionComponent component : components.values()) {
-        ComponentSide scaleSide = component.scaleIntersection(request.getSelectIdxPosition().x,
-            request.getSelectIdxPosition().y);
-        if (scaleSide != ComponentSide.NONE || component
-            .intersects(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y)) {
+      for (SelectableComponent component : components.values()) {
+        if (component.intersects(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y)) {
           model.setSelectedComponent(Optional.of(component));
-          if (scaleSide == ComponentSide.NONE) {
-            model.setTransformationActionState(TransformationAction.MOVE);
-          } else {
-            model.setTransformationActionState(TransformationAction.SCALE);
-          }
+          model.setTransformationActionState(TransformationAction.MOVE);
           log.debug("Selection triggered %s", request.getSelectIdxPosition());
           return true;
         }
       }
     }
+
     log.debug("No selection triggered %s", request.getSelectIdxPosition());
     model.setSelectedComponent(Optional.empty());
     model.setActiveCommandRequest(Optional.empty());

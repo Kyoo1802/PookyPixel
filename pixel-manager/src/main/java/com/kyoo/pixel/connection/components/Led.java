@@ -2,11 +2,12 @@ package com.kyoo.pixel.connection.components;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.Optional;
 
-public final class Led implements ConnectionComponent {
+public final class Led implements SelectableComponent{
 
   private static final Dimension LED_DIMENSION = new Dimension(1, 1);
-  private final ConnectionComponent parentComponent;
+
   private Point position;
 
   public Led(Point position) {
@@ -15,11 +16,11 @@ public final class Led implements ConnectionComponent {
 
   public Led(Point position, ConnectionComponent parentComponent) {
     this.position = position;
-    this.parentComponent = parentComponent;
   }
 
-  public Point getIdxPosition() {
-    return position;
+  @Override
+  public long getId() {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
@@ -28,23 +29,13 @@ public final class Led implements ConnectionComponent {
   }
 
   @Override
-  public ComponentType getComponentType() {
-    return ComponentType.LED_PATH;
-  }
-
-  @Override
-  public long getId() {
-    return 0;
-  }
-
-  @Override
   public Point getStartIdxPosition() {
-    return null;
+    return position;
   }
 
   @Override
   public Point getEndIdxPosition() {
-    return null;
+    return position;
   }
 
   @Override
@@ -53,17 +44,13 @@ public final class Led implements ConnectionComponent {
   }
 
   @Override
-  public void addDimension(Dimension addDimension) {
-  }
-
-  @Override
-  public ComponentSide scaleIntersection(int x, int y) {
-    return ComponentSide.NONE;
+  public ComponentType getComponentType() {
+    return ComponentType.LED;
   }
 
   @Override
   public String description() {
-    return position.toString();
+    return toString();
   }
 
   @Override
