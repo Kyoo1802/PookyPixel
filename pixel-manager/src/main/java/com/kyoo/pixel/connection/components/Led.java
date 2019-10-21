@@ -2,9 +2,8 @@ package com.kyoo.pixel.connection.components;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.Optional;
 
-public final class Led implements SelectableComponent{
+public final class Led implements SelectableComponent {
 
   private static final Dimension LED_DIMENSION = new Dimension(1, 1);
 

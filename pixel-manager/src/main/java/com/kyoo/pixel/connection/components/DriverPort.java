@@ -52,13 +52,13 @@ public final class DriverPort implements ConnectionComponent {
   }
 
   @Override
-  public Optional<Bridge> getEndBridge() {
-    return Optional.empty();
+  public void setStartBridge(Bridge bridge) {
+    startBridge = Optional.of(bridge);
   }
 
   @Override
-  public void setStartBridge(Bridge bridge) {
-    startBridge = Optional.of(bridge);
+  public Optional<Bridge> getEndBridge() {
+    return Optional.empty();
   }
 
   @Override

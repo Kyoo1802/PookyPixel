@@ -1,7 +1,6 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.Led;
 import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SelectableComponent;

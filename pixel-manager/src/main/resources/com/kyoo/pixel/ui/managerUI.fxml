@@ -21,7 +21,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
+  minHeight="-Infinity"
   minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
   xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.manager.ManagerView">
   <center>
@@ -58,7 +59,8 @@
                   <children>
                     <BorderPane>
                       <bottom>
-                        <HBox BorderPane.alignment="CENTER_RIGHT" alignment="CENTER_RIGHT" prefHeight="30.0"
+                        <HBox BorderPane.alignment="CENTER_RIGHT" alignment="CENTER_RIGHT"
+                          prefHeight="30.0"
                           prefWidth="292.0">
                           <children>
                             <Label minWidth="53.0" prefHeight="17.0" text="Frames:"/>
@@ -130,11 +132,13 @@
               text="Cabina 3 x 3"/>
           </center>
           <left>
-            <Hyperlink BorderPane.alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="83.0"
+            <Hyperlink BorderPane.alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0"
+              prefWidth="83.0"
               text="Pooky Pixel"/>
           </left>
           <right>
-            <ImageView BorderPane.alignment="CENTER" fitHeight="25.0" fitWidth="43.0" pickOnBounds="true"
+            <ImageView BorderPane.alignment="CENTER" fitHeight="25.0" fitWidth="43.0"
+              pickOnBounds="true"
               preserveRatio="true"/>
           </right>
         </BorderPane>

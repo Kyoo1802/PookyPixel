@@ -1,8 +1,8 @@
 package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.Bridge;
+import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.SquarePanel;

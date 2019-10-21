@@ -1,9 +1,9 @@
 package com.kyoo.pixel.utils;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
+import com.kyoo.pixel.connection.components.Bridge;
 import com.kyoo.pixel.connection.components.DriverPort;
 import com.kyoo.pixel.connection.components.Led;
-import com.kyoo.pixel.connection.components.Bridge;
 import com.kyoo.pixel.connection.components.LedComponent;
 import com.kyoo.pixel.connection.components.LedPath;
 import com.kyoo.pixel.connection.components.SelectableComponent;
@@ -228,9 +228,9 @@ public final class DrawUtils {
 
   public static void drawBridgeCommand(GraphicsContext gc, ConnectionProperties properties,
       DrawBridgeCommandRequest request, Point pointer) {
-    Point start =  request.getStartComponent() instanceof LedComponent?
+    Point start = request.getStartComponent() instanceof LedComponent ?
         ((LedComponent) request.getStartComponent()).getLastLed().getStartIdxPosition()
-        :request.getStartComponent().getStartIdxPosition();
+        : request.getStartComponent().getStartIdxPosition();
     start = PositionUtils.toCanvasPosition(start);
 
     Point end = PositionUtils.toCanvasPosition(pointer);
