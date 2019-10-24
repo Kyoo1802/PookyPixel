@@ -1,12 +1,15 @@
 package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.LedComponent;
+import com.kyoo.pixel.utils.DrawUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Optional;
+import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,7 +53,7 @@ public final class LedPath implements LedComponent {
       startIdxPosition.y = Math.min(p.y, startIdxPosition.y);
       endIdxPosition.x = Math.max(p.x, endIdxPosition.x);
       endIdxPosition.y = Math.max(p.y, endIdxPosition.y);
-      Led newLed = new Led(p, this);
+      Led newLed = new Led(p);
       if (firstLed == null) {
         firstLed = newLed;
       }
@@ -76,7 +79,23 @@ public final class LedPath implements LedComponent {
   }
 
   @Override
+  public void move(Point movement) {
+
+  }
+
+  @Override
   public String description() {
     return String.format("id: %d, size: %s ", id, getSize());
+  }
+
+  @Override
+  public void unSelect() {
+    selectedSide = SelectedSide.NONE;
+  }
+
+  @Override
+  public void draw(GraphicsContext gc, ConnectionProperties properties) {
+    DrawUtils.drawLedComponent(gc, properties, this);
+    DrawUtils.drawComponentSelection(gc, properties, this);
   }
 }

@@ -13,16 +13,4 @@ public interface ConnectionComponent extends SelectableComponent {
 
   void setEndBridge(Optional<Bridge> bridge);
 
-  enum SelectedSide {
-    NONE,
-    CENTER,
-    UPPER,
-    UPPER_LEFT,
-    LEFT,
-    UPPER_RIGHT,
-    RIGHT,
-    BOTTOM_LEFT,
-    BOTTOM,
-    BOTTOM_RIGHT
-  }
 }

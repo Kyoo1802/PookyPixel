@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponentManager;
+import com.kyoo.pixel.connection.components.Pointer;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
+import com.kyoo.pixel.connection.components.impl.pointers.DefaultPointer;
 import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -21,23 +23,25 @@ import lombok.extern.log4j.Log4j2;
 public final class ConnectionModel {
 
   private ConnectionState connectionState;
-  private TransformationAction transformationActionState;
+  private TransformationAction transformationAction;
   private ConnectionComponentManager createdComponentsManager;
   private Optional<ConnectionCommandRequest> activeCommandRequest;
-  private Optional<SelectableComponent> selectedComponent;
+  private Map<Long, SelectableComponent> selectedComponent;
   private Map<ComponentType, Integer> createdComponentsCount;
   private Point pointer;
+  private Pointer positionPointer;
   private Dimension dimension;
 
   @Inject
   public ConnectionModel() {
     this.activeCommandRequest = Optional.empty();
-    this.selectedComponent = Optional.empty();
+    this.selectedComponent = new HashMap<>();
     this.createdComponentsCount = new HashMap<>();
     this.createdComponentsManager = new ConnectionComponentManager();
     this.pointer = new Point(0, 0);
+    this.positionPointer = new DefaultPointer();
     this.connectionState = ConnectionState.NO_ACTION;
-    this.transformationActionState = TransformationAction.MOVE;
+    this.transformationAction = TransformationAction.MOVE;
     this.dimension = new Dimension(400, 400);
   }
 
@@ -76,6 +80,22 @@ public final class ConnectionModel {
 
   public Point getPointerCopy() {
     return new Point(pointer);
+  }
+
+  public void addSelectedComponent(SelectableComponent component) {
+    getSelectedComponent().put(component.getId(), component);
+  }
+
+  public Optional<SelectableComponent> getSelectedComponent(long id) {
+    return Optional.ofNullable(getSelectedComponent().get(id));
+  }
+
+  public void removeSelectedComponent(long id) {
+    getSelectedComponent().remove(id);
+  }
+
+  public Pointer getPositionPointer() {
+    return positionPointer;
   }
 
   public enum ConnectionState {

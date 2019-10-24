@@ -1,11 +1,13 @@
 package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.SelectableComponent;
+import com.kyoo.pixel.utils.DrawUtils;
 import java.awt.Dimension;
 import java.awt.Point;
+import javafx.scene.canvas.GraphicsContext;
 
 public class Bridge implements SelectableComponent {
 
@@ -27,6 +29,11 @@ public class Bridge implements SelectableComponent {
   @Override
   public SelectedSide getSelectedSide() {
     return SelectedSide.NONE;
+  }
+
+  @Override
+  public void move(Point movement) {
+
   }
 
   @Override
@@ -58,5 +65,15 @@ public class Bridge implements SelectableComponent {
   @Override
   public String description() {
     return String.format("EMPTY");
+  }
+
+  @Override
+  public void unSelect() {
+  }
+
+  @Override
+  public void draw(GraphicsContext gc, ConnectionProperties properties) {
+    DrawUtils.drawBridge(gc, properties, this);
+    DrawUtils.drawComponentSelection(gc, properties, this);
   }
 }

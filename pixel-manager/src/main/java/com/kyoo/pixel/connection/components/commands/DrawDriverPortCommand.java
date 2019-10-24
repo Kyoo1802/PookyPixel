@@ -4,7 +4,6 @@ import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
 import com.kyoo.pixel.connection.components.impl.DriverPort;
 import java.awt.Dimension;
-import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -24,7 +23,7 @@ public final class DrawDriverPortCommand implements ConnectionCommand {
     DriverPort port = new DriverPort(request.getId(), request.getIdxPosition(),
         DEFAULT_CONNECTION_PORT_SIZE);
     model.addComponent(port);
-    model.setSelectedComponent(Optional.of(port));
+    model.addSelectedComponent(port);
     log.debug("Draw Driver Port triggered %s", request.getIdxPosition());
     return true;
   }

@@ -1,31 +1,36 @@
 package com.kyoo.pixel.connection.handlers;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
 import com.kyoo.pixel.connection.components.commands.MoveCommand;
 import com.kyoo.pixel.connection.components.commands.ScaleCommand;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@Singleton
 public final class TransformationHandler {
 
-  private ConnectionViewModel viewModel;
-  private ConnectionModel model;
+  private final ConnectionModel model;
+  private final ConnectionCommandManager commandManager;
 
-  public TransformationHandler(ConnectionViewModel viewModel) {
-    this.viewModel = viewModel;
-    this.model = viewModel.getModel();
+  @Inject
+  public TransformationHandler(ConnectionModel model, ConnectionCommandManager commandManager) {
+    this.model = model;
+    this.commandManager = commandManager;
   }
 
   public void handleTransformation() {
     if (model.getSelectedComponent().isEmpty()) {
       return;
     }
-    switch (model.getTransformationActionState()) {
+    switch (model.getTransformationAction()) {
       case MOVE:
         handleMovement();
         break;
@@ -33,7 +38,7 @@ public final class TransformationHandler {
         handleScale();
         break;
       default:
-        log.error("Invalid transformation: " + model.getTransformationActionState());
+        log.error("Invalid transformation: " + model.getTransformationAction());
     }
   }
 
@@ -43,8 +48,8 @@ public final class TransformationHandler {
           MovementCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
               .commandType(ComponentType.MOVEMENT)
-              .idToMove(model.getSelectedComponent().get().getId())
-              .typeToMove(model.getSelectedComponent().get().getComponentType())
+              .idsToMove(model.getSelectedComponent().values().stream().map(c -> c.getId()).collect(
+                  Collectors.toList()))
               .startIdxPosition(model.getPointerCopy())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
@@ -54,19 +59,24 @@ public final class TransformationHandler {
               .toBuilder()
               .endIdxPosition(model.getPointerCopy())
               .build();
-      viewModel.executeCommand(new MoveCommand(model, request));
+      commandManager.execute(new MoveCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }
 
   private void handleScale() {
+    // We don't support more than one element to scale
+    if (model.getSelectedComponent().size() != 1) {
+      return;
+    }
     if (!model.hasActiveCommandRequest()) {
       ScaleCommandRequest request =
           ScaleCommandRequest.builder()
               .id(model.generateId(ComponentType.SCALE))
               .commandType(ComponentType.SCALE)
-              .idToScale(model.getSelectedComponent().get().getId())
-              .typeToScale(model.getSelectedComponent().get().getComponentType())
+              .idToScale(
+                  model.getSelectedComponent().values().stream().map(c -> c.getId()).findFirst()
+                      .get())
               .startIdxPosition(model.getPointerCopy())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
@@ -76,7 +86,7 @@ public final class TransformationHandler {
               .toBuilder()
               .endIdxPosition(model.getPointerCopy())
               .build();
-      viewModel.executeCommand(new ScaleCommand(model, request));
+      commandManager.execute(new ScaleCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }

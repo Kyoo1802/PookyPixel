@@ -2,14 +2,15 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.MainReleaseKeyHandler;
-import com.kyoo.pixel.connection.InputInteractions.ActionState;
-import com.kyoo.pixel.connection.InputInteractions.ActionStateInteractions;
-import com.kyoo.pixel.connection.InputInteractions.KeyboardInteractions;
-import com.kyoo.pixel.connection.InputInteractions.KeyboardKey;
-import com.kyoo.pixel.connection.InputInteractions.KeyboardState;
-import com.kyoo.pixel.connection.InputInteractions.PositionButtonSide;
-import com.kyoo.pixel.connection.InputInteractions.PositionInteractions;
-import com.kyoo.pixel.connection.InputInteractions.PositionState;
+import com.kyoo.pixel.connection.interactions.InteractionRequest;
+import com.kyoo.pixel.connection.interactions.KeyboardInteractionRequest;
+import com.kyoo.pixel.connection.interactions.KeyboardInteractionRequest.KeyboardKey;
+import com.kyoo.pixel.connection.interactions.KeyboardInteractionRequest.KeyboardState;
+import com.kyoo.pixel.connection.interactions.PositionInteractionRequest;
+import com.kyoo.pixel.connection.interactions.PositionInteractionRequest.PositionButtonSide;
+import com.kyoo.pixel.connection.interactions.PositionInteractionRequest.PositionState;
+import com.kyoo.pixel.connection.interactions.StateInteractionRequest;
+import com.kyoo.pixel.connection.interactions.StateInteractionRequest.ActionState;
 import java.awt.Point;
 import java.net.URL;
 import java.util.Optional;
@@ -68,8 +69,8 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
     canvas.onMouseDraggedProperty().set(e -> handleMouseInteraction(e, PositionState.DRAGGED));
 
     // Initialize properties
-    handleStateInteraction((int) canvas.getWidth(), ActionState.RESIZE_WIDTH);
-    handleStateInteraction((int) canvas.getHeight(), ActionState.RESIZE_HEIGHT);
+//    handleStateInteraction((int) canvas.getWidth(), ActionState.RESIZE_WIDTH);
+//    handleStateInteraction((int) canvas.getHeight(), ActionState.RESIZE_HEIGHT);
     handleStateInteraction(createSquarePanelBtn.isSelected(), ActionState.DRAW_SQUARE_PANEL);
     handleStateInteraction(createLedPathBtn.isSelected(), ActionState.DRAW_LED_PATH);
     handleStateInteraction(createDriverPortBtn.isSelected(), ActionState.DRAW_DRIVER_PORT);
@@ -90,7 +91,7 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
             ActionState.DRAW_DRIVER_PORT));
 
     // Initialize animation
-    viewModel.start();
+    viewModel.startConsumingInteraction();
     canvasRenderer.render(canvas);
     AnimationTimer timer = new AnimationTimer() {
       @Override
@@ -104,33 +105,62 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
   }
 
   private void handleStateInteraction(Object value, ActionState actionState) {
-    ActionStateInteractions interaction = new ActionStateInteractions();
-    interaction.setActionState(actionState);
+    StateInteractionRequest.StateInteractionRequestBuilder stateInteractionBuilder =
+        StateInteractionRequest
+            .builder()
+            .state(actionState);
+
     if (value instanceof Boolean) {
-      interaction.setBoolValue(Optional.of((Boolean) value));
+      stateInteractionBuilder
+          .boolValue(Optional.of((Boolean) value));
     } else if (value instanceof Integer) {
-      interaction.setIntValue(Optional.of((Integer) value));
+      stateInteractionBuilder
+          .intValue(Optional.of((Integer) value));
     } else if (value instanceof Double) {
-      interaction.setIntValue(Optional.of(((Double) value).intValue()));
+      stateInteractionBuilder
+          .intValue(Optional.of(((Double) value).intValue()));
     }
+
+    InteractionRequest interaction =
+        InteractionRequest
+            .builder()
+            .stateInteractionRequest(Optional.of(stateInteractionBuilder.build()))
+            .build();
     viewModel.getInputInteractions().get().add(interaction);
+
     log.debug("ActionState [{}] on {}", actionState, interaction);
   }
 
   private void handleMouseInteraction(MouseEvent e, PositionState state) {
-    PositionInteractions interaction = new PositionInteractions();
-    interaction.setState(state);
-    interaction.setPosition(new Point((int) e.getX(), (int) e.getY()));
-    interaction.setSide(PositionButtonSide.from(e.getButton()));
+    InteractionRequest interaction =
+        InteractionRequest
+            .builder()
+            .positionInteractionRequest(
+                Optional.of(
+                    PositionInteractionRequest
+                        .builder()
+                        .state(state)
+                        .position(new Point((int) e.getX(), (int) e.getY()))
+                        .side(PositionButtonSide.from(e.getButton()))
+                        .build()))
+            .build();
     viewModel.getInputInteractions().get().add(interaction);
     log.debug("Mouse interaction: {}", interaction);
   }
 
   @Override
   public void handle(KeyEvent event) {
-    KeyboardInteractions interaction = new KeyboardInteractions();
-    interaction.setState(KeyboardState.RELEASED);
-    interaction.setKey(KeyboardKey.from(event.getCode()));
+    InteractionRequest interaction =
+        InteractionRequest
+            .builder()
+            .keyboardInteractionRequest(
+                Optional.of(
+                    KeyboardInteractionRequest
+                        .builder()
+                        .state(KeyboardState.RELEASED)
+                        .key(KeyboardKey.from(event.getCode()))
+                        .build()))
+            .build();
     viewModel.getInputInteractions().get().add(interaction);
     log.debug("Keyboard interaction: {}", interaction);
   }

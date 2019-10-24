@@ -1,8 +1,10 @@
 package com.kyoo.pixel.connection.components;
 
-import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
+import com.google.common.collect.Lists;
+import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
 import java.awt.Point;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,12 +35,25 @@ public final class ConnectionComponentManager {
     }
   }
 
-  public Optional<SelectableComponent> getComponent(ComponentType type, long id) {
-    Map<Long, SelectableComponent> componentsByType = getComponents().get(type);
-    if (componentsByType != null && componentsByType.containsKey(id)) {
-      return Optional.of(componentsByType.get(id));
+  public Optional<SelectableComponent> getComponent(Long id) {
+    for (Map<Long, SelectableComponent> componentsByKey : components.values()) {
+      if (componentsByKey.containsKey(id)) {
+        return Optional.of(componentsByKey.get(id));
+      }
     }
     return Optional.empty();
+  }
+
+  public List<SelectableComponent> getComponents(List<Long> ids) {
+    List<SelectableComponent> result = Lists.newArrayList();
+    for (Map<Long, SelectableComponent> componentsByKey : components.values()) {
+      for (Long id : ids) {
+        if (componentsByKey.containsKey(id)) {
+          result.add(componentsByKey.get(id));
+        }
+      }
+    }
+    return result;
   }
 
   public Optional<SelectableComponent> lookupSelectableComponent(Point point) {

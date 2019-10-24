@@ -1,11 +1,11 @@
 package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
-import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import java.awt.Dimension;
 import java.awt.Point;
+import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
 
 public final class Led implements SelectableComponent {
@@ -18,10 +18,6 @@ public final class Led implements SelectableComponent {
   private Point position;
 
   public Led(Point position) {
-    this(position, null);
-  }
-
-  public Led(Point position, ConnectionComponent parentComponent) {
     this.position = position;
     this.selectedSide = SelectedSide.NONE;
     this.componentType = ComponentType.LED;
@@ -58,8 +54,23 @@ public final class Led implements SelectableComponent {
   }
 
   @Override
+  public void move(Point movement) {
+
+  }
+
+  @Override
   public String description() {
     return toString();
+  }
+
+  @Override
+  public void unSelect() {
+    selectedSide = SelectedSide.NONE;
+  }
+
+  @Override
+  public void draw(GraphicsContext gc, ConnectionProperties properties) {
+    throw new UnsupportedOperationException("There is not implementation for this method");
   }
 
   @Override

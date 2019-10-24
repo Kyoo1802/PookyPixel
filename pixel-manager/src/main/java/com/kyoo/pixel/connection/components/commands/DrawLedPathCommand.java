@@ -3,7 +3,6 @@ package com.kyoo.pixel.connection.components.commands;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.impl.LedPath;
-import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -21,7 +20,7 @@ public final class DrawLedPathCommand implements ConnectionCommand {
   public boolean execute() {
     LedPath ledPath = new LedPath(request.getId(), request.getIdxPositions());
     model.addComponent(ledPath);
-    model.setSelectedComponent(Optional.of(ledPath));
+    model.addSelectedComponent(ledPath);
     log.debug("Create Led Path [%s, %d]", request.getCommandType(), request.getId());
     return true;
   }

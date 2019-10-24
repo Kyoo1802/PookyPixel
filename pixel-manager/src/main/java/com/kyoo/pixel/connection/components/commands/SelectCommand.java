@@ -1,9 +1,8 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
-import com.kyoo.pixel.connection.components.ConnectionComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.SelectableComponent;
+import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
 import java.util.Map;
 import java.util.Optional;
@@ -28,8 +27,7 @@ public final class SelectCommand implements ConnectionCommand {
         SelectedSide selectedSide = component
             .select(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
         if (selectedSide != SelectedSide.NONE) {
-          model.setSelectedComponent(Optional.of(component));
-          model.setTransformationActionState(TransformationAction.MOVE);
+          model.addSelectedComponent(component);
           log.debug("Selection triggered %s", request.getSelectIdxPosition());
           return true;
         }
@@ -37,13 +35,21 @@ public final class SelectCommand implements ConnectionCommand {
     }
 
     log.debug("No selection triggered %s", request.getSelectIdxPosition());
-    model.setSelectedComponent(Optional.empty());
+    unSelectComponent();
     model.setActiveCommandRequest(Optional.empty());
     return false;
   }
 
   @Override
   public void undo() {
-    model.setSelectedComponent(Optional.empty());
+    unSelectComponent();
+  }
+
+  private void unSelectComponent() {
+    Optional<SelectableComponent> component = model.getSelectedComponent(request.getId());
+    if (component.isPresent()) {
+      component.get().unSelect();
+      model.removeSelectedComponent(component.get().getId());
+    }
   }
 }

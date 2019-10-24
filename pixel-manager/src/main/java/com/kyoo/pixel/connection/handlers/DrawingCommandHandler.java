@@ -2,10 +2,12 @@ package com.kyoo.pixel.connection.handlers;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.ConnectionViewModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
@@ -19,14 +21,16 @@ import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@Singleton
 public final class DrawingCommandHandler {
 
-  private ConnectionViewModel viewModel;
   private ConnectionModel model;
+  private ConnectionCommandManager commandManager;
 
-  public DrawingCommandHandler(ConnectionViewModel viewModel) {
-    this.viewModel = viewModel;
-    this.model = viewModel.getModel();
+  @Inject
+  public DrawingCommandHandler(ConnectionModel model, ConnectionCommandManager commandManager) {
+    this.model = model;
+    this.commandManager = commandManager;
   }
 
   public void handleSquarePanelDrawing() {
@@ -44,7 +48,7 @@ public final class DrawingCommandHandler {
               .toBuilder()
               .endIdxPosition(model.getPointerCopy())
               .build();
-      viewModel.executeCommand(new DrawSquarePanelCommand(model, request));
+      commandManager.execute(new DrawSquarePanelCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }
@@ -56,7 +60,7 @@ public final class DrawingCommandHandler {
             .commandType(ComponentType.DRIVER_PORT)
             .idxPosition(model.getPointerCopy())
             .build();
-    viewModel.executeCommand(new DrawDriverPortCommand(model, request));
+    commandManager.execute(new DrawDriverPortCommand(model, request));
   }
 
   public void handleLedPathDrawing(boolean hasFinished) {
@@ -81,7 +85,7 @@ public final class DrawingCommandHandler {
     } else {
       DrawLedPathCommandRequest request =
           (DrawLedPathCommandRequest) model.getActiveCommandRequest().get();
-      viewModel.executeCommand(new DrawLedPathCommand(model, request));
+      commandManager.execute(new DrawLedPathCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }
@@ -117,7 +121,7 @@ public final class DrawingCommandHandler {
           .toBuilder()
           .endComponent(component.get())
           .build();
-      viewModel.executeCommand(new DrawBridgeCommand(model, request));
+      commandManager.execute(new DrawBridgeCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }

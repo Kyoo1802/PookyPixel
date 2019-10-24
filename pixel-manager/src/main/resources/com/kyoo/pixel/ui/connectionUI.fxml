@@ -17,7 +17,7 @@
           hbarPolicy="ALWAYS"
           maxHeight="Infinity" maxWidth="Infinity" vbarPolicy="ALWAYS" fx:id="canvasScroll">
           <content>
-            <Canvas height="4000.0" width="3000.0" fx:id="canvas"/>
+            <Canvas height="2000.0" width="2000.0" fx:id="canvas"/>
           </content>
         </ScrollPane>
       </center>

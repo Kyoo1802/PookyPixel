@@ -1,10 +1,13 @@
 package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
+import com.kyoo.pixel.utils.DrawUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Optional;
+import javafx.scene.canvas.GraphicsContext;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,10 +57,26 @@ public final class DriverPort implements ConnectionComponent {
   }
 
   @Override
+  public void move(Point movement) {
+
+  }
+
+  @Override
   public String description() {
     int w = getEndIdxPosition().x - getStartIdxPosition().x + 1;
     int h = getEndIdxPosition().y - getStartIdxPosition().y + 1;
     return String.format("[%d, %d] = %d", w, h, w * h);
+  }
+
+  @Override
+  public void unSelect() {
+    selectedSide = SelectedSide.NONE;
+  }
+
+  @Override
+  public void draw(GraphicsContext gc, ConnectionProperties properties) {
+    DrawUtils.drawPort(gc, properties, this);
+    DrawUtils.drawComponentSelection(gc, properties, this);
   }
 
   @Override

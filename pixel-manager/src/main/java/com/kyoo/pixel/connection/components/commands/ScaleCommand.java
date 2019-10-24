@@ -31,8 +31,7 @@ public final class ScaleCommand implements ConnectionCommand {
 
   public boolean doScale(boolean isInverse) {
     Optional<SelectableComponent> component =
-        model.getCreatedComponentsManager().getComponent(request.getTypeToScale(),
-            request.getIdToScale());
+        model.getCreatedComponentsManager().getComponent(request.getIdToScale());
     if (component.isEmpty() || !(component.get() instanceof ScalableComponent)) {
       return false;
     }

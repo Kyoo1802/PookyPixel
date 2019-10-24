@@ -1,12 +1,16 @@
 package com.kyoo.pixel.connection.components.impl;
 
+import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.LedComponent;
 import com.kyoo.pixel.connection.components.ScalableComponent;
+import com.kyoo.pixel.utils.DrawUtils;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Optional;
+import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +36,7 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
   private Optional<Bridge> endBridge;
   @Getter
   private SelectedSide selectedSide;
-  @Getter
+
   private LinkedHashMap<Point, Led> leds;
 
   public SquarePanel(long id, Point startIdxPosition, Point endIdxPosition) {
@@ -45,6 +49,10 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
     this.selectedSide = SelectedSide.NONE;
     this.componentType = ComponentType.SQUARE_PANEL;
     createLeds();
+  }
+
+  public Collection<Led> getLeds() {
+    return leds.values();
   }
 
   @Override
@@ -88,7 +96,7 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
       for (int j = startIdxPosition.x; j <= endIdxPosition.x; j++) {
         int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x + endIdxPosition.x - j;
         Point ledPoint = new Point(tmpJ, i);
-        Led led = new Led(ledPoint, this);
+        Led led = new Led(ledPoint);
         this.leds.put(ledPoint, led);
         if (firstLed == null) {
           firstLed = led;
@@ -103,6 +111,11 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
   public Dimension getSize() {
     return new Dimension(endIdxPosition.x - startIdxPosition.x + 1,
         endIdxPosition.y - startIdxPosition.y + 1);
+  }
+
+  @Override
+  public void move(Point movement) {
+
   }
 
   @Override
@@ -121,7 +134,7 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
           led = this.leds.get(ledPoint);
           newLeds.put(led.getStartIdxPosition(), led);
         } else {
-          led = new Led(ledPoint, this);
+          led = new Led(ledPoint);
           newLeds.put(ledPoint, led);
         }
         if (tempFirst == null) {
@@ -142,5 +155,16 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
     int w = getEndIdxPosition().x - getStartIdxPosition().x + 1;
     int h = getEndIdxPosition().y - getStartIdxPosition().y + 1;
     return String.format("[%d, %d] = %d", w, h, w * h);
+  }
+
+  @Override
+  public void unSelect() {
+    selectedSide = SelectedSide.NONE;
+  }
+
+  @Override
+  public void draw(GraphicsContext gc, ConnectionProperties properties) {
+    DrawUtils.drawLedComponent(gc, properties, this);
+    DrawUtils.drawComponentSelection(gc, properties, this);
   }
 }
