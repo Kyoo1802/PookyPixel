@@ -62,23 +62,6 @@ public final class DrawUtils {
     gc.drawImage(img, 0, 0);
   }
 
-
-  public static void drawDefaultPointer(GraphicsContext gc, ConnectionProperties properties,
-      Point position) {
-    gc.setLineWidth(properties.getMouseWidth());
-    gc.setStroke(Color.web(properties.getMouseColor()));
-    gc.setLineDashes();
-    gc.strokeRect(position.x, position.y, PositionUtils.SQUARE_LENGTH + 4,
-        PositionUtils.SQUARE_LENGTH + 4);
-  }
-
-  public static void drawDriverPortPointer(GraphicsContext gc, ConnectionProperties properties,
-      Point canvasPosition) {
-    gc.setLineWidth(properties.getMouseWidth());
-    gc.setStroke(Color.web(properties.getMouseColor()));
-    gc.fillOval(canvasPosition.x, canvasPosition.y, 20, 20);
-  }
-
   public static void drawLedComponent(GraphicsContext gc, ConnectionProperties properties,
       LedComponent ledComponent) {
     Image img = componentCache.get(ledComponent, lc -> {
