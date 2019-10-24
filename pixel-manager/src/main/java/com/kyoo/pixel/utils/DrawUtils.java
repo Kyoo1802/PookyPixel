@@ -38,13 +38,13 @@ public final class DrawUtils {
       Dimension canvasDimension = PositionUtils.toCanvasDimension(size);
       BufferedImage bufferedImage =
           new BufferedImage(canvasDimension.width, canvasDimension.height,
-              BufferedImage.TYPE_INT_RGB);
+              BufferedImage.TYPE_INT_ARGB);
 
       Graphics2D g2d = (Graphics2D) bufferedImage.getGraphics();
 
       // Draw background
       g2d.setColor(java.awt.Color.decode(properties.getBackgroundColor()));
-      g2d.fillRect(0, 0, size.width, size.height);
+      g2d.fillRect(0, 0, canvasDimension.width, canvasDimension.height);
 
       // Draw dots
       g2d.setColor(java.awt.Color.decode(properties.getBackgroundDotsColor()));
