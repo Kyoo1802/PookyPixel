@@ -10,8 +10,9 @@ import lombok.extern.log4j.Log4j2;
 public final class DrawDriverPortCommand implements ConnectionCommand {
 
   public static final Dimension DEFAULT_CONNECTION_PORT_SIZE = new Dimension(2, 2);
-  private ConnectionModel model;
-  private DrawDriverPortRequest request;
+
+  private final ConnectionModel model;
+  private final DrawDriverPortRequest request;
 
   public DrawDriverPortCommand(ConnectionModel model, DrawDriverPortRequest request) {
     this.model = model;

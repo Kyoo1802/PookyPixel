@@ -11,8 +11,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class SelectCommand implements ConnectionCommand {
 
-  private ConnectionModel model;
-  private SelectCommandRequest request;
+  private final ConnectionModel model;
+  private final SelectCommandRequest request;
 
   public SelectCommand(ConnectionModel model, SelectCommandRequest request) {
     this.model = model;

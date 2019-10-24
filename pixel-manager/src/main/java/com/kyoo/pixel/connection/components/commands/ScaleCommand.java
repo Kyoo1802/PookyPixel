@@ -11,8 +11,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class ScaleCommand implements ConnectionCommand {
 
-  private ConnectionModel model;
-  private ScaleCommandRequest request;
+  private final ConnectionModel model;
+  private final ScaleCommandRequest request;
 
   public ScaleCommand(ConnectionModel model, ScaleCommandRequest request) {
     this.model = model;

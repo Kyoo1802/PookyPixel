@@ -9,8 +9,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class DrawBridgeCommand implements ConnectionCommand {
 
-  private ConnectionModel model;
-  private DrawBridgeCommandRequest request;
+  private final ConnectionModel model;
+  private final DrawBridgeCommandRequest request;
 
   public DrawBridgeCommand(ConnectionModel model, DrawBridgeCommandRequest request) {
     this.model = model;

@@ -8,8 +8,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class DrawSquarePanelCommand implements ConnectionCommand {
 
-  private ConnectionModel model;
-  private DrawSquarePanelCommandRequest request;
+  private final ConnectionModel model;
+  private final DrawSquarePanelCommandRequest request;
 
   public DrawSquarePanelCommand(ConnectionModel model, DrawSquarePanelCommandRequest request) {
     this.model = model;

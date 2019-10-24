@@ -22,15 +22,16 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class ConnectionModel {
 
+  private final TransformationAction transformationAction;
+  private final ConnectionComponentManager createdComponentsManager;
+  private final Map<Long, SelectableComponent> selectedComponent;
+  private final Map<ComponentType, Integer> createdComponentsCount;
+  private final Point pointer;
+  private final Pointer positionPointer;
+  private final Dimension dimension;
+
   private ConnectionState connectionState;
-  private TransformationAction transformationAction;
-  private ConnectionComponentManager createdComponentsManager;
   private Optional<ConnectionCommandRequest> activeCommandRequest;
-  private Map<Long, SelectableComponent> selectedComponent;
-  private Map<ComponentType, Integer> createdComponentsCount;
-  private Point pointer;
-  private Pointer positionPointer;
-  private Dimension dimension;
 
   @Inject
   public ConnectionModel() {
@@ -64,6 +65,10 @@ public final class ConnectionModel {
     int newCount = createdComponentsCount.get(componentType) + 1;
     createdComponentsCount.put(componentType, newCount);
     return newCount;
+  }
+
+  public void setActiveCommandRequest(Optional<ConnectionCommandRequest> activeCommandRequest) {
+    this.activeCommandRequest = activeCommandRequest;
   }
 
   public boolean hasActiveCommandRequest() {

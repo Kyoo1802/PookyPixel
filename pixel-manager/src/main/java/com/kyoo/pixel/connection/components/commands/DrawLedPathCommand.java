@@ -8,8 +8,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class DrawLedPathCommand implements ConnectionCommand {
 
-  private ConnectionModel model;
-  private DrawLedPathCommandRequest request;
+  private final ConnectionModel model;
+  private final DrawLedPathCommandRequest request;
 
   public DrawLedPathCommand(ConnectionModel model, DrawLedPathCommandRequest request) {
     this.model = model;
