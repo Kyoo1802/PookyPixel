@@ -52,7 +52,7 @@ public final class ConnectionViewModel {
 
   public void consumeInteractions() {
     while (hasPendingInteractions()) {
-      InteractionRequest interactionRequest = this.inputInteractions.get().peek();
+      InteractionRequest interactionRequest = inputInteractions.get().peek();
       switch (interactionRequest.type()) {
         case KEYBOARD:
           keyboardInteraction
@@ -70,7 +70,7 @@ public final class ConnectionViewModel {
           log.error("Invalid case for interaction: " + interactionRequest.type());
       }
       log.debug("Consuming input interaction: " + interactionRequest.type());
-      this.inputInteractions.get().poll();
+      inputInteractions.get().poll();
       needsRender(true);
     }
   }

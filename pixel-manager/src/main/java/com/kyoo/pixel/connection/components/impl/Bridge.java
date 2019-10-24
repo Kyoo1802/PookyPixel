@@ -43,12 +43,12 @@ public class Bridge implements SelectableComponent {
 
   @Override
   public Point getStartIdxPosition() {
-    return startComponent.getStartIdxPosition();
+    return startComponent.getEndIdxPosition();
   }
 
   @Override
   public Point getEndIdxPosition() {
-    return endComponent.getEndIdxPosition();
+    return endComponent.getStartIdxPosition();
   }
 
   @Override
