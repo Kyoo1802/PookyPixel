@@ -71,6 +71,7 @@ public final class ConnectionViewModel {
       }
       log.debug("Consuming input interaction: " + interactionRequest.type());
       this.inputInteractions.get().poll();
+      needsRender(true);
     }
   }
 

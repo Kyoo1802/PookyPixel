@@ -27,7 +27,7 @@ public final class SelectCommandHandler {
         SelectCommandRequest.builder()
             .id(model.generateId(ComponentType.SELECT))
             .commandType(ComponentType.SELECT)
-            .selectIdxPosition(model.getPointerCopy())
+            .selectIdxPosition(model.getPointer().idxPositionCopy())
             .build();
     commandManager.execute(new SelectCommand(model, request));
   }

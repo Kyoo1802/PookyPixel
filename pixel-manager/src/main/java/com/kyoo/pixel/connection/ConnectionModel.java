@@ -8,7 +8,6 @@ import com.kyoo.pixel.connection.components.Pointer;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.connection.components.impl.pointers.DefaultPointer;
-import com.kyoo.pixel.utils.PositionUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.HashMap;
@@ -26,8 +25,7 @@ public final class ConnectionModel {
   private final ConnectionComponentManager createdComponentsManager;
   private final Map<Long, SelectableComponent> selectedComponent;
   private final Map<ComponentType, Integer> createdComponentsCount;
-  private final Point pointer;
-  private final Pointer positionPointer;
+  private final Pointer pointer;
   private final Dimension dimension;
 
   private ConnectionState connectionState;
@@ -39,15 +37,14 @@ public final class ConnectionModel {
     this.selectedComponent = new HashMap<>();
     this.createdComponentsCount = new HashMap<>();
     this.createdComponentsManager = new ConnectionComponentManager();
-    this.pointer = new Point(0, 0);
-    this.positionPointer = new DefaultPointer();
+    this.pointer = new DefaultPointer();
     this.connectionState = ConnectionState.NO_ACTION;
     this.transformationAction = TransformationAction.MOVE;
     this.dimension = new Dimension(400, 400);
   }
 
   public void handlePointerMovement(Point canvasPointerPosition) {
-    pointer.setLocation(PositionUtils.toIdxPosition(canvasPointerPosition));
+    pointer.setCanvasPosition(canvasPointerPosition);
   }
 
   public void addComponent(SelectableComponent component) {
@@ -83,10 +80,6 @@ public final class ConnectionModel {
     }
   }
 
-  public Point getPointerCopy() {
-    return new Point(pointer);
-  }
-
   public void addSelectedComponent(SelectableComponent component) {
     getSelectedComponent().put(component.getId(), component);
   }
@@ -99,8 +92,8 @@ public final class ConnectionModel {
     getSelectedComponent().remove(id);
   }
 
-  public Pointer getPositionPointer() {
-    return positionPointer;
+  public Pointer getPointer() {
+    return pointer;
   }
 
   public enum ConnectionState {

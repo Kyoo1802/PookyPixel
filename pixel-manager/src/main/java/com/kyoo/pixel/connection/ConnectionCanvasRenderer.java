@@ -1,7 +1,6 @@
 package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.connection.components.Pointer;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.utils.DrawUtils;
 import java.util.Map;
@@ -45,12 +44,12 @@ public final class ConnectionCanvasRenderer {
 
   private void drawCurrentCommand(GraphicsContext gc) {
     if (model.getActiveCommandRequest().isPresent()) {
-      model.getActiveCommandRequest().get().draw(gc, properties, model.getPointer());
+      model.getActiveCommandRequest().get()
+          .draw(gc, properties, model.getPointer().idxPositionCopy());
     }
   }
 
   private void drawMousePointer(GraphicsContext gc) {
-    Pointer pointer = model.getPositionPointer();
-    pointer.draw(gc, properties);
+    model.getPointer().draw(gc, properties);
   }
 }

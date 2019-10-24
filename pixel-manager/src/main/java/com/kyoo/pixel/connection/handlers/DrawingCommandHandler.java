@@ -39,14 +39,14 @@ public final class DrawingCommandHandler {
           DrawSquarePanelCommandRequest.builder()
               .id(model.generateId(ComponentType.SQUARE_PANEL))
               .commandType(ComponentType.SQUARE_PANEL)
-              .startIdxPosition(model.getPointerCopy())
+              .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
       DrawSquarePanelCommandRequest request =
           ((DrawSquarePanelCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
-              .endIdxPosition(model.getPointerCopy())
+              .endIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       commandManager.execute(new DrawSquarePanelCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
@@ -58,7 +58,7 @@ public final class DrawingCommandHandler {
         DrawDriverPortRequest.builder()
             .id(model.generateId(ComponentType.DRIVER_PORT))
             .commandType(ComponentType.DRIVER_PORT)
-            .idxPosition(model.getPointerCopy())
+            .idxPosition(model.getPointer().idxPositionCopy())
             .build();
     commandManager.execute(new DrawDriverPortCommand(model, request));
   }
@@ -70,7 +70,8 @@ public final class DrawingCommandHandler {
               .id(model.generateId(ComponentType.LED_PATH))
               .commandType(ComponentType.LED_PATH)
               .idxPositions(
-                  Sets.newLinkedHashSet(Lists.newArrayList(new Led(model.getPointerCopy()))))
+                  Sets.newLinkedHashSet(
+                      Lists.newArrayList(new Led(model.getPointer().idxPositionCopy()))))
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else if (!hasFinished) {
@@ -80,7 +81,7 @@ public final class DrawingCommandHandler {
           request.getIdxPositions().parallelStream()
               .filter(led -> led.getStartIdxPosition().equals(model.getPointer())).findAny();
       if (ledInSamePosition.isEmpty()) {
-        request.getIdxPositions().add(new Led(model.getPointerCopy()));
+        request.getIdxPositions().add(new Led(model.getPointer().idxPositionCopy()));
       }
     } else {
       DrawLedPathCommandRequest request =
@@ -92,7 +93,8 @@ public final class DrawingCommandHandler {
 
   public void handleBridgeDrawing() {
     Optional<ConnectionComponent> component =
-        model.getCreatedComponentsManager().lookupConnectionComponent(model.getPointer());
+        model.getCreatedComponentsManager()
+            .lookupConnectionComponent(model.getPointer().getIdxPosition());
     if (component.isEmpty()) {
       return;
     }

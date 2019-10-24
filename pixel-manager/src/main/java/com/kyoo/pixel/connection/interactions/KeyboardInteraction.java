@@ -68,7 +68,7 @@ public final class KeyboardInteraction implements InputInteraction {
         }
         break;
       default:
-        log.error("Invalid action to handle: " + model.getConnectionState());
+        log.debug("Invalid Keyboard action to handle: " + model.getConnectionState());
     }
   }
 

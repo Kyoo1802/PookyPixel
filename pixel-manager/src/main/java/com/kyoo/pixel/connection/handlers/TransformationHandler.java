@@ -50,14 +50,14 @@ public final class TransformationHandler {
               .commandType(ComponentType.MOVEMENT)
               .idsToMove(model.getSelectedComponent().values().stream().map(c -> c.getId()).collect(
                   Collectors.toList()))
-              .startIdxPosition(model.getPointerCopy())
+              .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
       MovementCommandRequest request =
           ((MovementCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
-              .endIdxPosition(model.getPointerCopy())
+              .endIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       commandManager.execute(new MoveCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
@@ -77,14 +77,14 @@ public final class TransformationHandler {
               .idToScale(
                   model.getSelectedComponent().values().stream().map(c -> c.getId()).findFirst()
                       .get())
-              .startIdxPosition(model.getPointerCopy())
+              .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
       ScaleCommandRequest request =
           ((ScaleCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
-              .endIdxPosition(model.getPointerCopy())
+              .endIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       commandManager.execute(new ScaleCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());

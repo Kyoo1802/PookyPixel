@@ -3,7 +3,6 @@ package com.kyoo.pixel.connection.interactions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
 import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
 import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
 import com.kyoo.pixel.connection.handlers.TransformationHandler;
@@ -48,7 +47,6 @@ public final class PositionInteraction implements InputInteraction {
             break;
           case CLICK:
             selectCommandHandler.handleSelectAction();
-            model.setTransformationAction(TransformationAction.UNSET);
             break;
           default:
             log.debug("Event not supported for NO_ACTION: " + this);
@@ -107,7 +105,7 @@ public final class PositionInteraction implements InputInteraction {
         }
         break;
       default:
-        log.error("Invalid action to handle: " + model.getConnectionState());
+        log.error("Invalid Position action to handle: " + model.getConnectionState());
     }
   }
 
