@@ -1,3 +1,0 @@
-class Operaciones {
-  int pelotas;
-}
