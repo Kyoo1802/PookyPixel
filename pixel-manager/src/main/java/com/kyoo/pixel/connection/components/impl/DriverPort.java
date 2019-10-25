@@ -23,7 +23,7 @@ public final class DriverPort implements ConnectionComponent {
   private Point startIdxPosition;
   @Getter
   private Point endIdxPosition;
-  @Getter
+  @Getter @Setter
   private SelectedSide selectedSide;
   @Getter
   @Setter
@@ -38,17 +38,14 @@ public final class DriverPort implements ConnectionComponent {
   }
 
   @Override
-  public SelectedSide select(int x, int y) {
+  public SelectedSide hasSelection(int x, int y) {
     Dimension size = getSize();
     return
         startIdxPosition.x <= x && x <= startIdxPosition.x + size.width && startIdxPosition.y <= y
-            && y <= startIdxPosition.y + size.height ? selectSide(SelectedSide.CENTER) :
+            && y <= startIdxPosition.y + size.height ? SelectedSide.CENTER :
             SelectedSide.NONE;
   }
 
-  private SelectedSide selectSide(SelectedSide selectedSide) {
-    return this.selectedSide = selectedSide;
-  }
 
   @Override
   public Dimension getSize() {

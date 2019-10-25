@@ -22,7 +22,7 @@ public class Bridge implements SelectableComponent {
   }
 
   @Override
-  public SelectedSide select(int x, int y) {
+  public SelectedSide hasSelection(int x, int y) {
     return SelectedSide.NONE; // TODO (Kyoo): Implement bridge selection
   }
 
@@ -40,6 +40,9 @@ public class Bridge implements SelectableComponent {
   public long getId() {
     return id;
   }
+
+  @Override
+  public void setSelectedSide(SelectedSide selectedSide) {}
 
   @Override
   public Point getStartIdxPosition() {

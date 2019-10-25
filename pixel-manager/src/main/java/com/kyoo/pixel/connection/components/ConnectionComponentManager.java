@@ -16,7 +16,7 @@ public final class ConnectionComponentManager {
   private Map<ComponentType, Map<Long, SelectableComponent>> components;
 
   public ConnectionComponentManager() {
-    components = new ConcurrentHashMap<>();
+    components = new LinkedHashMap<>();
   }
 
   public synchronized void addComponent(SelectableComponent component) {
@@ -56,21 +56,10 @@ public final class ConnectionComponentManager {
     return result;
   }
 
-  public Optional<SelectableComponent> lookupSelectableComponent(Point point) {
-    for (Map<Long, SelectableComponent> ck : components.values()) {
-      for (SelectableComponent c : ck.values()) {
-        if (c.select(point.x, point.y) != SelectedSide.NONE) {
-          return Optional.of(c);
-        }
-      }
-    }
-    return Optional.empty();
-  }
-
   public Optional<ConnectionComponent> lookupConnectionComponent(Point point) {
     for (Map<Long, SelectableComponent> ck : components.values()) {
       for (SelectableComponent c : ck.values()) {
-        if (c instanceof ConnectionComponent && c.select(point.x, point.y) != SelectedSide.NONE) {
+        if (c instanceof ConnectionComponent && c.hasSelection(point.x, point.y) != SelectedSide.NONE) {
           return Optional.of((ConnectionComponent) c);
         }
       }

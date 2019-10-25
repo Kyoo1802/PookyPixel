@@ -24,7 +24,7 @@ public final class DrawBridgeCommand implements ConnectionCommand {
     request.getStartComponent().setStartBridge(Optional.of(bridge));
     request.getEndComponent().setEndBridge(Optional.of(bridge));
     model.addComponent(bridge);
-    model.addSelectedComponent(bridge);
+    model.addSelectedComponents(bridge);
     log.debug("Draw Connection Port triggered %s", request);
     return true;
   }

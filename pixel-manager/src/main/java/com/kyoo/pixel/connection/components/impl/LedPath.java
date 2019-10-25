@@ -63,9 +63,9 @@ public final class LedPath implements LedComponent {
   }
 
   @Override
-  public SelectedSide select(int x, int y) {
+  public SelectedSide hasSelection(int x, int y) {
     for (Led led : leds) {
-      if (led.select(x, y) != SelectedSide.NONE) {
+      if (led.hasSelection(x, y) != SelectedSide.NONE) {
         return SelectedSide.CENTER;
       }
     }

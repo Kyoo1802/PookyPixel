@@ -7,13 +7,14 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
+import lombok.Setter;
 
 public final class Led implements SelectableComponent {
 
   private static final Dimension LED_DIMENSION = new Dimension(1, 1);
   @Getter
   private final ComponentType componentType;
-  @Getter
+  @Getter @Setter
   private SelectedSide selectedSide;
   private Point position;
 
@@ -29,13 +30,8 @@ public final class Led implements SelectableComponent {
   }
 
   @Override
-  public SelectedSide select(int x, int y) {
-    return position.x == x && position.y == y ? setSelectedSide(SelectedSide.CENTER) :
-        setSelectedSide(SelectedSide.NONE);
-  }
-
-  private SelectedSide setSelectedSide(SelectedSide selectedSide) {
-    return this.selectedSide = selectedSide;
+  public SelectedSide hasSelection(int x, int y) {
+    return position.x == x && position.y == y ? SelectedSide.CENTER : SelectedSide.NONE;
   }
 
   @Override

@@ -9,7 +9,9 @@ public interface SelectableComponent {
 
   long getId();
 
-  SelectedSide select(int x, int y);
+  SelectedSide hasSelection(int x, int y);
+
+  void setSelectedSide(SelectedSide selectedSide);
 
   Point getStartIdxPosition();
 

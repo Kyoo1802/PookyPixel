@@ -20,7 +20,7 @@ public final class DrawLedPathCommand implements ConnectionCommand {
   public boolean execute() {
     LedPath ledPath = new LedPath(request.getId(), request.getIdxPositions());
     model.addComponent(ledPath);
-    model.addSelectedComponent(ledPath);
+    model.addSelectedComponents(ledPath);
     log.debug("Create Led Path [%s, %d]", request.getCommandType(), request.getId());
     return true;
   }

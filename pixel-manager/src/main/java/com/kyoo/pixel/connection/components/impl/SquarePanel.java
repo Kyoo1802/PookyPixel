@@ -32,7 +32,7 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
   private Optional<Bridge> startBridge;
   @Setter @Getter
   private Optional<Bridge> endBridge;
-  @Getter
+  @Getter @Setter
   private SelectedSide selectedSide;
 
   private LinkedHashMap<Point, Led> leds;
@@ -49,47 +49,7 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
     createLeds();
   }
 
-  public Collection<Led> getLeds() {
-    return leds.values();
-  }
-
-  @Override
-  public SelectedSide select(int x, int y) {
-    if (startIdxPosition.x <= x && x <= endIdxPosition.x && startIdxPosition.y <= y
-        && y <= endIdxPosition.y) {
-      if (startIdxPosition.x <= x && x <= startIdxPosition.x) {
-        if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
-          return setSelectedSide(SelectedSide.UPPER_LEFT);
-        } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
-          return setSelectedSide(SelectedSide.BOTTOM_LEFT);
-        } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
-          return setSelectedSide(SelectedSide.LEFT);
-        }
-      } else if (endIdxPosition.x <= x && x <= endIdxPosition.x) {
-        if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
-          return setSelectedSide(SelectedSide.UPPER_RIGHT);
-        } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
-          return setSelectedSide(SelectedSide.BOTTOM_RIGHT);
-        } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
-          return setSelectedSide(SelectedSide.RIGHT);
-        }
-      } else if (startIdxPosition.x <= x && x <= endIdxPosition.x) {
-        if (startIdxPosition.y <= y && y == startIdxPosition.y) {
-          return setSelectedSide(SelectedSide.UPPER);
-        } else if (endIdxPosition.y <= y && y == endIdxPosition.y) {
-          return setSelectedSide(SelectedSide.BOTTOM);
-        }
-      }
-      return setSelectedSide(SelectedSide.CENTER);
-    }
-    return setSelectedSide(SelectedSide.NONE);
-  }
-
-  private SelectedSide setSelectedSide(SelectedSide selectedSide) {
-    return this.selectedSide = selectedSide;
-  }
-
-  public void createLeds() {
+  private void createLeds() {
     for (int i = 0; i <= endIdxPosition.y-startIdxPosition.y; i++) {
       for (int j = 0; j <= endIdxPosition.x-startIdxPosition.x; j++) {
         int tmpJ = i % 2 == 0 ? j : endIdxPosition.x-startIdxPosition.x - j;
@@ -102,6 +62,43 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
         lastLed = led;
       }
     }
+  }
+
+
+  public Collection<Led> getLeds() {
+    return leds.values();
+  }
+
+  @Override
+  public SelectedSide hasSelection(int x, int y) {
+    if (startIdxPosition.x <= x && x <= endIdxPosition.x && startIdxPosition.y <= y
+        && y <= endIdxPosition.y) {
+      if (startIdxPosition.x <= x && x <= startIdxPosition.x) {
+        if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
+          return SelectedSide.UPPER_LEFT;
+        } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return SelectedSide.BOTTOM_LEFT;
+        } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return SelectedSide.LEFT;
+        }
+      } else if (endIdxPosition.x <= x && x <= endIdxPosition.x) {
+        if (startIdxPosition.y <= y && y <= startIdxPosition.y) {
+          return SelectedSide.UPPER_RIGHT;
+        } else if (endIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return SelectedSide.BOTTOM_RIGHT;
+        } else if (startIdxPosition.y <= y && y <= endIdxPosition.y) {
+          return SelectedSide.RIGHT;
+        }
+      } else if (startIdxPosition.x <= x && x <= endIdxPosition.x) {
+        if (startIdxPosition.y <= y && y == startIdxPosition.y) {
+          return SelectedSide.UPPER;
+        } else if (endIdxPosition.y <= y && y == endIdxPosition.y) {
+          return SelectedSide.BOTTOM;
+        }
+      }
+      return SelectedSide.CENTER;
+    }
+    return SelectedSide.NONE;
   }
 
   @Override

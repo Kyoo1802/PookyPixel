@@ -3,12 +3,16 @@ package com.kyoo.pixel.connection.handlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
+import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.SelectableComponent;
+import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
 import com.kyoo.pixel.connection.components.commands.MoveCommand;
 import com.kyoo.pixel.connection.components.commands.ScaleCommand;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
@@ -27,9 +31,10 @@ public final class TransformationHandler {
   }
 
   public void handleTransformation() {
-    if (model.getSelectedComponent().isEmpty()) {
+    if (model.getSelectedComponents().isEmpty()) {
       return;
     }
+    model.setTransformationAction(computeTransformation());
     switch (model.getTransformationAction()) {
       case MOVE:
         handleMovement();
@@ -37,9 +42,22 @@ public final class TransformationHandler {
       case SCALE:
         handleScale();
         break;
+      case UNSET:
+        break;
       default:
         log.error("Invalid transformation: " + model.getTransformationAction());
     }
+  }
+
+  private TransformationAction computeTransformation() {
+    for(Entry<Long, SelectableComponent> kC : model.getSelectedComponents().entrySet()){
+      if(kC.getValue().getSelectedSide() == SelectedSide.CENTER){
+        return TransformationAction.MOVE;
+      } else if( kC.getValue().getSelectedSide() != SelectedSide.NONE && model.getSelectedComponents().size()==1) {
+        return TransformationAction.SCALE;
+      }
+    }
+    return TransformationAction.UNSET;
   }
 
   private void handleMovement() {
@@ -48,7 +66,7 @@ public final class TransformationHandler {
           MovementCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
               .commandType(ComponentType.MOVEMENT)
-              .idsToMove(model.getSelectedComponent().values().stream().map(c -> c.getId()).collect(
+              .idsToMove(model.getSelectedComponents().values().stream().map(c -> c.getId()).collect(
                   Collectors.toList()))
               .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();
@@ -66,7 +84,7 @@ public final class TransformationHandler {
 
   private void handleScale() {
     // We don't support more than one element to scale
-    if (model.getSelectedComponent().size() != 1) {
+    if (model.getSelectedComponents().size() != 1) {
       return;
     }
     if (!model.hasActiveCommandRequest()) {
@@ -75,7 +93,7 @@ public final class TransformationHandler {
               .id(model.generateId(ComponentType.SCALE))
               .commandType(ComponentType.SCALE)
               .idToScale(
-                  model.getSelectedComponent().values().stream().map(c -> c.getId()).findFirst()
+                  model.getSelectedComponents().values().stream().map(c -> c.getId()).findFirst()
                       .get())
               .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();

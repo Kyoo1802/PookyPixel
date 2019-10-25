@@ -24,32 +24,44 @@ public final class SelectCommand implements ConnectionCommand {
     for (Map<Long, SelectableComponent> components :
         model.getCreatedComponentsManager().getComponents().values()) {
       for (SelectableComponent component : components.values()) {
-        SelectedSide selectedSide = component
-            .select(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
-        if (selectedSide != SelectedSide.NONE) {
-          model.addSelectedComponent(component);
-          log.debug("Selection triggered %s", request.getSelectIdxPosition());
-          return true;
+        SelectedSide selectionSide = component
+            .hasSelection(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
+
+        if (selectionSide != SelectedSide.NONE) {
+          log.debug("Selection triggered.");
+          if(component.getSelectedSide() != SelectedSide.NONE){
+            log.debug("Skip selection triggered.");
+            return false;
+          } else if (model.getSelectedComponents().isEmpty() || !request.isMultiSelection()){
+            model.singleSelection(component, selectionSide);
+            log.debug("Single selection triggered.");
+            return true;
+          } else {
+            model.multiSelection(component, selectionSide);
+            log.debug("Multi selection triggered.");
+            return true;
+          }
         }
+
       }
     }
-
-    log.debug("No selection triggered %s", request.getSelectIdxPosition());
-    unSelectComponent();
+    log.debug("No selection triggered.");
     model.setActiveCommandRequest(Optional.empty());
     return false;
   }
 
   @Override
   public void undo() {
-    unSelectComponent();
-  }
-
-  private void unSelectComponent() {
-    Optional<SelectableComponent> component = model.getSelectedComponent(request.getId());
-    if (component.isPresent()) {
-      component.get().unSelect();
-      model.removeSelectedComponent(component.get().getId());
+    for (Map<Long, SelectableComponent> components :
+        model.getCreatedComponentsManager().getComponents().values()) {
+      for (SelectableComponent component : components.values()) {
+        SelectedSide selectionSide = component
+            .hasSelection(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
+        if (selectionSide != SelectedSide.NONE) {
+          model.unSelect(component);
+          return;
+        }
+      }
     }
   }
 }

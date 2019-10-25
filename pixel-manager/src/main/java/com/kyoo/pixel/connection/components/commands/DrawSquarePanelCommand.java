@@ -24,7 +24,7 @@ public final class DrawSquarePanelCommand implements ConnectionCommand {
     SquarePanel squarePanel = new SquarePanel(request.getId(), request.getStartIdxPosition(),
         request.getEndIdxPosition());
     model.addComponent(squarePanel);
-    model.addSelectedComponent(squarePanel);
+    model.addSelectedComponents(squarePanel);
     log.debug("Draw Square Panel triggered %s-%s", request.getStartIdxPosition(),
         request.getEndIdxPosition());
     return true;

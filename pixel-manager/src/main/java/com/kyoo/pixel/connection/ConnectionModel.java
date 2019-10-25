@@ -6,11 +6,13 @@ import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponentManager;
 import com.kyoo.pixel.connection.components.Pointer;
 import com.kyoo.pixel.connection.components.SelectableComponent;
+import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest;
 import com.kyoo.pixel.connection.components.impl.pointers.DefaultPointer;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import lombok.Data;
@@ -21,25 +23,25 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class ConnectionModel {
 
-  private final TransformationAction transformationAction;
   private final ConnectionComponentManager createdComponentsManager;
-  private final Map<Long, SelectableComponent> selectedComponent;
+  private final LinkedHashMap<Long, SelectableComponent> selectedComponents;
   private final Map<ComponentType, Integer> createdComponentsCount;
   private final Pointer pointer;
   private final Dimension dimension;
 
   private ConnectionState connectionState;
   private Optional<ConnectionCommandRequest> activeCommandRequest;
+  private  TransformationAction transformationAction;
 
   @Inject
   public ConnectionModel() {
     this.activeCommandRequest = Optional.empty();
-    this.selectedComponent = new HashMap<>();
+    this.selectedComponents = new LinkedHashMap<>();
     this.createdComponentsCount = new HashMap<>();
     this.createdComponentsManager = new ConnectionComponentManager();
     this.pointer = new DefaultPointer();
     this.connectionState = ConnectionState.NO_ACTION;
-    this.transformationAction = TransformationAction.MOVE;
+    this.transformationAction = TransformationAction.UNSET;
     this.dimension = new Dimension(400, 400);
   }
 
@@ -80,20 +82,29 @@ public final class ConnectionModel {
     }
   }
 
-  public void addSelectedComponent(SelectableComponent component) {
-    getSelectedComponent().put(component.getId(), component);
+  public void addSelectedComponents(SelectableComponent component) {
+    getSelectedComponents().put(component.getId(), component);
   }
 
-  public Optional<SelectableComponent> getSelectedComponent(long id) {
-    return Optional.ofNullable(getSelectedComponent().get(id));
-  }
-
-  public void removeSelectedComponent(long id) {
-    getSelectedComponent().remove(id);
-  }
 
   public Pointer getPointer() {
     return pointer;
+  }
+
+  public void multiSelection(SelectableComponent component, SelectedSide selectionSide) {
+    component.setSelectedSide(selectionSide);
+    addSelectedComponents(component);
+  }
+
+  public void singleSelection(SelectableComponent component, SelectedSide selectionSide) {
+    selectedComponents.clear();
+    component.setSelectedSide(selectionSide);
+    addSelectedComponents(component);
+  }
+
+  public void unSelect(SelectableComponent component) {
+    selectedComponents.remove(component.getId());
+    component.unSelect();
   }
 
   public enum ConnectionState {
