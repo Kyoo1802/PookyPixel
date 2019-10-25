@@ -64,44 +64,39 @@ public final class DrawUtils {
 
   public static void drawLedComponent(GraphicsContext gc, ConnectionProperties properties,
       LedComponent ledComponent) {
-    Image img = componentCache.get(ledComponent, lc -> {
-      Dimension ledComponentSize = PositionUtils.toCanvasDimension(lc.getSize());
+    Image img = componentCache.get(ledComponent, component -> {
+      Dimension ledComponentSize = PositionUtils.toCanvasDimension(component.getSize());
       BufferedImage bufferedImage = new BufferedImage(ledComponentSize.width,
           ledComponentSize.height, BufferedImage.TYPE_4BYTE_ABGR);
       Graphics2D g2d = (Graphics2D) bufferedImage.getGraphics();
 
       // Draw Leds
-      int[] xPoint = new int[lc.getLeds().size()];
-      int[] yPoint = new int[lc.getLeds().size()];
+      int[] pathXPoint = new int[component.getLeds().size()];
+      int[] pathYPoint = new int[component.getLeds().size()];
       int idx = 0;
-      for (Led led : lc.getLeds()) {
-        Point ledCanvasPosition = PositionUtils
-            .toCanvasPosition(led.getStartIdxPosition().y - lc.getStartIdxPosition().y,
-                led.getStartIdxPosition().x - lc.getStartIdxPosition().x);
+      for (Led led : component.getLeds()) {
         String hexColor;
         if (idx == 0) {
           hexColor = properties.getLedStartColor();
-        } else if (idx == lc.getLeds().size() - 1) {
+        } else if (idx == component.getLeds().size() - 1) {
           hexColor = properties.getLedEndColor();
         } else {
           hexColor = properties.getLedOffColor();
         }
-        Point ledPosition = new Point(ledCanvasPosition.x - PositionUtils.HALF_SQUARE_LENGTH,
-            ledCanvasPosition.y - PositionUtils.HALF_SQUARE_LENGTH);
-
-        xPoint[idx] = ledPosition.x + PositionUtils.HALF_SQUARE_LENGTH;
-        yPoint[idx] = ledPosition.y + PositionUtils.HALF_SQUARE_LENGTH;
+        Point ledCanvasPosition = PositionUtils.toCanvasPosition(led.getStartIdxPosition());
+        pathXPoint[idx] = ledCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH;
+        pathYPoint[idx] = ledCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH;
 
         // Draw led
         g2d.setColor(java.awt.Color.decode(hexColor));
-        g2d.fillOval(ledPosition.x, ledPosition.y, PositionUtils.SQUARE_LENGTH,
+        g2d.fillOval(ledCanvasPosition.x, ledCanvasPosition.y, PositionUtils.SQUARE_LENGTH,
             PositionUtils.SQUARE_LENGTH);
         idx++;
       }
 
       // Draw Connection Path
       g2d.setColor(java.awt.Color.decode(properties.getLedConnectionPathColor()));
-      g2d.drawPolyline(xPoint, yPoint, xPoint.length);
+      g2d.drawPolyline(pathXPoint, pathYPoint, pathXPoint.length);
       g2d.dispose();
 
       return SwingFXUtils.toFXImage(bufferedImage, null);

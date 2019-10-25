@@ -17,22 +17,20 @@ import lombok.Setter;
 public final class SquarePanel implements LedComponent, ScalableComponent {
 
   @Getter
+  private long id;
+  @Getter
   private final ComponentType componentType;
   @Getter
   private Point startIdxPosition;
   @Getter
   private Point endIdxPosition;
   @Getter
-  private long id;
-  @Getter
   private Led firstLed;
   @Getter
   private Led lastLed;
-  @Setter
-  @Getter
+  @Setter @Getter
   private Optional<Bridge> startBridge;
-  @Setter
-  @Getter
+  @Setter @Getter
   private Optional<Bridge> endBridge;
   @Getter
   private SelectedSide selectedSide;
@@ -92,9 +90,9 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
   }
 
   public void createLeds() {
-    for (int i = startIdxPosition.y, pair = 0; i <= endIdxPosition.y; i++, pair++) {
-      for (int j = startIdxPosition.x; j <= endIdxPosition.x; j++) {
-        int tmpJ = pair % 2 == 0 ? j : startIdxPosition.x + endIdxPosition.x - j;
+    for (int i = 0; i <= endIdxPosition.y-startIdxPosition.y; i++) {
+      for (int j = 0; j <= endIdxPosition.x-startIdxPosition.x; j++) {
+        int tmpJ = i % 2 == 0 ? j : endIdxPosition.x-startIdxPosition.x - j;
         Point ledPoint = new Point(tmpJ, i);
         Led led = new Led(ledPoint);
         this.leds.put(ledPoint, led);
@@ -102,7 +100,6 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
           firstLed = led;
         }
         lastLed = led;
-
       }
     }
   }
@@ -115,7 +112,8 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
 
   @Override
   public void move(Point movement) {
-
+    startIdxPosition.setLocation(startIdxPosition.x+movement.x, startIdxPosition.x+movement.y);
+    endIdxPosition.setLocation(endIdxPosition.x+movement.x, endIdxPosition.x+movement.y);
   }
 
   @Override
