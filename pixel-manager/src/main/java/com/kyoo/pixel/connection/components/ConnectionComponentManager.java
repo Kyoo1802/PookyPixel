@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 
 @Getter
@@ -59,7 +58,8 @@ public final class ConnectionComponentManager {
   public Optional<ConnectionComponent> lookupConnectionComponent(Point point) {
     for (Map<Long, SelectableComponent> ck : components.values()) {
       for (SelectableComponent c : ck.values()) {
-        if (c instanceof ConnectionComponent && c.hasSelection(point.x, point.y) != SelectedSide.NONE) {
+        if (c instanceof ConnectionComponent
+            && c.hasSelection(point.x, point.y) != SelectedSide.NONE) {
           return Optional.of((ConnectionComponent) c);
         }
       }

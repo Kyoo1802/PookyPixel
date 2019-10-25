@@ -14,7 +14,8 @@ public final class Led implements SelectableComponent {
   private static final Dimension LED_DIMENSION = new Dimension(1, 1);
   @Getter
   private final ComponentType componentType;
-  @Getter @Setter
+  @Getter
+  @Setter
   private SelectedSide selectedSide;
   private Point position;
 

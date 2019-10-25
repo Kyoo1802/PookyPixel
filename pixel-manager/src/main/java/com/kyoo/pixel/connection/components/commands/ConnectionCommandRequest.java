@@ -11,7 +11,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -75,7 +74,8 @@ public abstract class ConnectionCommandRequest {
     private boolean multiSelection;
 
     @Override
-    public void draw(GraphicsContext gc, ConnectionProperties properties, Point pointer) {}
+    public void draw(GraphicsContext gc, ConnectionProperties properties, Point pointer) {
+    }
   }
 
   @Getter

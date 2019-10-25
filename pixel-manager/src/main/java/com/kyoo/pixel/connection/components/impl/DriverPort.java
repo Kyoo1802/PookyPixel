@@ -23,7 +23,8 @@ public final class DriverPort implements ConnectionComponent {
   private Point startIdxPosition;
   @Getter
   private Point endIdxPosition;
-  @Getter @Setter
+  @Getter
+  @Setter
   private SelectedSide selectedSide;
   @Getter
   @Setter

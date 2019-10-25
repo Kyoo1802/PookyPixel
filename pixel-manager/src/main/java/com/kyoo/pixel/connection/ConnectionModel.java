@@ -31,7 +31,7 @@ public final class ConnectionModel {
 
   private ConnectionState connectionState;
   private Optional<ConnectionCommandRequest> activeCommandRequest;
-  private  TransformationAction transformationAction;
+  private TransformationAction transformationAction;
 
   @Inject
   public ConnectionModel() {

@@ -50,10 +50,11 @@ public final class TransformationHandler {
   }
 
   private TransformationAction computeTransformation() {
-    for(Entry<Long, SelectableComponent> kC : model.getSelectedComponents().entrySet()){
-      if(kC.getValue().getSelectedSide() == SelectedSide.CENTER){
+    for (Entry<Long, SelectableComponent> kC : model.getSelectedComponents().entrySet()) {
+      if (kC.getValue().getSelectedSide() == SelectedSide.CENTER) {
         return TransformationAction.MOVE;
-      } else if( kC.getValue().getSelectedSide() != SelectedSide.NONE && model.getSelectedComponents().size()==1) {
+      } else if (kC.getValue().getSelectedSide() != SelectedSide.NONE
+          && model.getSelectedComponents().size() == 1) {
         return TransformationAction.SCALE;
       }
     }
@@ -66,8 +67,9 @@ public final class TransformationHandler {
           MovementCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
               .commandType(ComponentType.MOVEMENT)
-              .idsToMove(model.getSelectedComponents().values().stream().map(c -> c.getId()).collect(
-                  Collectors.toList()))
+              .idsToMove(
+                  model.getSelectedComponents().values().stream().map(c -> c.getId()).collect(
+                      Collectors.toList()))
               .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       model.setActiveCommandRequest(Optional.of(request));

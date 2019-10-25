@@ -29,10 +29,10 @@ public final class SelectCommand implements ConnectionCommand {
 
         if (selectionSide != SelectedSide.NONE) {
           log.debug("Selection triggered.");
-          if(component.getSelectedSide() != SelectedSide.NONE){
+          if (component.getSelectedSide() != SelectedSide.NONE) {
             log.debug("Skip selection triggered.");
             return false;
-          } else if (model.getSelectedComponents().isEmpty() || !request.isMultiSelection()){
+          } else if (model.getSelectedComponents().isEmpty() || !request.isMultiSelection()) {
             model.singleSelection(component, selectionSide);
             log.debug("Single selection triggered.");
             return true;

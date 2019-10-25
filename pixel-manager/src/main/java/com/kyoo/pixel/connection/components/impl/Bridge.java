@@ -32,6 +32,10 @@ public class Bridge implements SelectableComponent {
   }
 
   @Override
+  public void setSelectedSide(SelectedSide selectedSide) {
+  }
+
+  @Override
   public void move(Point movement) {
 
   }
@@ -40,9 +44,6 @@ public class Bridge implements SelectableComponent {
   public long getId() {
     return id;
   }
-
-  @Override
-  public void setSelectedSide(SelectedSide selectedSide) {}
 
   @Override
   public Point getStartIdxPosition() {

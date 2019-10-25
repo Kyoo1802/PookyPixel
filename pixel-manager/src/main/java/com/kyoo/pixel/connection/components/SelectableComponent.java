@@ -11,8 +11,6 @@ public interface SelectableComponent {
 
   SelectedSide hasSelection(int x, int y);
 
-  void setSelectedSide(SelectedSide selectedSide);
-
   Point getStartIdxPosition();
 
   Point getEndIdxPosition();
@@ -22,6 +20,8 @@ public interface SelectableComponent {
   ComponentType getComponentType();
 
   SelectedSide getSelectedSide();
+
+  void setSelectedSide(SelectedSide selectedSide);
 
   void move(Point movement);
 
