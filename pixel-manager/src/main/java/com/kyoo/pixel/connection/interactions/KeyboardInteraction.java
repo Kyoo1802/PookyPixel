@@ -3,8 +3,8 @@ package com.kyoo.pixel.connection.interactions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.handlers.CreateComponentHandler;
 import com.kyoo.pixel.connection.interactions.KeyboardInteractionRequest.KeyboardState;
+import com.kyoo.pixel.connection.interactions.handlers.CreateComponentHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

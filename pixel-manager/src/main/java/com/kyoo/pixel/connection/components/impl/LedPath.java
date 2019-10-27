@@ -40,19 +40,23 @@ public final class LedPath implements LedComponent {
   @Getter
   private LinkedHashSet<Led> leds;
 
-  public LedPath(long id, Collection<Led> ledsInput) {
+  public LedPath(long id, Collection<Point> ledPositions) {
     this.id = id;
     this.leds = new LinkedHashSet<>();
     this.componentType = ComponentType.LED_PATH;
     this.startIdxPosition = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
     this.endIdxPosition = new Point(0, 0);
-    for (Led led : ledsInput) {
-      Point p = led.getStartIdxPosition();
+    this.previousComponent = Optional.empty();
+    this.nextComponent = Optional.empty();
+    for (Point p : ledPositions) {
       startIdxPosition.x = Math.min(p.x, startIdxPosition.x);
       startIdxPosition.y = Math.min(p.y, startIdxPosition.y);
       endIdxPosition.x = Math.max(p.x, endIdxPosition.x);
       endIdxPosition.y = Math.max(p.y, endIdxPosition.y);
-      Led newLed = new Led(p);
+    }
+    for (Point p : ledPositions) {
+      Point relativeP = new Point(p.x - startIdxPosition.x, p.y - startIdxPosition.y);
+      Led newLed = new Led(relativeP);
       if (firstLed == null) {
         firstLed = newLed;
       }
@@ -64,7 +68,7 @@ public final class LedPath implements LedComponent {
   @Override
   public SelectedSide hasSelection(int x, int y) {
     for (Led led : leds) {
-      if (led.hasSelection(x, y) != SelectedSide.NONE) {
+      if (led.hasSelection(x - startIdxPosition.x, y - startIdxPosition.y) != SelectedSide.NONE) {
         return SelectedSide.CENTER;
       }
     }

@@ -3,11 +3,11 @@ package com.kyoo.pixel.connection.interactions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.handlers.CreateComponentHandler;
-import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
-import com.kyoo.pixel.connection.handlers.TransformationHandler;
 import com.kyoo.pixel.connection.interactions.PositionInteractionRequest.PositionButtonSide;
 import com.kyoo.pixel.connection.interactions.PositionInteractionRequest.PositionState;
+import com.kyoo.pixel.connection.interactions.handlers.CreateComponentHandler;
+import com.kyoo.pixel.connection.interactions.handlers.SelectCommandHandler;
+import com.kyoo.pixel.connection.interactions.handlers.TransformationHandler;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

@@ -1,4 +1,4 @@
-package com.kyoo.pixel.connection.handlers;
+package com.kyoo.pixel.connection.interactions.handlers;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

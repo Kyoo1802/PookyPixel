@@ -18,8 +18,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.Optional;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -113,56 +111,6 @@ public final class DrawComponentUtils {
     Dimension canvasDimension = PositionUtils.toCanvasDimension(port.getSize());
     gc.setFill(Color.web(properties.getDriverPortColor()));
     gc.fillOval(canvasPosition.x, canvasPosition.y, canvasDimension.width, canvasDimension.height);
-  }
-
-  public static void drawLedPath(GraphicsContext gc, ConnectionProperties properties,
-      Collection<Led> ledPath, Optional<Point> pointer) {
-    Point minPoint = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    Point maxPoint = new Point(0, 0);
-
-    gc.setLineWidth(1);
-    gc.setLineDashes();
-    gc.beginPath();
-    int i = 0;
-
-    // Draw Leds
-    for (Led led : ledPath) {
-      Point p = led.getStartIdxPosition();
-      Point startPosition = PositionUtils.toCanvasPosition(p.y, p.x);
-      minPoint.x = Math.min(minPoint.x, startPosition.x);
-      minPoint.y = Math.min(minPoint.y, startPosition.y);
-      maxPoint.x = Math.max(maxPoint.x, startPosition.x);
-      maxPoint.y = Math.max(maxPoint.y, startPosition.y);
-      if (i == 0) {
-        gc.moveTo(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
-            startPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
-        DrawUtils.drawLed(gc, properties.getLedStartColor(), startPosition);
-      } else {
-        gc.lineTo(startPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
-            startPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
-        DrawUtils.drawLed(gc, properties.getLedOffColor(), startPosition);
-      }
-      i++;
-    }
-    if (pointer.isPresent()) {
-      Point canvasPosition = PositionUtils.toCanvasPosition(pointer.get());
-      gc.lineTo(canvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH,
-          canvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH);
-    }
-    gc.setStroke(Color.web(properties.getLedConnectionPathColor()));
-    gc.stroke();
-
-    if (pointer.isPresent()) {
-      // Draw component preview
-      Dimension size = new Dimension(
-          maxPoint.x - minPoint.x + PositionUtils.SQUARE_LENGTH,
-          maxPoint.y - minPoint.y + PositionUtils.SQUARE_LENGTH);
-      drawSelectionRect(gc, properties.getSelectColor(), minPoint, size);
-
-      // Draw component info
-      String sizeText = String.format("[%d]", ledPath.size());
-      drawText(gc, properties.getSelectColor(), maxPoint, sizeText);
-    }
   }
 
   public static void drawBridge(GraphicsContext gc, ConnectionProperties properties,

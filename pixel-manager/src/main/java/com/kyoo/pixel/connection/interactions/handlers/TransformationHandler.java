@@ -1,4 +1,4 @@
-package com.kyoo.pixel.connection.handlers;
+package com.kyoo.pixel.connection.interactions.handlers;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -9,7 +9,7 @@ import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
 import com.kyoo.pixel.connection.components.commands.MoveComponentCommand;
-import com.kyoo.pixel.connection.components.commands.MoveComponentCommand.MovementCommandRequest;
+import com.kyoo.pixel.connection.components.commands.MoveComponentCommand.MoveCommandRequest;
 import com.kyoo.pixel.connection.components.commands.ScaleComponentCommand;
 import com.kyoo.pixel.connection.components.commands.ScaleComponentCommand.ScaleCommandRequest;
 import java.util.Map.Entry;
@@ -63,8 +63,8 @@ public final class TransformationHandler {
 
   private void handleMovement() {
     if (!model.hasActiveCommandRequest()) {
-      MovementCommandRequest request =
-          MovementCommandRequest.builder()
+      MoveCommandRequest request =
+          MoveCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
               .commandType(ComponentType.MOVEMENT)
               .idsToMove(
@@ -74,8 +74,8 @@ public final class TransformationHandler {
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
-      MovementCommandRequest request =
-          ((MovementCommandRequest) model.getActiveCommandRequest().get())
+      MoveCommandRequest request =
+          ((MoveCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
               .endIdxPosition(model.getPointer().idxPositionCopy())
               .build();

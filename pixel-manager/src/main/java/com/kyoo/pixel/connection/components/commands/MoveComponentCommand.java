@@ -17,9 +17,9 @@ import lombok.extern.log4j.Log4j2;
 public final class MoveComponentCommand implements ConnectionCommand {
 
   private final ConnectionModel model;
-  private final MovementCommandRequest request;
+  private final MoveCommandRequest request;
 
-  public MoveComponentCommand(ConnectionModel model, MovementCommandRequest request) {
+  public MoveComponentCommand(ConnectionModel model, MoveCommandRequest request) {
     this.model = model;
     this.request = request;
   }
@@ -64,7 +64,7 @@ public final class MoveComponentCommand implements ConnectionCommand {
   @Getter
   @ToString
   @Builder(toBuilder = true)
-  public static class MovementCommandRequest extends ConnectionCommandRequest {
+  public static class MoveCommandRequest extends ConnectionCommandRequest {
 
     private long id;
     private ComponentType commandType;
@@ -74,7 +74,7 @@ public final class MoveComponentCommand implements ConnectionCommand {
 
     @Override
     public void draw(GraphicsContext gc, ConnectionProperties properties, Point pointer) {
-      DrawCommandUtils.drawMovementCommand(gc, properties, this, pointer);
+      DrawCommandUtils.drawMoveCommand(gc, properties, this, pointer);
     }
   }
 }

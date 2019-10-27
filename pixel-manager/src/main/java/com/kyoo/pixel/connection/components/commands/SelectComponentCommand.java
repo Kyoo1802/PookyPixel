@@ -28,11 +28,15 @@ public final class SelectComponentCommand implements ConnectionCommand {
   public boolean execute() {
     for (Map<Long, SelectableComponent> components :
         model.getCreatedComponentsManager().getComponents().values()) {
+      System.out.println();
       for (SelectableComponent component : components.values()) {
         SelectedSide selectionSide = component
             .hasSelection(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
 
-        if (selectionSide != SelectedSide.NONE) {
+        if (selectionSide == SelectedSide.NONE) {
+          model.getSelectedComponents().remove(component.getId());
+          component.unSelect();
+        } else {
           log.debug("Selection triggered.");
           if (component.getSelectedSide() != SelectedSide.NONE) {
             log.debug("Skip selection triggered.");
@@ -47,10 +51,10 @@ public final class SelectComponentCommand implements ConnectionCommand {
             return true;
           }
         }
-
       }
     }
     log.debug("No selection triggered.");
+    model.getSelectedComponents().clear();
     model.setActiveCommandRequest(Optional.empty());
     return false;
   }

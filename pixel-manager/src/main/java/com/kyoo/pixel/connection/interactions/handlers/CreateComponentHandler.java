@@ -1,4 +1,4 @@
-package com.kyoo.pixel.connection.handlers;
+package com.kyoo.pixel.connection.interactions.handlers;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -16,7 +16,7 @@ import com.kyoo.pixel.connection.components.commands.CreateLedPathCommand;
 import com.kyoo.pixel.connection.components.commands.CreateLedPathCommand.CreateLedPathCommandRequest;
 import com.kyoo.pixel.connection.components.commands.CreateSquarePanelCommand;
 import com.kyoo.pixel.connection.components.commands.CreateSquarePanelCommand.CreateSquarePanelCommandRequest;
-import com.kyoo.pixel.connection.components.impl.Led;
+import java.awt.Point;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
@@ -64,6 +64,8 @@ public final class CreateComponentHandler {
   }
 
   public void createLedPath(boolean hasFinished) {
+    Point pointerPosition = model.getPointer().idxPositionCopy();
+
     if (!model.hasActiveCommandRequest()) {
       CreateLedPathCommandRequest request =
           CreateLedPathCommandRequest.builder()
@@ -71,17 +73,19 @@ public final class CreateComponentHandler {
               .commandType(ComponentType.LED_PATH)
               .idxPositions(
                   Sets.newLinkedHashSet(
-                      Lists.newArrayList(new Led(model.getPointer().idxPositionCopy()))))
+                      Lists.newArrayList(pointerPosition)))
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else if (!hasFinished) {
       CreateLedPathCommandRequest request =
           (CreateLedPathCommandRequest) model.getActiveCommandRequest().get();
-      Optional<Led> ledInSamePosition =
-          request.getIdxPositions().parallelStream()
-              .filter(led -> led.getStartIdxPosition().equals(model.getPointer())).findAny();
+      Optional<Point> ledInSamePosition =
+          request.getIdxPositions()
+              .parallelStream()
+              .filter(p -> p.equals(pointerPosition))
+              .findAny();
       if (ledInSamePosition.isEmpty()) {
-        request.getIdxPositions().add(new Led(model.getPointer().idxPositionCopy()));
+        request.getIdxPositions().add(pointerPosition);
       }
     } else {
       CreateLedPathCommandRequest request =

@@ -3,7 +3,6 @@ package com.kyoo.pixel.connection.components.commands;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
-import com.kyoo.pixel.connection.components.impl.Led;
 import com.kyoo.pixel.connection.components.impl.LedPath;
 import com.kyoo.pixel.utils.DrawCommandUtils;
 import java.awt.Point;
@@ -45,7 +44,7 @@ public final class CreateLedPathCommand implements ConnectionCommand {
 
     private long id;
     private ComponentType commandType;
-    private LinkedHashSet<Led> idxPositions;
+    private LinkedHashSet<Point> idxPositions;
 
     @Override
     public void draw(GraphicsContext gc, ConnectionProperties properties, Point pointer) {
