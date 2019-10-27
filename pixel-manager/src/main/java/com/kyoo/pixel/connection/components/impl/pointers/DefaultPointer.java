@@ -13,7 +13,7 @@ public final class DefaultPointer extends Pointer {
     gc.setLineWidth(properties.getMouseWidth());
     gc.setStroke(Color.web(properties.getMouseColor()));
     gc.setLineDashes();
-    gc.strokeRect(getCanvasPosition().x, getCanvasPosition().y, PositionUtils.SQUARE_LENGTH + 4,
+    gc.strokeRect(getDisplayPosition().x, getDisplayPosition().y, PositionUtils.SQUARE_LENGTH + 4,
         PositionUtils.SQUARE_LENGTH + 4);
   }
 }
