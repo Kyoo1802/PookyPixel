@@ -2,8 +2,9 @@ package com.kyoo.pixel.connection.components.impl;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.LedComponent;
-import com.kyoo.pixel.utils.DrawUtils;
+import com.kyoo.pixel.utils.DrawComponentUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Collection;
@@ -25,10 +26,10 @@ public final class LedPath implements LedComponent {
   private Led lastLed;
   @Getter
   @Setter
-  private Optional<Bridge> startBridge;
+  private Optional<ConnectionComponent> previousComponent;
   @Getter
   @Setter
-  private Optional<Bridge> endBridge;
+  private Optional<ConnectionComponent> nextComponent;
   @Getter
   @Setter
   private SelectedSide selectedSide;
@@ -42,8 +43,6 @@ public final class LedPath implements LedComponent {
   public LedPath(long id, Collection<Led> ledsInput) {
     this.id = id;
     this.leds = new LinkedHashSet<>();
-    this.startBridge = Optional.empty();
-    this.endBridge = Optional.empty();
     this.componentType = ComponentType.LED_PATH;
     this.startIdxPosition = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
     this.endIdxPosition = new Point(0, 0);
@@ -74,13 +73,18 @@ public final class LedPath implements LedComponent {
 
   @Override
   public Dimension getSize() {
-    return new Dimension(getEndIdxPosition().x - getStartIdxPosition().x + 1,
-        getEndIdxPosition().y - getStartIdxPosition().y + 1);
+    return new Dimension(endIdxPosition.x - startIdxPosition.x + 1,
+        endIdxPosition.y - startIdxPosition.y + 1);
   }
 
   @Override
   public void move(Point movement) {
-
+    for (Led led : leds) {
+      led.getStartIdxPosition().setLocation(led.getStartIdxPosition().x + movement.x,
+          led.getStartIdxPosition().y + movement.y);
+    }
+    startIdxPosition.setLocation(startIdxPosition.x + movement.x, startIdxPosition.y + movement.y);
+    endIdxPosition.setLocation(endIdxPosition.x + movement.x, endIdxPosition.y + movement.y);
   }
 
   @Override
@@ -95,7 +99,7 @@ public final class LedPath implements LedComponent {
 
   @Override
   public void draw(GraphicsContext gc, ConnectionProperties properties) {
-    DrawUtils.drawLedComponent(gc, properties, this);
-    DrawUtils.drawComponentSelection(gc, properties, this);
+    DrawComponentUtils.drawLedComponent(gc, properties, this);
+    DrawComponentUtils.drawComponentSelection(gc, properties, this);
   }
 }

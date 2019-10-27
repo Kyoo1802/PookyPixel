@@ -1,17 +1,23 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
+import com.kyoo.pixel.connection.ConnectionProperties;
+import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.impl.SquarePanel;
+import com.kyoo.pixel.utils.DrawCommandUtils;
+import java.awt.Point;
+import javafx.scene.canvas.GraphicsContext;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class DrawSquarePanelCommand implements ConnectionCommand {
+public final class CreateSquarePanelCommand implements ConnectionCommand {
 
   private final ConnectionModel model;
-  private final DrawSquarePanelCommandRequest request;
+  private final CreateSquarePanelCommandRequest request;
 
-  public DrawSquarePanelCommand(ConnectionModel model, DrawSquarePanelCommandRequest request) {
+  public CreateSquarePanelCommand(ConnectionModel model, CreateSquarePanelCommandRequest request) {
     this.model = model;
     this.request = request;
   }
@@ -40,5 +46,20 @@ public final class DrawSquarePanelCommand implements ConnectionCommand {
     model.removeComponent(request.getCommandType(), request.getId());
     log.debug("Draw Delete Square Panel triggered %s-%s", request.getCommandType(),
         request.getId());
+  }
+
+  @Getter
+  @Builder(toBuilder = true)
+  public static class CreateSquarePanelCommandRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private ComponentType commandType;
+    private Point startIdxPosition;
+    private Point endIdxPosition;
+
+    @Override
+    public void draw(GraphicsContext gc, ConnectionProperties properties, Point pointer) {
+      DrawCommandUtils.drawSquarePanelCommand(gc, properties, this, pointer);
+    }
   }
 }

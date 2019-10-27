@@ -19,5 +19,4 @@ public final class StateInteractionRequest {
     DRAW_LED_PATH,
     DRAW_CONNECTOR_PORT,
   }
-
 }

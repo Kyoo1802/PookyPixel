@@ -2,9 +2,10 @@ package com.kyoo.pixel.connection.components.impl;
 
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
+import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.LedComponent;
 import com.kyoo.pixel.connection.components.ScalableComponent;
-import com.kyoo.pixel.utils.DrawUtils;
+import com.kyoo.pixel.utils.DrawComponentUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Collection;
@@ -30,10 +31,10 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
   private Led lastLed;
   @Setter
   @Getter
-  private Optional<Bridge> startBridge;
+  private Optional<ConnectionComponent> previousComponent;
   @Setter
   @Getter
-  private Optional<Bridge> endBridge;
+  private Optional<ConnectionComponent> nextComponent;
   @Getter
   @Setter
   private SelectedSide selectedSide;
@@ -45,8 +46,8 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
     this.leds = new LinkedHashMap<>();
     this.startIdxPosition = startIdxPosition;
     this.endIdxPosition = endIdxPosition;
-    this.startBridge = Optional.empty();
-    this.endBridge = Optional.empty();
+    this.previousComponent = Optional.empty();
+    this.nextComponent = Optional.empty();
     this.selectedSide = SelectedSide.NONE;
     this.componentType = ComponentType.SQUARE_PANEL;
     createLeds();
@@ -164,7 +165,7 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
 
   @Override
   public void draw(GraphicsContext gc, ConnectionProperties properties) {
-    DrawUtils.drawLedComponent(gc, properties, this);
-    DrawUtils.drawComponentSelection(gc, properties, this);
+    DrawComponentUtils.drawLedComponent(gc, properties, this);
+    DrawComponentUtils.drawComponentSelection(gc, properties, this);
   }
 }

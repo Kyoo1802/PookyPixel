@@ -8,10 +8,10 @@ import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.MovementCommandRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
-import com.kyoo.pixel.connection.components.commands.MoveCommand;
-import com.kyoo.pixel.connection.components.commands.ScaleCommand;
+import com.kyoo.pixel.connection.components.commands.MoveComponentCommand;
+import com.kyoo.pixel.connection.components.commands.MoveComponentCommand.MovementCommandRequest;
+import com.kyoo.pixel.connection.components.commands.ScaleComponentCommand;
+import com.kyoo.pixel.connection.components.commands.ScaleComponentCommand.ScaleCommandRequest;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,7 +79,7 @@ public final class TransformationHandler {
               .toBuilder()
               .endIdxPosition(model.getPointer().idxPositionCopy())
               .build();
-      commandManager.execute(new MoveCommand(model, request));
+      commandManager.execute(new MoveComponentCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }
@@ -106,7 +106,7 @@ public final class TransformationHandler {
               .toBuilder()
               .endIdxPosition(model.getPointer().idxPositionCopy())
               .build();
-      commandManager.execute(new ScaleCommand(model, request));
+      commandManager.execute(new ScaleComponentCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }

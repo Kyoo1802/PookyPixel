@@ -2,7 +2,7 @@ package com.kyoo.pixel.connection;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.connection.components.SelectableComponent;
-import com.kyoo.pixel.utils.DrawUtils;
+import com.kyoo.pixel.utils.DrawComponentUtils;
 import java.util.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,7 +30,7 @@ public final class ConnectionCanvasRenderer {
   }
 
   private void drawBackground(GraphicsContext gc) {
-    DrawUtils.getBackground(gc, model.getDimension(), properties);
+    DrawComponentUtils.getBackground(gc, model.getDimension(), properties);
   }
 
   private void drawCreatedComponents(GraphicsContext gc) {

@@ -109,10 +109,10 @@ public final class ConnectionModel {
 
   public enum ConnectionState {
     NO_ACTION,
-    DRAW_SQUARE_PANEL,
-    DRAW_LED_PATH,
-    DRAW_DRIVER_PORT,
-    DRAW_LED_BRIDGE,
+    CREATE_SQUARE_PANEL,
+    CREATE_LED_PATH,
+    CREATE_DRIVER_PORT,
+    CREATE_LED_BRIDGE,
   }
 
   public enum TransformationAction {

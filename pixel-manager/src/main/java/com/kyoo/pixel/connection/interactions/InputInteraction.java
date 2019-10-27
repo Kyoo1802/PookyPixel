@@ -6,7 +6,7 @@ public interface InputInteraction {
     UNKNOWN, POINTER_MOVE, PRESS, RELEASE, CLICK, DRAG, CANCEL,
   }
 
-  enum DrawEvent {
-    UNKNOWN, DRAW_POINT, MOVE, FINISH_DRAW, CANCEL,
+  enum CreateEvents {
+    UNKNOWN, CREATE, MOVE, COMPLETE, CANCEL,
   }
 }

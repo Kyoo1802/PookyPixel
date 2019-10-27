@@ -1,20 +1,28 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
+import com.kyoo.pixel.connection.ConnectionProperties;
+import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ScalableComponent;
 import com.kyoo.pixel.connection.components.SelectableComponent;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.ScaleCommandRequest;
+import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
+import com.kyoo.pixel.utils.DrawCommandUtils;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.Optional;
+import javafx.scene.canvas.GraphicsContext;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class ScaleCommand implements ConnectionCommand {
+public final class ScaleComponentCommand implements ConnectionCommand {
 
   private final ConnectionModel model;
   private final ScaleCommandRequest request;
 
-  public ScaleCommand(ConnectionModel model, ScaleCommandRequest request) {
+  public ScaleComponentCommand(ConnectionModel model, ScaleCommandRequest request) {
     this.model = model;
     this.request = request;
   }
@@ -58,5 +66,25 @@ public final class ScaleCommand implements ConnectionCommand {
   private Dimension invert(Dimension scale) {
     scale.setSize(-scale.width, -scale.height);
     return scale;
+  }
+
+  @Getter
+  @ToString
+  @Builder(toBuilder = true)
+  public static class ScaleCommandRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private ComponentType commandType;
+    private Long idToScale;
+    private SelectedSide sideToScale;
+    private Point componentStartIdxPoint;
+    private Point startIdxPosition;
+    private Point endIdxPosition;
+    private int scaleSize;
+
+    @Override
+    public void draw(GraphicsContext gc, ConnectionProperties properties, Point pointer) {
+      DrawCommandUtils.drawScaleCommand(gc, properties, this, pointer);
+    }
   }
 }

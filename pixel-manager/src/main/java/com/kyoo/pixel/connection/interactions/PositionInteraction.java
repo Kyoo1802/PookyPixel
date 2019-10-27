@@ -3,7 +3,7 @@ package com.kyoo.pixel.connection.interactions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
+import com.kyoo.pixel.connection.handlers.CreateComponentHandler;
 import com.kyoo.pixel.connection.handlers.SelectCommandHandler;
 import com.kyoo.pixel.connection.handlers.TransformationHandler;
 import com.kyoo.pixel.connection.interactions.PositionInteractionRequest.PositionButtonSide;
@@ -14,17 +14,17 @@ import lombok.extern.log4j.Log4j2;
 @Singleton
 public final class PositionInteraction implements InputInteraction {
 
-  private final DrawingCommandHandler drawingCommandHandler;
+  private final CreateComponentHandler createComponentHandler;
   private final SelectCommandHandler selectCommandHandler;
   private final TransformationHandler transformationHandler;
   private final ConnectionModel model;
 
   @Inject
-  public PositionInteraction(DrawingCommandHandler drawingCommandHandler,
+  public PositionInteraction(CreateComponentHandler createComponentHandler,
       SelectCommandHandler selectCommandHandler,
       TransformationHandler transformationHandler,
       ConnectionModel model) {
-    this.drawingCommandHandler = drawingCommandHandler;
+    this.createComponentHandler = createComponentHandler;
     this.selectCommandHandler = selectCommandHandler;
     this.transformationHandler = transformationHandler;
     this.model = model;
@@ -49,59 +49,59 @@ public final class PositionInteraction implements InputInteraction {
             selectCommandHandler.handleSelectAction();
             break;
           default:
-            log.debug("Event not supported for NO_ACTION: " + this);
+            log.debug("Event not supported: " + getNoActionEvent(request));
         }
       }
       break;
-      case DRAW_DRIVER_PORT:
-        switch (getDrawEvent(request)) {
-          case DRAW_POINT:
-            drawingCommandHandler.handleDriverPortDrawing();
+      case CREATE_DRIVER_PORT:
+        switch (getCreateEvent(request)) {
+          case CREATE:
+            createComponentHandler.createDriverPort();
             break;
           case MOVE:
             model.handlePointerMovement(request.getPosition());
             break;
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
-      case DRAW_SQUARE_PANEL:
-        switch (getDrawEvent(request)) {
-          case DRAW_POINT:
-            drawingCommandHandler.handleSquarePanelDrawing();
+      case CREATE_SQUARE_PANEL:
+        switch (getCreateEvent(request)) {
+          case CREATE:
+            createComponentHandler.createSquarePanel();
             break;
           case MOVE:
             model.handlePointerMovement(request.getPosition());
             break;
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
-      case DRAW_LED_BRIDGE:
-        switch (getDrawEvent(request)) {
-          case DRAW_POINT:
-            drawingCommandHandler.handleBridgeDrawing();
+      case CREATE_LED_BRIDGE:
+        switch (getCreateEvent(request)) {
+          case CREATE:
+            createComponentHandler.createBridgePort();
             break;
           case MOVE:
             model.handlePointerMovement(request.getPosition());
             break;
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
-      case DRAW_LED_PATH:
-        switch (getDrawEvent(request)) {
-          case DRAW_POINT:
-            drawingCommandHandler.handleLedPathDrawing(false);
+      case CREATE_LED_PATH:
+        switch (getCreateEvent(request)) {
+          case CREATE:
+            createComponentHandler.createLedPath(false);
             break;
           case MOVE:
             model.handlePointerMovement(request.getPosition());
             break;
-          case FINISH_DRAW:
-            drawingCommandHandler.handleLedPathDrawing(true);
+          case COMPLETE:
+            createComponentHandler.createLedPath(true);
             break;
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
       default:
@@ -130,14 +130,14 @@ public final class PositionInteraction implements InputInteraction {
     return NoActionEvent.UNKNOWN;
   }
 
-  private DrawEvent getDrawEvent(PositionInteractionRequest request) {
+  private CreateEvents getCreateEvent(PositionInteractionRequest request) {
     switch (request.getState()) {
       case CLICKED:
-        return DrawEvent.DRAW_POINT;
+        return CreateEvents.CREATE;
       case MOVED:
-        return DrawEvent.MOVE;
+        return CreateEvents.MOVE;
     }
-    return DrawEvent.UNKNOWN;
+    return CreateEvents.UNKNOWN;
   }
 
 }

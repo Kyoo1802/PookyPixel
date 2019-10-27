@@ -5,8 +5,8 @@ import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.SelectCommandRequest;
-import com.kyoo.pixel.connection.components.commands.SelectCommand;
+import com.kyoo.pixel.connection.components.commands.SelectComponentCommand;
+import com.kyoo.pixel.connection.components.commands.SelectComponentCommand.SelectCommandRequest;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -29,6 +29,6 @@ public final class SelectCommandHandler {
             .commandType(ComponentType.SELECT)
             .selectIdxPosition(model.getPointer().idxPositionCopy())
             .build();
-    commandManager.execute(new SelectCommand(model, request));
+    commandManager.execute(new SelectComponentCommand(model, request));
   }
 }

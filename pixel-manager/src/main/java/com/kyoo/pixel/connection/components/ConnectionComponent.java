@@ -1,16 +1,14 @@
 package com.kyoo.pixel.connection.components;
 
-import com.kyoo.pixel.connection.components.impl.Bridge;
 import java.util.Optional;
 
 public interface ConnectionComponent extends SelectableComponent {
 
-  Optional<Bridge> getStartBridge();
+  Optional<ConnectionComponent> getNextComponent();
 
-  void setStartBridge(Optional<Bridge> bridge);
+  void setNextComponent(Optional<ConnectionComponent> component);
 
-  Optional<Bridge> getEndBridge();
+  Optional<ConnectionComponent> getPreviousComponent();
 
-  void setEndBridge(Optional<Bridge> bridge);
-
+  void setPreviousComponent(Optional<ConnectionComponent> component);
 }

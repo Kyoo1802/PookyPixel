@@ -21,18 +21,18 @@ public final class StateInteraction implements InputInteraction {
   public void handleInteraction(StateInteractionRequest request) {
     switch (request.getState()) {
       case DRAW_SQUARE_PANEL:
-        model.setConnectionState(ConnectionState.DRAW_SQUARE_PANEL, request.getBoolValue().get());
+        model.setConnectionState(ConnectionState.CREATE_SQUARE_PANEL, request.getBoolValue().get());
         break;
       case DRAW_LED_PATH:
-        model.setConnectionState(ConnectionState.DRAW_LED_PATH, request.getBoolValue().get());
+        model.setConnectionState(ConnectionState.CREATE_LED_PATH, request.getBoolValue().get());
         break;
       case DRAW_DRIVER_PORT:
         model
-            .setConnectionState(ConnectionState.DRAW_DRIVER_PORT, request.getBoolValue().get());
+            .setConnectionState(ConnectionState.CREATE_DRIVER_PORT, request.getBoolValue().get());
         break;
       case DRAW_CONNECTOR_PORT:
         model
-            .setConnectionState(ConnectionState.DRAW_LED_BRIDGE, request.getBoolValue().get());
+            .setConnectionState(ConnectionState.CREATE_LED_BRIDGE, request.getBoolValue().get());
         break;
       default:
         log.error("Invalid interaction: " + request.getState());

@@ -1,6 +1,5 @@
 package com.kyoo.pixel.connection.interactions;
 
-
 import javafx.scene.input.KeyCode;
 import lombok.Builder;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package com.kyoo.pixel.connection.components.impl;
 import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.utils.DrawUtils;
+import com.kyoo.pixel.utils.DrawComponentUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Optional;
@@ -28,7 +28,10 @@ public final class DriverPort implements ConnectionComponent {
   private SelectedSide selectedSide;
   @Getter
   @Setter
-  private Optional<Bridge> startBridge;
+  private Optional<ConnectionComponent> previousComponent;
+  @Getter
+  @Setter
+  private Optional<ConnectionComponent> nextComponent;
 
   public DriverPort(long id, Point startIdxPosition, Dimension size) {
     this.id = id;
@@ -56,7 +59,10 @@ public final class DriverPort implements ConnectionComponent {
 
   @Override
   public void move(Point movement) {
-
+    startIdxPosition.setLocation(startIdxPosition.x + movement.x,
+        startIdxPosition.y + movement.y);
+    endIdxPosition.setLocation(endIdxPosition.x + movement.x,
+        endIdxPosition.y + movement.y);
   }
 
   @Override
@@ -73,17 +79,7 @@ public final class DriverPort implements ConnectionComponent {
 
   @Override
   public void draw(GraphicsContext gc, ConnectionProperties properties) {
-    DrawUtils.drawPort(gc, properties, this);
-    DrawUtils.drawComponentSelection(gc, properties, this);
-  }
-
-  @Override
-  public Optional<Bridge> getEndBridge() {
-    return startBridge;
-  }
-
-  @Override
-  public void setEndBridge(Optional<Bridge> bridge) {
-    throw new UnsupportedOperationException("Invalid Operation");
+    DrawComponentUtils.drawDriverPort(gc, properties, this);
+    DrawComponentUtils.drawComponentSelection(gc, properties, this);
   }
 }

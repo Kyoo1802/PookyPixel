@@ -4,12 +4,14 @@ import com.kyoo.pixel.connection.ConnectionProperties;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.SelectableComponent;
-import com.kyoo.pixel.utils.DrawUtils;
+import com.kyoo.pixel.utils.DrawComponentUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import javafx.scene.canvas.GraphicsContext;
+import lombok.Getter;
 
-public class Bridge implements SelectableComponent {
+@Getter
+public final class Bridge implements SelectableComponent {
 
   private long id;
   private ConnectionComponent startComponent;
@@ -77,7 +79,7 @@ public class Bridge implements SelectableComponent {
 
   @Override
   public void draw(GraphicsContext gc, ConnectionProperties properties) {
-    DrawUtils.drawBridge(gc, properties, this);
-    DrawUtils.drawComponentSelection(gc, properties, this);
+    DrawComponentUtils.drawBridge(gc, properties, this);
+    DrawComponentUtils.drawComponentSelection(gc, properties, this);
   }
 }

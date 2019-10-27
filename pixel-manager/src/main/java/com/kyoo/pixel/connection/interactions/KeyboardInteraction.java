@@ -3,68 +3,67 @@ package com.kyoo.pixel.connection.interactions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.handlers.DrawingCommandHandler;
+import com.kyoo.pixel.connection.handlers.CreateComponentHandler;
 import com.kyoo.pixel.connection.interactions.KeyboardInteractionRequest.KeyboardState;
-import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Singleton
 public final class KeyboardInteraction implements InputInteraction {
 
-  private final DrawingCommandHandler drawingCommandHandler;
+  private final CreateComponentHandler createComponentHandler;
   private final ConnectionModel model;
 
   @Inject
-  public KeyboardInteraction(DrawingCommandHandler drawingCommandHandler, ConnectionModel model) {
-    this.drawingCommandHandler = drawingCommandHandler;
+  public KeyboardInteraction(CreateComponentHandler createComponentHandler, ConnectionModel model) {
+    this.createComponentHandler = createComponentHandler;
     this.model = model;
   }
 
   public void handleInteraction(KeyboardInteractionRequest request) {
     switch (model.getConnectionState()) {
-      case DRAW_DRIVER_PORT:
-        switch (getDrawEvent(request)) {
-          case FINISH_DRAW:
-            drawingCommandHandler.handleDriverPortDrawing();
+      case CREATE_DRIVER_PORT:
+        switch (getCreateEvent(request)) {
+          case COMPLETE:
+            createComponentHandler.createDriverPort();
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
-      case DRAW_SQUARE_PANEL:
-        switch (getDrawEvent(request)) {
-          case FINISH_DRAW:
-            drawingCommandHandler.handleSquarePanelDrawing();
+      case CREATE_SQUARE_PANEL:
+        switch (getCreateEvent(request)) {
+          case COMPLETE:
+            createComponentHandler.createSquarePanel();
             break;
           case CANCEL:
-            model.setActiveCommandRequest(Optional.empty());
+            createComponentHandler.cancel();
             break;
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
-      case DRAW_LED_BRIDGE:
-        switch (getDrawEvent(request)) {
-          case FINISH_DRAW:
-            drawingCommandHandler.handleBridgeDrawing();
+      case CREATE_LED_BRIDGE:
+        switch (getCreateEvent(request)) {
+          case COMPLETE:
+            createComponentHandler.createBridgePort();
             break;
           case CANCEL:
-            model.setActiveCommandRequest(Optional.empty());
+            createComponentHandler.cancel();
             break;
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
-      case DRAW_LED_PATH:
-        switch (getDrawEvent(request)) {
-          case FINISH_DRAW:
-            drawingCommandHandler.handleLedPathDrawing(true);
+      case CREATE_LED_PATH:
+        switch (getCreateEvent(request)) {
+          case COMPLETE:
+            createComponentHandler.createLedPath(true);
             break;
           case CANCEL:
-            model.setActiveCommandRequest(Optional.empty());
+            createComponentHandler.cancel();
             break;
           default:
-            log.debug("Event not supported for DRAW_DRIVER_PORT: " + this);
+            log.debug("Event not supported: " + getCreateEvent(request));
         }
         break;
       default:
@@ -72,18 +71,18 @@ public final class KeyboardInteraction implements InputInteraction {
     }
   }
 
-  private DrawEvent getDrawEvent(KeyboardInteractionRequest request) {
+  private CreateEvents getCreateEvent(KeyboardInteractionRequest request) {
     if (request.getState() == KeyboardState.RELEASED) {
       switch (request.getKey()) {
         case ENTER:
-          return DrawEvent.FINISH_DRAW;
+          return CreateEvents.COMPLETE;
         case ESCAPE:
-          return DrawEvent.CANCEL;
+          return CreateEvents.CANCEL;
         default:
           log.debug("Not supported Key: " + request.getKey());
       }
     }
-    return DrawEvent.UNKNOWN;
+    return CreateEvents.UNKNOWN;
   }
 
 }

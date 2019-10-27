@@ -8,65 +8,65 @@ import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.ConnectionComponent;
 import com.kyoo.pixel.connection.components.commands.ConnectionCommandManager;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawBridgeCommandRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawLedPathCommandRequest;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawSquarePanelCommandRequest;
-import com.kyoo.pixel.connection.components.commands.DrawBridgeCommand;
-import com.kyoo.pixel.connection.components.commands.DrawDriverPortCommand;
-import com.kyoo.pixel.connection.components.commands.DrawLedPathCommand;
-import com.kyoo.pixel.connection.components.commands.DrawSquarePanelCommand;
+import com.kyoo.pixel.connection.components.commands.CreateBridgeCommand;
+import com.kyoo.pixel.connection.components.commands.CreateBridgeCommand.CreateBridgeCommandRequest;
+import com.kyoo.pixel.connection.components.commands.CreateDriverPortCommand;
+import com.kyoo.pixel.connection.components.commands.CreateDriverPortCommand.CreateDriverPortRequest;
+import com.kyoo.pixel.connection.components.commands.CreateLedPathCommand;
+import com.kyoo.pixel.connection.components.commands.CreateLedPathCommand.CreateLedPathCommandRequest;
+import com.kyoo.pixel.connection.components.commands.CreateSquarePanelCommand;
+import com.kyoo.pixel.connection.components.commands.CreateSquarePanelCommand.CreateSquarePanelCommandRequest;
 import com.kyoo.pixel.connection.components.impl.Led;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Singleton
-public final class DrawingCommandHandler {
+public final class CreateComponentHandler {
 
   private ConnectionModel model;
   private ConnectionCommandManager commandManager;
 
   @Inject
-  public DrawingCommandHandler(ConnectionModel model, ConnectionCommandManager commandManager) {
+  public CreateComponentHandler(ConnectionModel model, ConnectionCommandManager commandManager) {
     this.model = model;
     this.commandManager = commandManager;
   }
 
-  public void handleSquarePanelDrawing() {
+  public void createSquarePanel() {
     if (!model.hasActiveCommandRequest()) {
-      DrawSquarePanelCommandRequest request =
-          DrawSquarePanelCommandRequest.builder()
+      CreateSquarePanelCommandRequest request =
+          CreateSquarePanelCommandRequest.builder()
               .id(model.generateId(ComponentType.SQUARE_PANEL))
               .commandType(ComponentType.SQUARE_PANEL)
               .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
-      DrawSquarePanelCommandRequest request =
-          ((DrawSquarePanelCommandRequest) model.getActiveCommandRequest().get())
+      CreateSquarePanelCommandRequest request =
+          ((CreateSquarePanelCommandRequest) model.getActiveCommandRequest().get())
               .toBuilder()
               .endIdxPosition(model.getPointer().idxPositionCopy())
               .build();
-      commandManager.execute(new DrawSquarePanelCommand(model, request));
+      commandManager.execute(new CreateSquarePanelCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }
 
-  public void handleDriverPortDrawing() {
-    DrawDriverPortRequest request =
-        DrawDriverPortRequest.builder()
+  public void createDriverPort() {
+    CreateDriverPortRequest request =
+        CreateDriverPortRequest.builder()
             .id(model.generateId(ComponentType.DRIVER_PORT))
             .commandType(ComponentType.DRIVER_PORT)
             .idxPosition(model.getPointer().idxPositionCopy())
             .build();
-    commandManager.execute(new DrawDriverPortCommand(model, request));
+    commandManager.execute(new CreateDriverPortCommand(model, request));
   }
 
-  public void handleLedPathDrawing(boolean hasFinished) {
+  public void createLedPath(boolean hasFinished) {
     if (!model.hasActiveCommandRequest()) {
-      DrawLedPathCommandRequest request =
-          DrawLedPathCommandRequest.builder()
+      CreateLedPathCommandRequest request =
+          CreateLedPathCommandRequest.builder()
               .id(model.generateId(ComponentType.LED_PATH))
               .commandType(ComponentType.LED_PATH)
               .idxPositions(
@@ -75,8 +75,8 @@ public final class DrawingCommandHandler {
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else if (!hasFinished) {
-      DrawLedPathCommandRequest request =
-          (DrawLedPathCommandRequest) model.getActiveCommandRequest().get();
+      CreateLedPathCommandRequest request =
+          (CreateLedPathCommandRequest) model.getActiveCommandRequest().get();
       Optional<Led> ledInSamePosition =
           request.getIdxPositions().parallelStream()
               .filter(led -> led.getStartIdxPosition().equals(model.getPointer())).findAny();
@@ -84,14 +84,14 @@ public final class DrawingCommandHandler {
         request.getIdxPositions().add(new Led(model.getPointer().idxPositionCopy()));
       }
     } else {
-      DrawLedPathCommandRequest request =
-          (DrawLedPathCommandRequest) model.getActiveCommandRequest().get();
-      commandManager.execute(new DrawLedPathCommand(model, request));
+      CreateLedPathCommandRequest request =
+          (CreateLedPathCommandRequest) model.getActiveCommandRequest().get();
+      commandManager.execute(new CreateLedPathCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
   }
 
-  public void handleBridgeDrawing() {
+  public void createBridgePort() {
     Optional<ConnectionComponent> component =
         model.getCreatedComponentsManager()
             .lookupConnectionComponent(model.getPointer().getIdxPosition());
@@ -100,22 +100,22 @@ public final class DrawingCommandHandler {
     }
 
     if (!model.hasActiveCommandRequest()) { // First Interaction
-      if (component.get().getStartBridge().isPresent()) {
+      if (component.get().getNextComponent().isPresent()) {
         return;
       }
-      DrawBridgeCommandRequest request =
-          DrawBridgeCommandRequest.builder()
+      CreateBridgeCommandRequest request =
+          CreateBridgeCommandRequest.builder()
               .id(model.generateId(ComponentType.BRIDGE))
               .commandType(ComponentType.BRIDGE)
               .startComponent(component.get())
               .build();
       model.setActiveCommandRequest(Optional.of(request));
     } else {
-      DrawBridgeCommandRequest request =
-          ((DrawBridgeCommandRequest) model.getActiveCommandRequest().get());
+      CreateBridgeCommandRequest request =
+          ((CreateBridgeCommandRequest) model.getActiveCommandRequest().get());
       // Avoid adding end bridge to a Led component which already contains an end bridge, and also
       // avoid adding a bridge to the component itself.
-      if (component.get().getEndBridge().isPresent() ||
+      if (component.get().getPreviousComponent().isPresent() ||
           request.getStartComponent() == component.get()) {
         return;
       }
@@ -123,8 +123,12 @@ public final class DrawingCommandHandler {
           .toBuilder()
           .endComponent(component.get())
           .build();
-      commandManager.execute(new DrawBridgeCommand(model, request));
+      commandManager.execute(new CreateBridgeCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
+  }
+
+  public void cancel() {
+    model.setActiveCommandRequest(Optional.empty());
   }
 }

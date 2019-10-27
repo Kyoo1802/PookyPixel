@@ -1,20 +1,25 @@
 package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
-import com.kyoo.pixel.connection.components.commands.ConnectionCommandRequest.DrawDriverPortRequest;
+import com.kyoo.pixel.connection.ConnectionProperties;
+import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.impl.DriverPort;
 import java.awt.Dimension;
+import java.awt.Point;
+import javafx.scene.canvas.GraphicsContext;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class DrawDriverPortCommand implements ConnectionCommand {
+public final class CreateDriverPortCommand implements ConnectionCommand {
 
   public static final Dimension DEFAULT_CONNECTION_PORT_SIZE = new Dimension(2, 2);
 
   private final ConnectionModel model;
-  private final DrawDriverPortRequest request;
+  private final CreateDriverPortRequest request;
 
-  public DrawDriverPortCommand(ConnectionModel model, DrawDriverPortRequest request) {
+  public CreateDriverPortCommand(ConnectionModel model, CreateDriverPortRequest request) {
     this.model = model;
     this.request = request;
   }
@@ -34,5 +39,18 @@ public final class DrawDriverPortCommand implements ConnectionCommand {
     model.removeComponent(request.getCommandType(), request.getId());
     log.debug("Draw Delete Driver Port triggered %s-%s", request.getCommandType(),
         request.getId());
+  }
+
+  @Getter
+  @Builder(toBuilder = true)
+  public static class CreateDriverPortRequest extends ConnectionCommandRequest {
+
+    private long id;
+    private ComponentType commandType;
+    private Point idxPosition;
+
+    @Override
+    public void draw(GraphicsContext gc, ConnectionProperties properties, Point pointer) {
+    }
   }
 }
