@@ -168,4 +168,14 @@ public final class SquarePanel implements LedComponent, ScalableComponent {
     DrawComponentUtils.drawLedComponent(gc, properties, this);
     DrawComponentUtils.drawComponentSelection(gc, properties, this);
   }
+
+  @Override
+  public int availableInputs() {
+    return previousComponent.isPresent() ? 0 : 1;
+  }
+
+  @Override
+  public int availableOutputs() {
+    return nextComponent.isPresent() ? 0 : 1;
+  }
 }

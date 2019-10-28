@@ -2,6 +2,7 @@ package com.kyoo.pixel.connection.components.commands;
 
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionProperties;
+import com.kyoo.pixel.connection.components.ComponentKey;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.utils.DrawCommandUtils;
@@ -36,7 +37,7 @@ public final class MoveComponentCommand implements ConnectionCommand {
 
   private boolean doMove(boolean isInverse) {
     List<SelectableComponent> components =
-        model.getCreatedComponentsManager().getComponents(request.getIdsToMove());
+        model.getCreatedComponentsManager().getComponents(request.getKeysToMove());
 
     if (!components.isEmpty()) {
       Point movement = new Point(request.getEndIdxPosition().x - request.getStartIdxPosition().x,
@@ -68,7 +69,7 @@ public final class MoveComponentCommand implements ConnectionCommand {
 
     private long id;
     private ComponentType commandType;
-    private List<Long> idsToMove;
+    private List<ComponentKey> keysToMove;
     private Point startIdxPosition;
     private Point endIdxPosition;
 

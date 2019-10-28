@@ -24,8 +24,8 @@ public abstract class Pointer {
 
   public void setCanvasPosition(Point canvasPointerPosition) {
     this.canvasPosition = canvasPointerPosition;
-    Point tmpPosition = new Point(this.canvasPosition.x+PositionUtils.HALF_SQUARE_LENGTH-2,
-        this.canvasPosition.y+PositionUtils.HALF_SQUARE_LENGTH-1);
+    Point tmpPosition = new Point(this.canvasPosition.x+PositionUtils.HALF_SQUARE_LENGTH - 2,
+        this.canvasPosition.y+PositionUtils.HALF_SQUARE_LENGTH - 1);
     this.idxPosition = PositionUtils.toIdxPosition(tmpPosition);
     this.displayPosition = PositionUtils.toCanvasPosition(idxPosition);
   }

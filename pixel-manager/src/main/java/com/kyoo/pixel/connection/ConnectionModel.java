@@ -51,6 +51,8 @@ public final class ConnectionModel {
 
   public void addComponent(SelectableComponent component) {
     createdComponentsManager.addComponent(component);
+    clearSelection();
+    select(component, SelectedSide.CENTER);
   }
 
   public void removeComponent(ComponentType componentType, long id) {
@@ -82,29 +84,23 @@ public final class ConnectionModel {
     }
   }
 
-  public void addSelectedComponents(SelectableComponent component) {
-    getSelectedComponents().put(component.getId(), component);
-  }
-
-
   public Pointer getPointer() {
     return pointer;
   }
 
-  public void multiSelection(SelectableComponent component, SelectedSide selectionSide) {
+  public void select(SelectableComponent component, SelectedSide selectionSide) {
     component.setSelectedSide(selectionSide);
-    addSelectedComponents(component);
-  }
-
-  public void singleSelection(SelectableComponent component, SelectedSide selectionSide) {
-    selectedComponents.clear();
-    component.setSelectedSide(selectionSide);
-    addSelectedComponents(component);
+    getSelectedComponents().put(component.getId(), component);
   }
 
   public void unSelect(SelectableComponent component) {
     selectedComponents.remove(component.getId());
     component.unSelect();
+  }
+
+  public void clearSelection() {
+    selectedComponents.values().parallelStream().forEach(c->c.unSelect());
+    selectedComponents.clear();
   }
 
   public enum ConnectionState {

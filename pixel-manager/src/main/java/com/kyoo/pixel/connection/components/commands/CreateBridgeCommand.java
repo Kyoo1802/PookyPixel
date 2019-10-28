@@ -29,8 +29,8 @@ public final class CreateBridgeCommand implements ConnectionCommand {
     Bridge bridge = new Bridge(request.getId(), request.getStartComponent(),
         request.getEndComponent());
     request.getStartComponent().setNextComponent(Optional.of(request.getEndComponent()));
+    request.getEndComponent().setPreviousComponent(Optional.of(request.getStartComponent()));
     model.addComponent(bridge);
-    model.addSelectedComponents(bridge);
     log.debug("Draw Connection Port triggered %s", request);
     return true;
   }

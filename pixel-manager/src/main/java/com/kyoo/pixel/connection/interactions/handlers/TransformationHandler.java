@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.connection.ConnectionModel;
 import com.kyoo.pixel.connection.ConnectionModel.TransformationAction;
+import com.kyoo.pixel.connection.components.ComponentKey;
 import com.kyoo.pixel.connection.components.ComponentType;
 import com.kyoo.pixel.connection.components.SelectableComponent;
 import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
@@ -67,8 +68,8 @@ public final class TransformationHandler {
           MoveCommandRequest.builder()
               .id(model.generateId(ComponentType.MOVEMENT))
               .commandType(ComponentType.MOVEMENT)
-              .idsToMove(
-                  model.getSelectedComponents().values().stream().map(c -> c.getId()).collect(
+              .keysToMove(
+                  model.getSelectedComponents().values().stream().map(c -> new ComponentKey(c.getId(), c.getComponentType())).collect(
                       Collectors.toList()))
               .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();

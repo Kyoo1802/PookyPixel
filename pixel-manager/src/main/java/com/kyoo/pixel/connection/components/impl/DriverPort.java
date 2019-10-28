@@ -35,6 +35,8 @@ public final class DriverPort implements ConnectionComponent {
 
   public DriverPort(long id, Point startIdxPosition, Dimension size) {
     this.id = id;
+    this.previousComponent = Optional.empty();
+    this.nextComponent = Optional.empty();
     this.startIdxPosition = startIdxPosition;
     this.endIdxPosition = new Point(
         startIdxPosition.x + size.width - 1, startIdxPosition.y + size.height - 1);
@@ -81,5 +83,15 @@ public final class DriverPort implements ConnectionComponent {
   public void draw(GraphicsContext gc, ConnectionProperties properties) {
     DrawComponentUtils.drawDriverPort(gc, properties, this);
     DrawComponentUtils.drawComponentSelection(gc, properties, this);
+  }
+
+  @Override
+  public int availableInputs() {
+    return 0;
+  }
+
+  @Override
+  public int availableOutputs() {
+    return nextComponent.isPresent() ? 0 : 1;
   }
 }

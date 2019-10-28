@@ -104,7 +104,7 @@ public final class CreateComponentHandler {
     }
 
     if (!model.hasActiveCommandRequest()) { // First Interaction
-      if (component.get().getNextComponent().isPresent()) {
+      if (component.get().availableOutputs() == 0) {
         return;
       }
       CreateBridgeCommandRequest request =
@@ -119,8 +119,8 @@ public final class CreateComponentHandler {
           ((CreateBridgeCommandRequest) model.getActiveCommandRequest().get());
       // Avoid adding end bridge to a Led component which already contains an end bridge, and also
       // avoid adding a bridge to the component itself.
-      if (component.get().getPreviousComponent().isPresent() ||
-          request.getStartComponent() == component.get()) {
+      if (component.get().availableInputs() == 0 || detectLoop(request.getStartComponent(),
+          component.get())) {
         return;
       }
       request = request
@@ -130,6 +130,14 @@ public final class CreateComponentHandler {
       commandManager.execute(new CreateBridgeCommand(model, request));
       model.setActiveCommandRequest(Optional.empty());
     }
+  }
+
+  private boolean detectLoop(ConnectionComponent startComponent, ConnectionComponent endComponent) {
+    ConnectionComponent currentComponent = startComponent;
+    while (currentComponent.getNextComponent().isPresent()){
+      currentComponent=currentComponent.getNextComponent().get();
+    }
+    return currentComponent == endComponent;
   }
 
   public void cancel() {

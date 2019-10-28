@@ -83,10 +83,6 @@ public final class LedPath implements LedComponent {
 
   @Override
   public void move(Point movement) {
-    for (Led led : leds) {
-      led.getStartIdxPosition().setLocation(led.getStartIdxPosition().x + movement.x,
-          led.getStartIdxPosition().y + movement.y);
-    }
     startIdxPosition.setLocation(startIdxPosition.x + movement.x, startIdxPosition.y + movement.y);
     endIdxPosition.setLocation(endIdxPosition.x + movement.x, endIdxPosition.y + movement.y);
   }
@@ -105,5 +101,15 @@ public final class LedPath implements LedComponent {
   public void draw(GraphicsContext gc, ConnectionProperties properties) {
     DrawComponentUtils.drawLedComponent(gc, properties, this);
     DrawComponentUtils.drawComponentSelection(gc, properties, this);
+  }
+
+  @Override
+  public int availableInputs() {
+    return previousComponent.isPresent() ? 0 : 1;
+  }
+
+  @Override
+  public int availableOutputs() {
+    return nextComponent.isPresent() ? 0 : 1;
   }
 }

@@ -29,7 +29,6 @@ public final class CreateDriverPortCommand implements ConnectionCommand {
     DriverPort port = new DriverPort(request.getId(), request.getIdxPosition(),
         DEFAULT_CONNECTION_PORT_SIZE);
     model.addComponent(port);
-    model.addSelectedComponents(port);
     log.debug("Draw Driver Port triggered %s", request.getIdxPosition());
     return true;
   }

@@ -27,7 +27,6 @@ public final class CreateLedPathCommand implements ConnectionCommand {
   public boolean execute() {
     LedPath ledPath = new LedPath(request.getId(), request.getIdxPositions());
     model.addComponent(ledPath);
-    model.addSelectedComponents(ledPath);
     log.debug("Create Led Path [%s, %d]", request.getCommandType(), request.getId());
     return true;
   }

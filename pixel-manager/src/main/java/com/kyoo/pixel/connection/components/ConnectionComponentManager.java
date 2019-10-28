@@ -43,12 +43,13 @@ public final class ConnectionComponentManager {
     return Optional.empty();
   }
 
-  public List<SelectableComponent> getComponents(List<Long> ids) {
+  public List<SelectableComponent> getComponents(List<ComponentKey> keys) {
     List<SelectableComponent> result = Lists.newArrayList();
-    for (Map<Long, SelectableComponent> componentsByKey : components.values()) {
-      for (Long id : ids) {
-        if (componentsByKey.containsKey(id)) {
-          result.add(componentsByKey.get(id));
+    for(ComponentKey key: keys){
+      if(components.containsKey(key.getType())){
+        Map<Long, SelectableComponent> componentsById = components.get(key.getType());
+        if(componentsById.containsKey(key.getId())){
+          result.add(componentsById.get(key.getId()));
         }
       }
     }

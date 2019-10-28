@@ -28,28 +28,21 @@ public final class SelectComponentCommand implements ConnectionCommand {
   public boolean execute() {
     for (Map<Long, SelectableComponent> components :
         model.getCreatedComponentsManager().getComponents().values()) {
-      System.out.println();
       for (SelectableComponent component : components.values()) {
         SelectedSide selectionSide = component
             .hasSelection(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
 
         if (selectionSide == SelectedSide.NONE) {
-          model.getSelectedComponents().remove(component.getId());
-          component.unSelect();
-        } else {
-          log.debug("Selection triggered.");
-          if (component.getSelectedSide() != SelectedSide.NONE) {
-            log.debug("Skip selection triggered.");
-            return false;
-          } else if (model.getSelectedComponents().isEmpty() || !request.isMultiSelection()) {
-            model.singleSelection(component, selectionSide);
-            log.debug("Single selection triggered.");
-            return true;
-          } else {
-            model.multiSelection(component, selectionSide);
-            log.debug("Multi selection triggered.");
-            return true;
+          if(!request.isMultiSelection()) {
+            model.unSelect(component);
           }
+        } else {
+          if (!request.isMultiSelection()) {
+            model.clearSelection();
+          }
+          model.select(component, selectionSide);
+          log.debug("Selection triggered.");
+          return true;
         }
       }
     }

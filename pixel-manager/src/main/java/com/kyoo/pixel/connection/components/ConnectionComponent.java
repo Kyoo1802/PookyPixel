@@ -11,4 +11,8 @@ public interface ConnectionComponent extends SelectableComponent {
   Optional<ConnectionComponent> getPreviousComponent();
 
   void setPreviousComponent(Optional<ConnectionComponent> component);
+
+  int availableInputs();
+
+  int availableOutputs();
 }
