@@ -25,9 +25,14 @@ public class MainScene {
     scene.setOnKeyReleased(injector.getInstance(MainReleaseKeyHandler.class));
   }
 
-  public void switchScene(String scenePath) {
+  public void switchScene(String scenePath, boolean maximize) {
     Parent newScene = loader.load(getClass().getResource(scenePath));
     scene.setRoot(newScene);
-    stage.setMaximized(true);
+    if (maximize) {
+      stage.setMaximized(true);
+    } else {
+      newScene.getScene().getWindow().sizeToScene();
+      newScene.getScene().getWindow().centerOnScreen();
+    }
   }
 }

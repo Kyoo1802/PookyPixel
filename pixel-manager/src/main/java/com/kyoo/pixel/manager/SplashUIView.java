@@ -33,7 +33,7 @@ public final class SplashUIView implements Initializable {
     progressBar.progressProperty().bind(copyWorker.progressProperty());
     progressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
           if (newValue.doubleValue() == 1) {
-            mainScene.switchScene("ui/managerUI.fxml");
+            mainScene.switchScene("ui/selectProjectUI.fxml", false);
           }
         }
     );

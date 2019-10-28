@@ -1,3 +1,10 @@
 .label {
-    -fx-text-fill: blue;
+  -fx-text-fill: blue;
+}
+.highlight-button {
+  -fx-background-color: transparent;
+  -fx-cursor: hand;
+}
+.highlight-button:hover {
+  -fx-background-color: #383838;
 }
