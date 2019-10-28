@@ -3,11 +3,8 @@ package com.kyoo.pixel;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.kyoo.pixel.connection.ConnectionModule;
-import com.kyoo.pixel.inject.GuiceFXMLLoader;
 import com.kyoo.pixel.visualizer.VisualizerModule;
 import javafx.application.Application;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
 
@@ -26,15 +23,13 @@ public class MainApp extends Application {
 
   @Override
   public void start(Stage stage) {
-    log.info("Starting your application.");
-    GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
-    Parent splash = loader.load(getClass().getResource("ui/SplashUI.fxml"));
+    MainScene mainScene = injector.getInstance(MainScene.class);
+    mainScene.init(injector, stage, "ui/SplashUI.fxml");
 
-    Scene scene = new Scene(splash);
-    scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
+    log.info("Starting your application.");
     stage.setTitle("Pixelandia");
-    stage.setScene(scene);
-    scene.setOnKeyReleased(injector.getInstance(MainReleaseKeyHandler.class));
+    stage.setScene(mainScene.getScene());
+    stage.centerOnScreen();
     stage.show();
   }
 
