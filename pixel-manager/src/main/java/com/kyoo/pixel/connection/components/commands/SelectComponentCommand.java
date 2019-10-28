@@ -33,7 +33,7 @@ public final class SelectComponentCommand implements ConnectionCommand {
             .hasSelection(request.getSelectIdxPosition().x, request.getSelectIdxPosition().y);
 
         if (selectionSide == SelectedSide.NONE) {
-          if(!request.isMultiSelection()) {
+          if (!request.isMultiSelection()) {
             model.unSelect(component);
           }
         } else {

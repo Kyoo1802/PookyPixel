@@ -89,7 +89,8 @@ public final class LedPath implements LedComponent {
 
   @Override
   public String description() {
-    return String.format("id: %d, size: %s ", id, getSize());
+    Dimension d = getSize();
+    return String.format("[%d, %d] = %d", d.width, d.height, d.width * d.height);
   }
 
   @Override

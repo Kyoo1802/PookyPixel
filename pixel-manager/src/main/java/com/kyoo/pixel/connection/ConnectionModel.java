@@ -99,7 +99,7 @@ public final class ConnectionModel {
   }
 
   public void clearSelection() {
-    selectedComponents.values().parallelStream().forEach(c->c.unSelect());
+    selectedComponents.values().parallelStream().forEach(c -> c.unSelect());
     selectedComponents.clear();
   }
 

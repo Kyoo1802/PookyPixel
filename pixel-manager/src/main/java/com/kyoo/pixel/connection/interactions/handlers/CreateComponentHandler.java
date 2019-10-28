@@ -134,8 +134,8 @@ public final class CreateComponentHandler {
 
   private boolean detectLoop(ConnectionComponent startComponent, ConnectionComponent endComponent) {
     ConnectionComponent currentComponent = startComponent;
-    while (currentComponent.getNextComponent().isPresent()){
-      currentComponent=currentComponent.getNextComponent().get();
+    while (currentComponent.getNextComponent().isPresent()) {
+      currentComponent = currentComponent.getNextComponent().get();
     }
     return currentComponent == endComponent;
   }

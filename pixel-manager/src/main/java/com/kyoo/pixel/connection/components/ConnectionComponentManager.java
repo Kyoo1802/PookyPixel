@@ -45,10 +45,10 @@ public final class ConnectionComponentManager {
 
   public List<SelectableComponent> getComponents(List<ComponentKey> keys) {
     List<SelectableComponent> result = Lists.newArrayList();
-    for(ComponentKey key: keys){
-      if(components.containsKey(key.getType())){
+    for (ComponentKey key : keys) {
+      if (components.containsKey(key.getType())) {
         Map<Long, SelectableComponent> componentsById = components.get(key.getType());
-        if(componentsById.containsKey(key.getId())){
+        if (componentsById.containsKey(key.getId())) {
           result.add(componentsById.get(key.getId()));
         }
       }

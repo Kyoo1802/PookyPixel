@@ -69,7 +69,8 @@ public final class TransformationHandler {
               .id(model.generateId(ComponentType.MOVEMENT))
               .commandType(ComponentType.MOVEMENT)
               .keysToMove(
-                  model.getSelectedComponents().values().stream().map(c -> new ComponentKey(c.getId(), c.getComponentType())).collect(
+                  model.getSelectedComponents().values().stream()
+                      .map(c -> new ComponentKey(c.getId(), c.getComponentType())).collect(
                       Collectors.toList()))
               .startIdxPosition(model.getPointer().idxPositionCopy())
               .build();
