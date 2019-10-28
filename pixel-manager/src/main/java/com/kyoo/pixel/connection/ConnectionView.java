@@ -69,8 +69,6 @@ public class ConnectionView implements Initializable, EventHandler<KeyEvent> {
     canvas.onMouseDraggedProperty().set(e -> handleMouseInteraction(e, PositionState.DRAGGED));
 
     // Initialize properties
-//    handleStateInteraction((int) canvas.getWidth(), ActionState.RESIZE_WIDTH);
-//    handleStateInteraction((int) canvas.getHeight(), ActionState.RESIZE_HEIGHT);
     handleStateInteraction(createSquarePanelBtn.isSelected(), ActionState.DRAW_SQUARE_PANEL);
     handleStateInteraction(createLedPathBtn.isSelected(), ActionState.DRAW_LED_PATH);
     handleStateInteraction(createDriverPortBtn.isSelected(), ActionState.DRAW_DRIVER_PORT);

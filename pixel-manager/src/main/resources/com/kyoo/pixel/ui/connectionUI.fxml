@@ -5,6 +5,7 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -23,10 +24,13 @@
       </center>
       <top>
         <FlowPane BorderPane.alignment="CENTER">
-          <ToggleButton text="Sp" fx:id="createSquarePanelBtn"/>
-          <ToggleButton text="Dp" fx:id="createDriverPortBtn"/>
-          <ToggleButton text="Lp" fx:id="createLedPathBtn"/>
-          <ToggleButton text="B" fx:id="createBridgeBtn"/>
+          <ToggleButton text="Sp" toggleGroup="$actions" fx:id="createSquarePanelBtn"/>
+          <ToggleButton text="Dp" toggleGroup="$actions" fx:id="createDriverPortBtn"/>
+          <ToggleButton text="Lp" toggleGroup="$actions" fx:id="createLedPathBtn"/>
+          <ToggleButton text="B" toggleGroup="$actions" fx:id="createBridgeBtn"/>
+          <fx:define>
+            <ToggleGroup fx:id="actions"/>
+          </fx:define>
         </FlowPane>
       </top>
     </BorderPane>

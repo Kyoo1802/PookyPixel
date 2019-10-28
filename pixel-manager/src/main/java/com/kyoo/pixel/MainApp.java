@@ -28,10 +28,11 @@ public class MainApp extends Application {
   public void start(Stage stage) {
     log.info("Starting your application.");
     GuiceFXMLLoader loader = new GuiceFXMLLoader(injector);
-    Parent root = loader.load(getClass().getResource("ui/connectionUI.fxml"));
-    Scene scene = new Scene(root);
+    Parent splash = loader.load(getClass().getResource("ui/SplashUI.fxml"));
+
+    Scene scene = new Scene(splash);
     scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
-    stage.setTitle("JavaFX and Gradle");
+    stage.setTitle("Pixelandia");
     stage.setScene(scene);
     scene.setOnKeyReleased(injector.getInstance(MainReleaseKeyHandler.class));
     stage.show();
@@ -39,7 +40,7 @@ public class MainApp extends Application {
 
   @Override
   public void stop() throws Exception {
-    super.stop(); //To change body of generated methods, choose Tools | Templates.
+    super.stop(); // To change body of generated methods, choose Tools | Templates.
     System.exit(0);
   }
 }

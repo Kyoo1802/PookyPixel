@@ -12,8 +12,6 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ManagerView implements Initializable {
-//  private final Node rootIcon =
-//      new ImageView(new Image(getClass().getResourceAsStream("root.png")));
 
   @FXML
   TreeView<String> proyectoTv;
