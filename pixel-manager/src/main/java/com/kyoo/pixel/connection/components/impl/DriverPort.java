@@ -52,7 +52,6 @@ public final class DriverPort implements ConnectionComponent {
             SelectedSide.NONE;
   }
 
-
   @Override
   public Dimension getSize() {
     return new Dimension(

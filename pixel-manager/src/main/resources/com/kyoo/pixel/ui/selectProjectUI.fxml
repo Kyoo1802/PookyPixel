@@ -8,30 +8,26 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<HBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0"
-  minWidth="600.0" prefHeight="400.0" prefWidth="600.0"
-  xmlns="http://javafx.com/javafx/11.0.1">
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <children>
-    <VBox style="-fx-background-color: #434343ff#434343ff;" prefHeight="400.0" prefWidth="304.0">
+    <VBox prefHeight="400.0" prefWidth="304.0" style="-fx-background-color: #434343ff#434343ff;">
       <children>
         <AnchorPane prefHeight="190.0" prefWidth="321.0">
           <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="14.0"
-              pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
               <image>
-                <Image url="@/assets/images/Logo.png"/>
+                <Image url="@/assets/images/Logo.png" />
               </image>
             </ImageView>
-            <Label alignment="CENTER" layoutX="102.0" layoutY="117.0" text="Pooky pixel"
-              textFill="#efefef">
+            <Label alignment="CENTER" layoutX="102.0" layoutY="117.0" text="Pooky pixel" textFill="#efefef">
               <font>
-                <Font name="Verdana" size="16.0"/>
+                <Font name="Verdana" size="16.0" />
               </font>
             </Label>
-            <Label alignment="CENTER" layoutX="121.0" layoutY="137.0" text="Version 1.0"
-              textFill="#999999">
+            <Label alignment="CENTER" layoutX="121.0" layoutY="137.0" text="Version 1.0" textFill="#999999">
               <font>
-                <Font size="10.0"/>
+                <Font size="10.0" />
               </font>
             </Label>
           </children>
@@ -40,34 +36,29 @@
           <children>
             <VBox layoutX="78.0" prefHeight="200.0" prefWidth="141.0">
               <children>
-                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="144.0"
-                  styleClass="highlight-button" text="+ Nuevo proyecto" textFill="#efefef"/>
-                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="144.0"
-                  styleClass="highlight-button" text="\@ Abrir proyecto" textFill="#efefef"/>
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="144.0" styleClass="highlight-button" text="+ Nuevo proyecto" textFill="#efefef" />
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="144.0" styleClass="highlight-button" text="\@ Abrir proyecto" textFill="#efefef" />
               </children>
             </VBox>
           </children>
         </AnchorPane>
       </children>
     </VBox>
-    <VBox style="-fx-background-color: #666666ff#666666ff;" prefHeight="400.0" prefWidth="311.0">
+    <VBox prefHeight="400.0" prefWidth="311.0" style="-fx-background-color: #666666ff#666666ff;">
       <children>
         <HBox prefHeight="48.0" prefWidth="279.0" styleClass="highlight-button">
           <children>
-            <Button style="-fx-padding: 0; -fx-background-color: transparent;" mnemonicParsing="false" prefHeight="48.0"
-              prefWidth="314.0">
+            <Button mnemonicParsing="false" prefHeight="48.0" prefWidth="314.0" style="-fx-padding: 0; -fx-background-color: transparent;">
               <graphic>
-                <VBox style="-fx-padding: 0 0 0 5px;" prefHeight="48.0" prefWidth="256.0">
+                <VBox prefHeight="48.0" prefWidth="256.0" style="-fx-padding: 0 0 0 5px;">
                   <children>
-                    <Label prefHeight="28.0" text="Cabina 3x8" textFill="#efefef"/>
-                    <Label prefHeight="21.0" text="C:/Mis Documentos/Proyectos/Cabina 3x8"
-                      textFill="#999999"/>
+                    <Label prefHeight="28.0" text="Cabina 3x8" textFill="#efefef" />
+                    <Label prefHeight="21.0" text="C:/Mis Documentos/Proyectos/Cabina 3x8" textFill="#999999" />
                   </children>
                 </VBox>
               </graphic>
             </Button>
-            <Button style="-fx-background-color: transparent;" mnemonicParsing="false" prefHeight="49.0"
-              prefWidth="46.0" text="x" textFill="#efefef"/>
+            <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="46.0" style="-fx-background-color: transparent;" text="x" textFill="#efefef" />
           </children>
         </HBox>
       </children>
