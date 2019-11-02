@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+<DialogPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="265.0" prefWidth="413.0"
+  xmlns="http://javafx.com/javafx/11.0.1">
+  <buttonTypes>
+    <ButtonType fx:constant="APPLY"/>
+    <ButtonType fx:constant="CANCEL"/>
+  </buttonTypes>
+  <content>
+    <VBox alignment="CENTER" prefHeight="186.0" prefWidth="331.0">
+      <children>
+        <FlowPane prefHeight="200.0" prefWidth="200.0">
+          <children>
+            <Label text="Universo: "/>
+            <Label style="-fx-padding: 0 0 0 20;" text="Canal: ">
+              <opaqueInsets>
+                <Insets/>
+              </opaqueInsets>
+            </Label>
+            <TextField prefHeight="27.0" prefWidth="107.0"/>
+            <TextField prefHeight="27.0" prefWidth="98.0"/>
+          </children>
+        </FlowPane>
+        <FlowPane prefHeight="200.0" prefWidth="200.0"/>
+        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../../../../assets/images/Logo.png"/>
+          </image>
+        </ImageView>
+      </children>
+    </VBox>
+  </content>
+  <header>
+    <BorderPane prefHeight="52.0" prefWidth="331.0">
+      <center>
+        <Label BorderPane.alignment="CENTER" text="Plantilla"/>
+      </center>
+    </BorderPane>
+  </header>
+</DialogPane>

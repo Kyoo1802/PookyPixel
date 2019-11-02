@@ -1,3 +1,10 @@
+* {
+   -primary-background-color: #434343ff;
+   -hover-background-color: #434343cc;
+   -pressed-background-color: #535353cc;
+   -primary-text-color: #d9d9d9;
+}
+
 .label {
   -fx-text-fill: blue;
 }
@@ -7,4 +14,77 @@
 }
 .highlight-button:hover {
   -fx-background-color: #383838;
+}
+
+.tree-view {
+  -fx-background-color: #ffffff11;
+  -fx-border-style: none;
+  -fx-border-width: 0;
+  -fx-border-insets: 0;
+}
+.tree-view:focused {
+  -fx-background-color: #ffffff11;
+}
+.tree-cell {
+  -fx-background-color: transparent; // Default color
+  -fx-text-fill: white;
+}
+.tree-cell:filled:selected{
+  -fx-background-color: #ffffff22; // Unfocused color
+}
+
+.scroll-pane {
+  -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {  //not .scrollpane but .scroll-pane
+  -fx-background-color: transparent;
+}
+.corner {
+  -fx-background-color: transparent ;
+ }
+.scroll-bar:horizontal, .scroll-bar:vertical{
+  -fx-background-color: transparent;
+}
+
+.increment-button, .decrement-button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+  -fx-background-color: white;
+  -fx-background-radius: 5em;
+}
+
+.primary-background {
+  -fx-background-color: -primary-background-color;
+}
+
+.primary-font {
+  -fx-text-fill: -primary-text-color;
+}
+
+.button {
+  -fx-background-color: -primary-background-color;
+  -fx-text-fill: -primary-text-color;
+}
+.button:hover {
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #ffffff88, #ffffff44, #ffffff22, -hover-background-color;
+  -fx-background-insets: -2, -0.3, 1, 2;
+  -fx-background-radius: 7, 6, 4, 3;
+}
+.button:pressed {
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #ffffff88, #ffffff44, #ffffff22, -pressed-background-color;
+  -fx-background-insets: -2, -0.3, 1, 2;
+  -fx-background-radius: 7, 6, 4, 3;
 }

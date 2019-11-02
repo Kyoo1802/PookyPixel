@@ -24,11 +24,12 @@ public class MainApp extends Application {
   @Override
   public void start(Stage stage) {
     MainScene mainScene = injector.getInstance(MainScene.class);
-    mainScene.init(injector, stage, "ui/fixtureUI.fxml");
+    mainScene.init(injector, stage, "ui/mainLayout.fxml");
 
     log.info("Starting your application.");
     stage.setTitle("Pixelandia");
     stage.setScene(mainScene.getScene());
+    stage.setMaximized(true);
     stage.centerOnScreen();
     stage.show();
   }

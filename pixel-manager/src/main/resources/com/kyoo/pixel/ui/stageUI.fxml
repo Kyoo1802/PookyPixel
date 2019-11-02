@@ -2,7 +2,9 @@
 
 <?language javascript?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -10,6 +12,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="600.0" maxWidth="800.0"
   xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.fixtures.FixtureView">
   <children>
@@ -41,5 +45,22 @@
           fx:id="elements"/>
       </content>
     </ScrollPane>
+    <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+      AnchorPane.rightAnchor="0.0">
+      <children>
+        <HBox alignment="CENTER" prefHeight="136.0" prefWidth="802.0" spacing="10.0">
+          <children>
+            <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="67.0" text="C">
+              <HBox.margin>
+                <Insets/>
+              </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="102.0" prefWidth="59.0" text="V"/>
+            <Button mnemonicParsing="false" prefHeight="101.0" prefWidth="59.0" text="A"/>
+          </children>
+        </HBox>
+        <ScrollPane prefHeight="110.0" prefWidth="802.0" styleClass="../stylesheets/style.css"/>
+      </children>
+    </StackPane>
   </children>
 </AnchorPane>

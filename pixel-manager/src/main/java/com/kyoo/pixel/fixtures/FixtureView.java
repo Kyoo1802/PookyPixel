@@ -23,6 +23,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import lombok.extern.log4j.Log4j2;
@@ -43,6 +45,8 @@ public class FixtureView implements Initializable, EventHandler<KeyEvent> {
   private Canvas canvas;
   @FXML
   private ScrollPane canvasScroll;
+  @FXML
+  private TreeView<String> elements;
 
   @Inject
   public FixtureView(FixtureViewModel viewModel, FixtureCanvasRenderer canvasRenderer,
@@ -55,6 +59,22 @@ public class FixtureView implements Initializable, EventHandler<KeyEvent> {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+
+    TreeItem<String> rootItem = new TreeItem<>("Pantalla");
+    TreeItem<String> efectos = new TreeItem<>("Elementos");
+    efectos.getChildren().add(new TreeItem<>("Matriz 10x20"));
+    efectos.getChildren().add(new TreeItem<>("Matriz 30x40"));
+    efectos.getChildren().add(new TreeItem<>("Matriz 10x10"));
+    efectos.getChildren().add(new TreeItem<>("Tira Leds 30"));
+    efectos.getChildren().add(new TreeItem<>("Tira Leds 45"));
+    efectos.getChildren().add(new TreeItem<>("Tira Leds 23"));
+    efectos.getChildren().add(new TreeItem<>("Estrella 3"));
+    efectos.getChildren().add(new TreeItem<>("Esfera"));
+    rootItem.getChildren().add(efectos);
+    rootItem.setExpanded(true);
+    elements.setShowRoot(true);
+    elements.setRoot(rootItem);
+
     canvasScroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
     canvasScroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
     canvasScroll.setContent(canvas);
