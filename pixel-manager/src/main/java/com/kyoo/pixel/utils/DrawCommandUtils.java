@@ -5,12 +5,12 @@ import static com.kyoo.pixel.utils.DrawUtils.drawLed;
 import static com.kyoo.pixel.utils.DrawUtils.drawSelectionRect;
 import static com.kyoo.pixel.utils.DrawUtils.drawText;
 
-import com.kyoo.pixel.connection.ConnectionProperties;
-import com.kyoo.pixel.connection.components.commands.CreateBridgeCommand.CreateBridgeCommandRequest;
-import com.kyoo.pixel.connection.components.commands.CreateLedPathCommand.CreateLedPathCommandRequest;
-import com.kyoo.pixel.connection.components.commands.CreateSquarePanelCommand.CreateSquarePanelCommandRequest;
-import com.kyoo.pixel.connection.components.commands.MoveComponentCommand.MoveCommandRequest;
-import com.kyoo.pixel.connection.components.commands.ScaleComponentCommand.ScaleCommandRequest;
+import com.kyoo.pixel.fixtures.FixtureProperties;
+import com.kyoo.pixel.fixtures.commands.CreateBridgeCommand.CreateBridgeCommandRequest;
+import com.kyoo.pixel.fixtures.commands.CreateLedPathCommand.CreateLedPathCommandRequest;
+import com.kyoo.pixel.fixtures.commands.CreateSquarePanelCommand.CreateSquarePanelCommandRequest;
+import com.kyoo.pixel.fixtures.commands.MoveComponentCommand.MoveCommandRequest;
+import com.kyoo.pixel.fixtures.commands.ScaleComponentCommand.ScaleCommandRequest;
 import java.awt.Dimension;
 import java.awt.Point;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 
 public final class DrawCommandUtils {
 
-  public static void drawSquarePanelCommand(GraphicsContext gc, ConnectionProperties properties,
+  public static void drawSquarePanelCommand(GraphicsContext gc, FixtureProperties properties,
       CreateSquarePanelCommandRequest request, Point pointer) {
     Point startPosition = PositionUtils.toCanvasPosition(
         request.getStartIdxPosition().y, request.getStartIdxPosition().x);
@@ -43,7 +43,7 @@ public final class DrawCommandUtils {
     }
   }
 
-  public static void drawLedPathCommand(GraphicsContext gc, ConnectionProperties properties,
+  public static void drawLedPathCommand(GraphicsContext gc, FixtureProperties properties,
       CreateLedPathCommandRequest request, Point pointer) {
     Point minPoint = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
     Point maxPoint = new Point(0, 0);
@@ -88,7 +88,7 @@ public final class DrawCommandUtils {
     drawText(gc, properties.getSelectColor(), maxPoint, sizeText);
   }
 
-  public static void drawBridgeCommand(GraphicsContext gc, ConnectionProperties properties,
+  public static void drawBridgeCommand(GraphicsContext gc, FixtureProperties properties,
       CreateBridgeCommandRequest request, Point pointer) {
     Point start = getBridgePosition(request.getStartComponent(), true);
     Point end = PositionUtils.toCanvasPosition(pointer);
@@ -100,7 +100,7 @@ public final class DrawCommandUtils {
         end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);
   }
 
-  public static void drawMoveCommand(GraphicsContext gc, ConnectionProperties properties,
+  public static void drawMoveCommand(GraphicsContext gc, FixtureProperties properties,
       MoveCommandRequest request, Point pointer) {
     Point start = PositionUtils.toCanvasPosition(request.getStartIdxPosition());
     Point end = PositionUtils.toCanvasPosition(pointer);
@@ -112,7 +112,7 @@ public final class DrawCommandUtils {
         end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);
   }
 
-  public static void drawScaleCommand(GraphicsContext gc, ConnectionProperties properties,
+  public static void drawScaleCommand(GraphicsContext gc, FixtureProperties properties,
       ScaleCommandRequest request, Point idxPointer) {
 
     // Draw Scale square

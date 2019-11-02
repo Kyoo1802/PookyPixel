@@ -2,7 +2,7 @@ package com.kyoo.pixel;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.kyoo.pixel.connection.ConnectionModule;
+import com.kyoo.pixel.fixtures.FixtureModule;
 import com.kyoo.pixel.visualizer.VisualizerModule;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -13,7 +13,7 @@ public class MainApp extends Application {
 
   public static final Injector injector = Guice.createInjector(
       new CommonModule(),
-      new ConnectionModule(),
+      new FixtureModule(),
       new VisualizerModule());
 
   public static void main(String[] args) {
@@ -24,7 +24,7 @@ public class MainApp extends Application {
   @Override
   public void start(Stage stage) {
     MainScene mainScene = injector.getInstance(MainScene.class);
-    mainScene.init(injector, stage, "ui/SplashUI.fxml");
+    mainScene.init(injector, stage, "ui/fixtureUI.fxml");
 
     log.info("Starting your application.");
     stage.setTitle("Pixelandia");

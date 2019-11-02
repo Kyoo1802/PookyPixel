@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="913eaf17-216d-4b9f-bb6d-e08cbe607d51" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/FixtureCommandRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/BasicComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/BasicComponentUnit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/Component.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/ComponentUnit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/LedComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveBridge.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveComponentManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveComponentUnit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveGroup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveLed.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveLedPath.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/paint/InteractiveSquarePanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/paint/DrawableObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/paint/MovableObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/MoveComponentUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/SelectComponentUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/MainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/ConnectionCanvasRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/FixtureCanvasRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/ConnectionModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/FixtureModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/ConnectionModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/FixtureModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/ConnectionProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/FixtureProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/ConnectionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/FixtureView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/ConnectionViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/FixtureViewModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/ComponentKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/ComponentKey.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/ComponentType.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/ComponentType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/ConnectionComponent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/ConnectionComponentManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/ComponentManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/LedComponent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/Pointer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/pointers/Pointer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/ScalableComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/paint/ScalableObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/SelectableComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/paint/SelectableObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/ConnectionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/FixtureCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/ConnectionCommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/FixtureCommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/ConnectionCommandRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/CreateBridgeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/CreateBridgeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/CreateDriverPortCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/CreateLedPathCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/CreateLedPathCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/CreateSquarePanelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/CreateSquarePanelCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/MoveComponentCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/MoveComponentCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/ScaleComponentCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/ScaleComponentCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/commands/SelectComponentCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/commands/SelectComponentCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/Bridge.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/led/Bridge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/DriverPort.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/Led.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/led/Led.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/LedPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/led/LedPath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/SquarePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/components/led/SquarePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/pointers/DefaultPointer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/pointers/DefaultPointer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/pointers/ImagePointer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/pointers/ImagePointer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/components/impl/pointers/LedComponentPointer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/pointers/LedComponentPointer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/InputInteraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/InputInteraction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/InteractionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/InteractionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/KeyboardInteraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/KeyboardInteraction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/KeyboardInteractionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/KeyboardInteractionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/PositionInteraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/PositionInteraction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/PositionInteractionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/PositionInteractionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/StateInteraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/StateInteraction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/StateInteractionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/StateInteractionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/handlers/CreateComponentHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/handlers/CreateComponentHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/handlers/SelectCommandHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/handlers/SelectCommandHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/connection/interactions/handlers/TransformationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/fixtures/interactions/handlers/TransformationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/DrawCommandUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/DrawCommandUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/DrawComponentUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/DrawComponentUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/PositionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/java/com/kyoo/pixel/utils/PositionUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/resources/com/kyoo/pixel/ui/connectionUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/resources/com/kyoo/pixel/ui/connectionUI.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pixel-manager/src/main/resources/com/kyoo/pixel/ui/selectProjectUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../pixel-manager/src/main/resources/com/kyoo/pixel/ui/selectProjectUI.fxml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1T0Oq4BE19prYDyLjEvmIIY3px6" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file enabled="true" id="idea.log" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="913eaf17-216d-4b9f-bb6d-e08cbe607d51" name="Default Changelist" comment="" />
+      <created>1572593733101</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1572593733101</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

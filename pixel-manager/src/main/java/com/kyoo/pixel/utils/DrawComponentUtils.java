@@ -4,16 +4,13 @@ import static com.kyoo.pixel.utils.DrawUtils.DOT_SIZE;
 import static com.kyoo.pixel.utils.DrawUtils.MAX_HORIZONTAL_LEDS;
 import static com.kyoo.pixel.utils.DrawUtils.MAX_VERTICAL_LEDS;
 import static com.kyoo.pixel.utils.DrawUtils.drawSelectionRect;
-import static com.kyoo.pixel.utils.DrawUtils.drawText;
 
-import com.kyoo.pixel.connection.ConnectionProperties;
-import com.kyoo.pixel.connection.components.ConnectionComponent;
-import com.kyoo.pixel.connection.components.LedComponent;
-import com.kyoo.pixel.connection.components.SelectableComponent;
-import com.kyoo.pixel.connection.components.SelectableComponent.SelectedSide;
-import com.kyoo.pixel.connection.components.impl.Bridge;
-import com.kyoo.pixel.connection.components.impl.DriverPort;
-import com.kyoo.pixel.connection.components.impl.Led;
+import com.kyoo.pixel.fixtures.FixtureProperties;
+import com.kyoo.pixel.fixtures.components.Component;
+import com.kyoo.pixel.fixtures.components.ComponentUnit;
+import com.kyoo.pixel.fixtures.components.LedComponent;
+import com.kyoo.pixel.fixtures.components.led.Bridge;
+import com.kyoo.pixel.fixtures.components.led.Led;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -29,7 +26,7 @@ public final class DrawComponentUtils {
 
 
   public static void getBackground(GraphicsContext gc, Dimension size,
-      ConnectionProperties properties) {
+      FixtureProperties properties) {
     Image img = DrawUtils.OBJECTS_CACHE.get("Background-" + size, o -> {
 
       Dimension canvasDimension = PositionUtils.toCanvasDimension(size);
@@ -59,7 +56,7 @@ public final class DrawComponentUtils {
     gc.drawImage(img, 0, 0);
   }
 
-  public static void drawLedComponent(GraphicsContext gc, ConnectionProperties properties,
+  public static void drawLedComponent(GraphicsContext gc, FixtureProperties properties,
       LedComponent ledComponent) {
     Image img = componentCache.get(ledComponent, component -> {
       Dimension ledComponentSize = PositionUtils.toCanvasDimension(component.getSize());
@@ -71,7 +68,7 @@ public final class DrawComponentUtils {
       int[] pathXPoint = new int[component.getLeds().size()];
       int[] pathYPoint = new int[component.getLeds().size()];
       int idx = 0;
-      for (Led led : component.getLeds()) {
+      for (Led led : component.getLeds().values()) {
         String hexColor;
         if (idx == 0) {
           hexColor = properties.getLedStartColor();
@@ -80,7 +77,7 @@ public final class DrawComponentUtils {
         } else {
           hexColor = properties.getLedOffColor();
         }
-        Point ledCanvasPosition = PositionUtils.toCanvasPosition(led.getStartIdxPosition());
+        Point ledCanvasPosition = PositionUtils.toCanvasPosition(led.getPosition());
         pathXPoint[idx] = ledCanvasPosition.x + PositionUtils.HALF_SQUARE_LENGTH;
         pathYPoint[idx] = ledCanvasPosition.y + PositionUtils.HALF_SQUARE_LENGTH;
 
@@ -100,23 +97,14 @@ public final class DrawComponentUtils {
     });
 
     // Draw cached Image
-    Point ledCanvasPosition = PositionUtils.toCanvasPosition(ledComponent.getStartIdxPosition());
+    Point ledCanvasPosition = PositionUtils.toCanvasPosition(ledComponent.getPosition());
     gc.drawImage(img, ledCanvasPosition.x, ledCanvasPosition.y);
   }
 
-  public static void drawDriverPort(GraphicsContext gc, ConnectionProperties properties,
-      DriverPort port) {
-    Point canvasPosition = PositionUtils
-        .toCanvasPosition(port.getStartIdxPosition().y, port.getStartIdxPosition().x);
-    Dimension canvasDimension = PositionUtils.toCanvasDimension(port.getSize());
-    gc.setFill(Color.web(properties.getDriverPortColor()));
-    gc.fillOval(canvasPosition.x, canvasPosition.y, canvasDimension.width, canvasDimension.height);
-  }
-
-  public static void drawBridge(GraphicsContext gc, ConnectionProperties properties,
+  public static void drawBridge(GraphicsContext gc, FixtureProperties properties,
       Bridge bridge) {
-    Point start = getBridgePosition(bridge.getStartComponent(), true);
-    Point end = getBridgePosition(bridge.getEndComponent(), false);
+    Point start = null;//getBridgePosition(bridge.getStartComponentKey(), true);
+    Point end = null; //getBridgePosition(bridge.getEndComponentKey(), false);
     gc.setLineWidth(2);
     gc.setStroke(Color.web(properties.getBridgeColor()));
     gc.setLineDashes();
@@ -125,31 +113,26 @@ public final class DrawComponentUtils {
         end.x + PositionUtils.HALF_SQUARE_LENGTH, end.y + PositionUtils.HALF_SQUARE_LENGTH);
   }
 
-  protected static Point getBridgePosition(ConnectionComponent c, boolean isStart) {
+  protected static Point getBridgePosition(Component c, boolean isStart) {
     if (c instanceof LedComponent) {
       LedComponent lc = ((LedComponent) c);
       Led l = isStart ? lc.getLastLed() : lc.getFirstLed();
       return PositionUtils
-          .toCanvasPosition(lc.getStartIdxPosition().y + l.getStartIdxPosition().y,
-              lc.getStartIdxPosition().x + l.getStartIdxPosition().x);
+          .toCanvasPosition(lc.getPosition().y + l.getPosition().y,
+              lc.getPosition().x + l.getPosition().x);
     } else {
-      return PositionUtils.toCanvasPosition(c.getStartIdxPosition().y, c.getStartIdxPosition().x);
+      return PositionUtils.toCanvasPosition(c.getPosition().y, c.getPosition().x);
     }
   }
 
-  public static void drawComponentSelection(GraphicsContext gc, ConnectionProperties properties,
-      SelectableComponent component) {
-    if (component.getSelectedSide() == SelectedSide.NONE) {
-      return;
-    }
-    Point startPosition = PositionUtils.toCanvasPosition(component.getStartIdxPosition());
-    Point endPosition = PositionUtils.toCanvasPosition(component.getEndIdxPosition());
-    Dimension size = PositionUtils.toCanvasDimension(component.getSize());
+  public static void drawComponentSelection(GraphicsContext gc, FixtureProperties properties,
+      ComponentUnit componentUnit) {
+    Point startPosition = PositionUtils.toCanvasPosition(componentUnit.getPosition());
+    Point endPosition = PositionUtils.toCanvasPosition(componentUnit.getEndPosition());
+    Dimension size = PositionUtils.toCanvasDimension(componentUnit.getSize());
 
     drawSelectionRect(gc, properties.getSelectColor(), startPosition, size);
     drawResizePoints(gc, properties.getSelectColor(), startPosition, endPosition);
-    drawText(gc, properties.getSelectColor(), endPosition,
-        component.description());
   }
 
   private static void drawResizePoints(GraphicsContext gc, String hexColor, Point startPosition,

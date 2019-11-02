@@ -51,7 +51,7 @@
         <TabPane prefHeight="401.0" prefWidth="129.0" side="BOTTOM">
           <tabs>
             <Tab text="Conexion">
-              <fx:include source="connectionUI.fxml"/>
+              <fx:include source="fixtureUI.fxml"/>
             </Tab>
             <Tab text="Efectos">
               <content>
