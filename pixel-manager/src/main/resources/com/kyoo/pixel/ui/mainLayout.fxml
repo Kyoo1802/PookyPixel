@@ -7,10 +7,16 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
-  xmlns="http://javafx.com/javafx/11.0.1">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity"
+  maxWidth="-Infinity"
+  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.stage.StageView">
   <center>
-    <StackPane BorderPane.alignment="CENTER" prefHeight="150.0" prefWidth="200.0"/>
+    <StackPane fx:id="stageStackPane">
+      <children>
+        <fx:include source="metaStageUI.fxml" fx:id="metaStage"/>
+        <fx:include source="stageUI.fxml" fx:id="stage"/>
+      </children>
+    </StackPane>
   </center>
   <top>
     <BorderPane BorderPane.alignment="CENTER" maxHeight="42.0" styleClass="primary-background">
@@ -37,8 +43,8 @@
         <HBox BorderPane.alignment="CENTER" alignment="CENTER_RIGHT" prefHeight="100.0"
           prefWidth="200.0">
           <children>
-            <Button mnemonicParsing="false" text="-&gt;"/>
-            <Button mnemonicParsing="false" text="&lt;-"/>
+            <Button mnemonicParsing="false" onMouseClicked="#changeTop" text="-&gt;"/>
+            <Button mnemonicParsing="false" onMouseClicked="#changeTop" text="&lt;-"/>
             <Button mnemonicParsing="false" text="/"/>
             <Button mnemonicParsing="false" text="C"/>
           </children>

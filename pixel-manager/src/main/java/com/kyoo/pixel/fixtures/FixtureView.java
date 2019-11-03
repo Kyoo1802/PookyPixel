@@ -27,6 +27,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -47,6 +49,12 @@ public class FixtureView implements Initializable, EventHandler<KeyEvent> {
   private ScrollPane canvasScroll;
   @FXML
   private TreeView<String> elements;
+  @FXML
+  private StackPane propertyBtns;
+  @FXML
+  private StackPane createBtns;
+  @FXML
+  private AnchorPane mainPane;
 
   @Inject
   public FixtureView(FixtureViewModel viewModel, FixtureCanvasRenderer canvasRenderer,
@@ -59,6 +67,10 @@ public class FixtureView implements Initializable, EventHandler<KeyEvent> {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+    mainPane.widthProperty().addListener((o, oV, nV) -> {
+      AnchorPane.setLeftAnchor(propertyBtns, mainPane.getWidth() / 2 - propertyBtns.getWidth() / 2);
+      AnchorPane.setLeftAnchor(createBtns, mainPane.getWidth() / 2 - createBtns.getWidth() / 2);
+    });
 
     TreeItem<String> rootItem = new TreeItem<>("Pantalla");
     TreeItem<String> efectos = new TreeItem<>("Elementos");

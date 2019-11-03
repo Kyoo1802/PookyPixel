@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 
 @Singleton
-public class MainScene {
+public class MainStage {
 
   @Getter
   private Scene scene;

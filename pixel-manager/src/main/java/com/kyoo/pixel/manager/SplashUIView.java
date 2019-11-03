@@ -2,7 +2,7 @@ package com.kyoo.pixel.manager;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.ImageAssets;
-import com.kyoo.pixel.MainScene;
+import com.kyoo.pixel.MainStage;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.concurrent.Task;
@@ -14,16 +14,16 @@ import javafx.scene.control.ProgressBar;
 public final class SplashUIView implements Initializable {
 
   private final Task copyWorker;
-  private final MainScene mainScene;
+  private final MainStage mainStage;
   @FXML
   private Label label;
   @FXML
   private ProgressBar progressBar;
 
   @Inject
-  public SplashUIView(MainScene mainScene) {
+  public SplashUIView(MainStage mainStage) {
     copyWorker = createWorker();
-    this.mainScene = mainScene;
+    this.mainStage = mainStage;
   }
 
   @Override
@@ -33,7 +33,7 @@ public final class SplashUIView implements Initializable {
     progressBar.progressProperty().bind(copyWorker.progressProperty());
     progressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
           if (newValue.doubleValue() == 1) {
-            mainScene.switchScene("ui/selectProjectUI.fxml", false);
+            mainStage.switchScene("ui/selectProjectUI.fxml", false);
           }
         }
     );
