@@ -1,65 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?language javascript?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.fixtures.FixtureView"
-  fx:id="mainPane">
+<AnchorPane
+  xmlns:fx="http://javafx.com/fxml/1"
+  maxHeight="1.7976931348623157E308"
+  maxWidth="1.7976931348623157E308"
+  xmlns="http://javafx.com/javafx/11.0.1"
+  fx:controller="com.kyoo.pixel.stage.StageView"
+  fx:id="stagePane">
   <children>
-    <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-      fitToHeight="true" fitToWidth="true" pannable="true"
-      fx:id="canvasScroll">
-      <content>
-        <Canvas height="2000.0" width="2000.0" fx:id="canvas"/>
-      </content>
-    </ScrollPane>
-    <ScrollPane styleClass="../stylesheets/style.css../stylesheets/style.css">
-      <content>
-        <TreeView prefHeight="252.0" prefWidth="134.0" styleClass="../stylesheets/style.css"
-          fx:id="elements"/>
-      </content>
-    </ScrollPane>
-    <StackPane AnchorPane.topAnchor="0.0" maxHeight="1.7976931348623157E308"
-      maxWidth="1.7976931348623157E308" fx:id="createBtns">
-      <children>
+    <BorderPane AnchorPane.topAnchor="0.0" fx:id="createBtns">
+      <center>
         <FlowPane alignment="CENTER" maxWidth="200.0">
-          <ToggleButton text="Sp" fx:id="createSquarePanelBtn">
+          <ToggleButton fx:id="createDJBtn">
+            <graphic>
+              <ImageView fitHeight="32.0" fitWidth="32.0">
+                <Image url="@/assets/images/dj.png"/>
+              </ImageView>
+            </graphic>
             <toggleGroup>
-              <ToggleGroup fx:id="actions"/>
+              <ToggleGroup fx:id="stageActions"/>
             </toggleGroup>
           </ToggleButton>
-          <ToggleButton text="Dp" toggleGroup="$actions" fx:id="createDriverPortBtn"/>
-          <ToggleButton text="Lp" toggleGroup="$actions" fx:id="createLedPathBtn"/>
-          <ToggleButton text="B" toggleGroup="$actions" fx:id="createBridgeBtn"/>
-          <fx:define>
-            <ToggleGroup fx:id="actions"/>
-          </fx:define>
+          <ToggleButton toggleGroup="$stageActions" fx:id="createStageBtn">
+            <graphic>
+              <ImageView fitHeight="32.0" fitWidth="32.0">
+                <Image url="@/assets/images/stage_steel.png"/>
+              </ImageView>
+            </graphic>
+          </ToggleButton>
+          <ToggleButton toggleGroup="$stageActions" fx:id="createTxtBtn">
+            <graphic>
+              <ImageView fitHeight="32.0" fitWidth="32.0">
+                <Image url="@/assets/images/text.png"/>
+              </ImageView>
+            </graphic>
+          </ToggleButton>
         </FlowPane>
-      </children>
-    </StackPane>
-    <StackPane AnchorPane.bottomAnchor="0.0" maxHeight="1.7976931348623157E308"
-      maxWidth="1.7976931348623157E308" fx:id="propertyBtns">
+      </center>
+    </BorderPane>
+    <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+      fitToHeight="true" fitToWidth="true"
+      fx:id="canvasStageScroll">
+      <content>
+        <Canvas height="2000.0" width="2000.0" fx:id="canvasStage"/>
+      </content>
+    </ScrollPane>
+    <ScrollPane>
+      <content>
+        <TreeView prefHeight="252.0" prefWidth="134.0" fx:id="stageElements"/>
+      </content>
+    </ScrollPane>
+    <StackPane AnchorPane.bottomAnchor="0.0" fx:id="propertyBtns">
       <children>
         <HBox alignment="CENTER" spacing="10.0">
           <children>
-            <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="67.0" text="C">
-              <HBox.margin>
-                <Insets/>
-              </HBox.margin>
+            <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="67.0">
+              <graphic>
+                <ImageView fitHeight="64.0" fitWidth="64.0">
+                  <Image url="@/assets/images/color_picker.png"/>
+                </ImageView>
+              </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="102.0" prefWidth="59.0" text="V"/>
-            <Button mnemonicParsing="false" prefHeight="101.0" prefWidth="59.0" text="A"/>
+            <Button mnemonicParsing="false" prefHeight="102.0" prefWidth="59.0">
+              <graphic>
+                <ImageView fitHeight="64.0" fitWidth="64.0">
+                  <Image url="@/assets/images/live.png"/>
+                </ImageView>
+              </graphic>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="101.0" prefWidth="59.0">
+              <graphic>
+                <ImageView fitHeight="64.0" fitWidth="64.0">
+                  <Image url="@/assets/images/animation.png"/>
+                </ImageView>
+              </graphic>
+            </Button>
           </children>
         </HBox>
       </children>

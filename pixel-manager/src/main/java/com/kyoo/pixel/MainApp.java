@@ -23,16 +23,16 @@ public class MainApp extends Application {
 
   @Override
   public void start(Stage stage) {
-    MainStage mainStage = injector.getInstance(MainStage.class);
-    mainStage.init(injector, stage, "ui/mainLayout.fxml");
+    SceneTransition sceneTransition = injector.getInstance(SceneTransition.class);
+    sceneTransition.init(injector, stage, "ui/splashUI.fxml");
 
     log.info("Starting your application.");
     stage.setTitle("Pixelandia");
-    stage.setScene(mainStage.getScene());
-    stage.setMaximized(true);
+    stage.setScene(sceneTransition.getScene());
+
+//    stage.setMinWidth(750);
+//    stage.setMinHeight(500);
     stage.centerOnScreen();
-    stage.setMinWidth(750);
-    stage.setMinHeight(500);
     stage.show();
   }
 

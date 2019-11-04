@@ -1,7 +1,8 @@
 package com.kyoo.pixel.fixtures;
 
 import com.google.inject.Inject;
-import com.kyoo.pixel.MainReleaseKeyHandler;
+import com.google.inject.Singleton;
+import com.kyoo.pixel.MainKeyHandler;
 import com.kyoo.pixel.fixtures.interactions.InteractionRequest;
 import com.kyoo.pixel.fixtures.interactions.KeyboardInteractionRequest;
 import com.kyoo.pixel.fixtures.interactions.KeyboardInteractionRequest.KeyboardKey;
@@ -28,15 +29,16 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class FixtureView implements Initializable, EventHandler<KeyEvent> {
+@Singleton
+public final class FixtureView implements Initializable, EventHandler<KeyEvent> {
 
   private final FixtureViewModel viewModel;
   private final FixtureCanvasRenderer canvasRenderer;
-  private final MainReleaseKeyHandler keyboardHandler;
+  private final MainKeyHandler keyboardHandler;
   @FXML
   private ToggleButton createSquarePanelBtn;
   @FXML
@@ -50,15 +52,13 @@ public class FixtureView implements Initializable, EventHandler<KeyEvent> {
   @FXML
   private TreeView<String> elements;
   @FXML
-  private StackPane propertyBtns;
+  private BorderPane fixtureBtns;
   @FXML
-  private StackPane createBtns;
-  @FXML
-  private AnchorPane mainPane;
+  private AnchorPane fixturePane;
 
   @Inject
   public FixtureView(FixtureViewModel viewModel, FixtureCanvasRenderer canvasRenderer,
-      MainReleaseKeyHandler keyboardHandler) {
+      MainKeyHandler keyboardHandler) {
     this.viewModel = viewModel;
     this.canvasRenderer = canvasRenderer;
     this.keyboardHandler = keyboardHandler;
@@ -67,10 +67,8 @@ public class FixtureView implements Initializable, EventHandler<KeyEvent> {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    mainPane.widthProperty().addListener((o, oV, nV) -> {
-      AnchorPane.setLeftAnchor(propertyBtns, mainPane.getWidth() / 2 - propertyBtns.getWidth() / 2);
-      AnchorPane.setLeftAnchor(createBtns, mainPane.getWidth() / 2 - createBtns.getWidth() / 2);
-    });
+    fixturePane.widthProperty().addListener((o, oV, nV) -> AnchorPane
+        .setLeftAnchor(fixtureBtns, fixturePane.getWidth() / 2 - fixtureBtns.getWidth() / 2));
 
     TreeItem<String> rootItem = new TreeItem<>("Pantalla");
     TreeItem<String> efectos = new TreeItem<>("Elementos");

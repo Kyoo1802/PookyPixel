@@ -1,38 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?language javascript?>
-
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="600.0" maxWidth="800.0"
-  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.fixtures.FixtureView">
+<AnchorPane
+  xmlns:fx="http://javafx.com/fxml/1"
+  maxHeight="1.7976931348623157E308"
+  maxWidth="1.7976931348623157E308"
+  xmlns="http://javafx.com/javafx/11.0.1"
+  fx:controller="com.kyoo.pixel.fixtures.FixtureView"
+  fx:id="fixturePane">
   <children>
-    <BorderPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <BorderPane AnchorPane.topAnchor="0.0" fx:id="fixtureBtns">
       <center>
         <FlowPane alignment="CENTER" maxWidth="200.0">
-          <ToggleButton text="Sp" fx:id="createSquarePanelBtn">
+          <ToggleButton fx:id="createSquarePanelBtn">
+            <graphic>
+              <ImageView fitHeight="32.0" fitWidth="32.0">
+                <Image url="@/assets/images/led_matrix.png"/>
+              </ImageView>
+            </graphic>
             <toggleGroup>
-              <ToggleGroup fx:id="actions"/>
+              <ToggleGroup fx:id="fixtureActions"/>
             </toggleGroup>
           </ToggleButton>
-          <ToggleButton text="Dp" toggleGroup="$actions" fx:id="createDriverPortBtn"/>
-          <ToggleButton text="Lp" toggleGroup="$actions" fx:id="createLedPathBtn"/>
-          <ToggleButton text="B" toggleGroup="$actions" fx:id="createBridgeBtn"/>
-          <fx:define>
-            <ToggleGroup fx:id="actions"/>
-          </fx:define>
+          <ToggleButton toggleGroup="$fixtureActions"
+            fx:id="createLedPathBtn">
+            <graphic>
+              <ImageView fitHeight="32.0" fitWidth="32.0">
+                <Image url="@/assets/images/led_strip.png"/>
+              </ImageView>
+            </graphic>
+          </ToggleButton>
+          <ToggleButton toggleGroup="$fixtureActions"
+            fx:id="createBridgeBtn">
+            <graphic>
+              <ImageView fitHeight="32.0" fitWidth="32.0">
+                <Image url="@/assets/images/bridge.png"/>
+              </ImageView>
+            </graphic>
+          </ToggleButton>
         </FlowPane>
       </center>
     </BorderPane>
-    <ScrollPane fx:id="canvasScroll">
+    <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+      fitToHeight="true" fitToWidth="true"
+      fx:id="canvasScroll">
       <content>
-        <Canvas height="600.0" width="800.0" fx:id="canvas"/>
+        <Canvas height="2000.0" width="2000.0" fx:id="canvas"/>
       </content>
     </ScrollPane>
     <ScrollPane styleClass="../stylesheets/style.css../stylesheets/style.css">

@@ -3,17 +3,11 @@
    -hover-background-color: #434343cc;
    -pressed-background-color: #535353cc;
    -primary-text-color: #d9d9d9;
+   -secondary-background-color: #666666ff;
 }
 
 .label {
   -fx-text-fill: blue;
-}
-.highlight-button {
-  -fx-background-color: transparent;
-  -fx-cursor: hand;
-}
-.highlight-button:hover {
-  -fx-background-color: #383838;
 }
 
 .tree-view {
@@ -68,12 +62,16 @@
   -fx-background-color: -primary-background-color;
 }
 
+.secondary-background {
+  -fx-background-color: -secondary-background-color;
+}
+
 .primary-font {
   -fx-text-fill: -primary-text-color;
 }
 
 .button {
-  -fx-background-color: -primary-background-color;
+  -fx-background-color: -secondary-background-color;
   -fx-text-fill: -primary-text-color;
 }
 .button:hover {
@@ -85,6 +83,40 @@
 .button:pressed {
   -fx-text-fill: #ffffff;
   -fx-background-color: #ffffff88, #ffffff44, #ffffff22, -pressed-background-color;
+  -fx-background-insets: -2, -0.3, 1, 2;
+  -fx-background-radius: 7, 6, 4, 3;
+}
+
+.textField {
+  -fx-text-fill: -primary-text-color;
+  -fx-background-color: -primary-background-color;
+}
+.label {
+  -fx-text-fill: -primary-text-color;
+}
+
+
+
+.toggle-button {
+  -fx-background-color: -secondary-background-color;
+  -fx-text-fill: -primary-text-color;
+}
+.toggle-button:hover {
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #ffffff88, #ffffff44, #ffffff22, -hover-background-color;
+  -fx-background-insets: -2, -0.3, 1, 2;
+  -fx-background-radius: 7, 6, 4, 3;
+}
+.toggle-button:pressed {
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #ffffff88, #ffffff44, #ffffff22, -pressed-background-color;
+  -fx-background-insets: -2, -0.3, 1, 2;
+  -fx-background-radius: 7, 6, 4, 3;
+}
+
+.toggle-button:selected {
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #ffffff88, #ffffff44, #ffffff22, -secondary-background-color;
   -fx-background-insets: -2, -0.3, 1, 2;
   -fx-background-radius: 7, 6, 4, 3;
 }

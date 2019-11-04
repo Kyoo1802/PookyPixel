@@ -6,25 +6,27 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="300.0" prefWidth="400.0"
-  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.manager.SplashUIView">
+<AnchorPane
+  xmlns:fx="http://javafx.com/fxml/1"
+  prefHeight="280.0" prefWidth="400.0"
+  styleClass="primary-background"
+  xmlns="http://javafx.com/javafx/11.0.1"
+  fx:controller="com.kyoo.pixel.project.SplashView">
   <children>
-    <ImageView fitHeight="183.0" fitWidth="282.0"
-      layoutX="65.0"
-      layoutY="44.0"
-      pickOnBounds="true" preserveRatio="true">
-      <Image url="@/assets/images/Logo.png"/>
+    <ImageView AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0"
+      AnchorPane.topAnchor="40.0" fitHeight="160.0" fitWidth="160.0"
+      layoutX="65.0" layoutY="44.0" preserveRatio="true">
+      <Image url="@/assets/images/pixelandia.png"/>
     </ImageView>
-    <Label layoutX="23.0" layoutY="135.0" minHeight="16" minWidth="65.0" prefHeight="17.0"
-      prefWidth="224.0" fx:id="label"/>
-
-
-    <Label layoutX="154.0" layoutY="235.0" text="%splash.status">
+    <Label alignment="CENTER" layoutX="160.0" layoutY="115.0" text="Pixelandia">
       <font>
-        <Font name="System Bold" size="16.0"/>
+        <Font name="Verdana" size="16.0"/>
       </font>
     </Label>
-    <ProgressBar layoutX="9.0" layoutY="268.0" prefHeight="18.0" prefWidth="403.0"
+    <Label AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="40.0" text="%splash.status"/>
+    <Label AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="150.0" fx:id="splashValue"/>
+    <ProgressBar AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+      AnchorPane.rightAnchor="10.0"
       progress="0.0" fx:id="progressBar"/>
   </children>
 </AnchorPane>

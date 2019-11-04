@@ -1,51 +1,76 @@
 package com.kyoo.pixel.stage;
 
+import static javafx.scene.paint.Color.GRAY;
+
+import com.google.inject.Singleton;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.collections.ObservableList;
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
+@Singleton
 public class StageView implements Initializable {
 
   @FXML
-  private StackPane stageStackPane;
+  private Canvas canvasStage;
+  @FXML
+  private ScrollPane canvasStageScroll;
+  @FXML
+  private TreeView<String> stageElements;
+  @FXML
+  private StackPane propertyBtns;
+  @FXML
+  private BorderPane createBtns;
+  @FXML
+  private AnchorPane stagePane;
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-  }
+    stagePane.widthProperty().addListener((o, oV, nV) -> {
+      AnchorPane
+          .setLeftAnchor(propertyBtns, stagePane.getWidth() / 2 - propertyBtns.getWidth() / 2);
+      AnchorPane.setLeftAnchor(createBtns, stagePane.getWidth() / 2 - createBtns.getWidth() / 2);
+    });
 
-  @FXML
-  public void changeTop() {
-    ObservableList<Node> childs = this.stageStackPane.getChildren();
+    TreeItem<String> rootItem = new TreeItem<>("Pantalla");
+    TreeItem<String> efectos = new TreeItem<>("Elementos");
+    efectos.getChildren().add(new TreeItem<>("Matriz 10x20"));
+    efectos.getChildren().add(new TreeItem<>("Matriz 30x40"));
+    efectos.getChildren().add(new TreeItem<>("Matriz 10x10"));
+    efectos.getChildren().add(new TreeItem<>("Tira Leds 30"));
+    efectos.getChildren().add(new TreeItem<>("Tira Leds 45"));
+    efectos.getChildren().add(new TreeItem<>("Tira Leds 23"));
+    efectos.getChildren().add(new TreeItem<>("Estrella 3"));
+    efectos.getChildren().add(new TreeItem<>("Esfera"));
+    rootItem.getChildren().add(efectos);
+    rootItem.setExpanded(true);
+    stageElements.setShowRoot(true);
+    stageElements.setRoot(rootItem);
 
-    if (childs.size() > 1) {
-      // This node will be brought to the front
-      Node newTopNode = childs.get(childs.size() - 2);
-      Node topNode = childs.get(childs.size() - 1);
-      topNode.setVisible(true);
-      newTopNode.setVisible(true);
+    canvasStageScroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+    canvasStageScroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+    canvasStageScroll.setContent(canvasStage);
 
-      FadeTransition ft1 = new FadeTransition(Duration.millis(1000), newTopNode);
-      ft1.setFromValue(0);
-      ft1.setToValue(1);
-      FadeTransition ft2 = new FadeTransition(Duration.millis(1000), topNode);
-      ft2.setFromValue(1);
-      ft2.setToValue(0);
-      ParallelTransition pt = new ParallelTransition(ft1, ft2);
-      pt.setOnFinished(t ->
-      {
-        topNode.setVisible(false);
-        newTopNode.setVisible(true);
-      });
-      pt.play();
-      topNode.toBack();
-
-    }
+    AnimationTimer timer = new AnimationTimer() {
+      @Override
+      public void handle(long now) {
+        GraphicsContext gc = canvasStage.getGraphicsContext2D();
+        gc.setFill(GRAY);
+        gc.fillRect(0, 0, canvasStage.getWidth(), canvasStage.getHeight());
+      }
+    };
+    timer.start();
   }
 }

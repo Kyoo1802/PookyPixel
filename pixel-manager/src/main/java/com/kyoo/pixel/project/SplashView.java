@@ -1,8 +1,8 @@
-package com.kyoo.pixel.manager;
+package com.kyoo.pixel.project;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.ImageAssets;
-import com.kyoo.pixel.MainStage;
+import com.kyoo.pixel.SceneTransition;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.concurrent.Task;
@@ -11,29 +11,29 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 
-public final class SplashUIView implements Initializable {
+public final class SplashView implements Initializable {
 
   private final Task copyWorker;
-  private final MainStage mainStage;
+  private final SceneTransition sceneTransition;
   @FXML
-  private Label label;
+  private Label splashValue;
   @FXML
   private ProgressBar progressBar;
 
   @Inject
-  public SplashUIView(MainStage mainStage) {
+  public SplashView(SceneTransition sceneTransition) {
     copyWorker = createWorker();
-    this.mainStage = mainStage;
+    this.sceneTransition = sceneTransition;
   }
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     copyWorker.messageProperty()
-        .addListener((observable, oldValue, newValue) -> label.setText(newValue));
+        .addListener((observable, oldValue, newValue) -> splashValue.setText(newValue));
     progressBar.progressProperty().bind(copyWorker.progressProperty());
     progressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
           if (newValue.doubleValue() == 1) {
-            mainStage.switchScene("ui/selectProjectUI.fxml", false);
+            sceneTransition.switchScene("ui/manageProjectsUI.fxml", false);
           }
         }
     );

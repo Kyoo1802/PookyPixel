@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity"
-  maxWidth="-Infinity"
-  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.stage.StageView">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+  xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.kyoo.pixel.stage.MainStageView">
   <center>
     <StackPane fx:id="stageStackPane">
       <children>
-        <fx:include source="metaStageUI.fxml" fx:id="metaStage"/>
-        <fx:include source="stageUI.fxml" fx:id="stage"/>
+        <fx:include source="metaStageUI.fxml" visible="true" fx:id="metaStage"/>
+        <fx:include source="fixtureUI.fxml" visible="false" fx:id="fixture"/>
+        <fx:include source="stageUI.fxml" visible="false" fx:id="stage"/>
       </children>
     </StackPane>
   </center>
@@ -33,7 +33,7 @@
           <children>
             <ImageView fitHeight="33.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
               <image>
-                <Image url="@/assets/images/Logo.png"/>
+                <Image url="@/assets/images/pixelandia.png"/>
               </image>
             </ImageView>
           </children>
@@ -41,12 +41,12 @@
       </left>
       <right>
         <HBox BorderPane.alignment="CENTER" alignment="CENTER_RIGHT" prefHeight="100.0"
-          prefWidth="200.0">
+          prefWidth="200.0" spacing="5">
           <children>
-            <Button mnemonicParsing="false" onMouseClicked="#changeTop" text="-&gt;"/>
-            <Button mnemonicParsing="false" onMouseClicked="#changeTop" text="&lt;-"/>
-            <Button mnemonicParsing="false" text="/"/>
-            <Button mnemonicParsing="false" text="C"/>
+            <Button mnemonicParsing="false" onMouseClicked="#previousPane" text="&lt;-"/>
+            <Button mnemonicParsing="false" onMouseClicked="#nextPane" text="-&gt;"/>
+            <Button mnemonicParsing="false" text="/" visible="false"/>
+            <Button mnemonicParsing="false" text="C" visible="false"/>
           </children>
         </HBox>
       </right>

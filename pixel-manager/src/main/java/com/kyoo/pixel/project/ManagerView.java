@@ -1,4 +1,4 @@
-package com.kyoo.pixel.manager;
+package com.kyoo.pixel.project;
 
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -47,7 +47,9 @@ public final class FixtureViewModel {
   }
 
   public void startConsumingInteraction() {
-    consumeInteractionThread.start();
+    if (!consumeInteractionThread.isAlive()) {
+      consumeInteractionThread.start();
+    }
   }
 
   public void consumeInteractions() {

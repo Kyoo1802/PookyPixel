@@ -7,12 +7,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Uses Guice to inject model actionState. Basically you create an instance of GuiceFXMLLoader
  * supplying an Injector, and then call load. The load method takes the FXML file to load, and the
  * controller to create and associate with the FXML file.
  */
+@Log4j2
 public class GuiceFXMLLoader {
 
   private final Injector injector;
@@ -25,8 +27,7 @@ public class GuiceFXMLLoader {
   // Load some FXML file, using the supplied Controller, and return the
   // instance of the initialized controller...?
   public Parent load(URL url) {
-    FXMLLoader loader = new FXMLLoader(url,
-        injector.getInstance(ResourceBundle.class));
+    FXMLLoader loader = new FXMLLoader(url, injector.getInstance(ResourceBundle.class));
     loader.setControllerFactory(controllerClass -> {
       if (controllerClass == null) {
         return null;
@@ -38,6 +39,7 @@ public class GuiceFXMLLoader {
     try {
       return (Parent) loader.load();
     } catch (IOException e) {
+      log.error(e);
       e.printStackTrace();
       return null;
     }

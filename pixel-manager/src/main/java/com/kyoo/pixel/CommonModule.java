@@ -10,7 +10,7 @@ public class CommonModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(MainReleaseKeyHandler.class);
+    bind(MainKeyHandler.class);
   }
 
   @Provides

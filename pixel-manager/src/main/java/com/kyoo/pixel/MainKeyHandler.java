@@ -6,11 +6,11 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
 @Singleton
-public class MainReleaseKeyHandler implements EventHandler<KeyEvent> {
+public class MainKeyHandler implements EventHandler<KeyEvent> {
 
   private ConcurrentLinkedQueue<EventHandler<KeyEvent>> concurrentLinkedQueue;
 
-  public MainReleaseKeyHandler() {
+  public MainKeyHandler() {
     concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
   }
 
