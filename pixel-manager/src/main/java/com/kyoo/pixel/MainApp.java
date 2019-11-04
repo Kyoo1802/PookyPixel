@@ -17,7 +17,6 @@ public class MainApp extends Application {
       new VisualizerModule());
 
   public static void main(String[] args) {
-    System.setProperty("javafx.animation.fullspeed", "true");
     launch(args);
   }
 

@@ -34,7 +34,7 @@ public class StageView implements Initializable {
   @FXML
   private BorderPane createBtns;
   @FXML
-  private AnchorPane stagePane;
+  private BorderPane stagePane;
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
