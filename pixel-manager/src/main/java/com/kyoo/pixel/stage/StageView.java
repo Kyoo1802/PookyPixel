@@ -1,15 +1,11 @@
 package com.kyoo.pixel.stage;
 
-import static javafx.scene.paint.Color.GRAY;
-
 import com.google.inject.Singleton;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TreeItem;
@@ -63,14 +59,14 @@ public class StageView implements Initializable {
     canvasStageScroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
     canvasStageScroll.setContent(canvasStage);
 
-    AnimationTimer timer = new AnimationTimer() {
-      @Override
-      public void handle(long now) {
-        GraphicsContext gc = canvasStage.getGraphicsContext2D();
-        gc.setFill(GRAY);
-        gc.fillRect(0, 0, canvasStage.getWidth(), canvasStage.getHeight());
-      }
-    };
-    timer.start();
+//    AnimationTimer timer = new AnimationTimer() {
+//      @Override
+//      public void handle(long now) {
+//        GraphicsContext gc = canvasStage.getGraphicsContext2D();
+//        gc.setFill(GRAY);
+//        gc.fillRect(0, 0, canvasStage.getWidth(), canvasStage.getHeight());
+//      }
+//    };
+//    timer.start();
   }
 }

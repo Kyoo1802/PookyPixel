@@ -1,5 +1,8 @@
 package com.kyoo.pixel;
 
+import com.kyoo.pixel.fixtures.FixtureProperties;
+import com.kyoo.pixel.utils.DrawComponentUtils;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -14,13 +17,15 @@ public final class ImageAssets {
 
   private static Map<ImageKey, BufferedImage> images = new HashMap<>();
 
-  public static void load() {
+  public static void load(FixtureProperties properties) {
     Stream.of(ImageKey.values()).forEach(img -> {
       BufferedImage bi = loadImage(img);
       if (bi != null) {
         images.put(img, bi);
       }
     });
+
+    DrawComponentUtils.loadBackground(new Dimension(800, 800), properties);
   }
 
   public static BufferedImage getImage(ImageKey image) {

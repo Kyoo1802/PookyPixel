@@ -82,7 +82,8 @@
             </FlowPane>
           </center>
         </BorderPane>
-        <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+        <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
           AnchorPane.topAnchor="0.0" fitToHeight="true" fitToWidth="true"
           fx:id="canvasStageScroll">
           <content>

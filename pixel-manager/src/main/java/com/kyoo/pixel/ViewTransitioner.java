@@ -1,11 +1,8 @@
 package com.kyoo.pixel;
 
-import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.inject.GuiceFXMLLoader;
-import java.util.Map;
-import java.util.Optional;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.scene.Node;
@@ -18,7 +15,7 @@ import javafx.util.Duration;
 import lombok.Getter;
 
 @Singleton
-public class SceneTransition {
+public class ViewTransitioner {
 
   @Getter
   private Scene scene;
@@ -66,36 +63,23 @@ public class SceneTransition {
     currentElement.toBack();
   }
 
-  public void init(Injector injector, Stage stage, StageStyle style, String scenePath) {
+  public void init(Injector injector, Stage stage, String scenePath) {
     loader = new GuiceFXMLLoader(injector);
-    this.scene = new Scene(loadNode(scenePath));
-    this.scene
-        .getStylesheets()
-        .add(getClass().getResource("stylesheets/style.css").toExternalForm());
-    this.scene.setOnKeyReleased(injector.getInstance(MainKeyHandler.class));
-
     this.stage = stage;
-    this.stage.setTitle("Pixelandia");
-    this.stage.setScene(scene);
-    this.stage.initStyle(style);
+    Parent splash = loader.load(getClass().getResource(scenePath));
+    scene = new Scene(splash);
+    scene.getStylesheets().add(getClass().getResource("stylesheets/style.css").toExternalForm());
+    scene.setOnKeyReleased(injector.getInstance(MainKeyHandler.class));
   }
 
-  public Parent loadNode(String path) {
-    return loadNode(path, Maps.newHashMap());
-  }
-
-  public Parent loadNode(String path, Map<String, Object> parameters) {
-    return loader.load(getClass().getResource(path), parameters, Optional.empty());
-  }
-
-  public <T> Parent loadNode(String path, Map<String, Object> parameters, Optional<T> request) {
-    return loader.load(getClass().getResource(path), parameters, request);
-  }
-
-
-  public void switchScene(String scenePath, boolean maximize) {
-    Parent newScene = loadNode(scenePath);
-    scene.setRoot(newScene);
+  public void switchStage(String stagePath, StageStyle style, boolean maximize) {
+    Stage newStage = new Stage(style);
+    Scene newScene = new Scene(loader.load(getClass().getResource(stagePath)));
+    newStage.setScene(newScene);
+    newStage.show();
+    this.stage.close();
+    this.stage = newStage;
+    this.scene = newScene;
     if (maximize) {
       maximize();
     } else {
@@ -103,25 +87,9 @@ public class SceneTransition {
     }
   }
 
-  public void switchStage(String stagePath, StageStyle style, boolean maximize) {
-    switchStage(stagePath, style, maximize, Optional.empty());
-  }
-
-  public <T> void switchStage(String stagePath, StageStyle style, boolean maximize,
-      Optional<T> request) {
-    Stage newStage = new Stage(style);
-    Scene newScene = new Scene(loadNode(stagePath, Maps.newHashMap(), request));
-    newScene
-        .getStylesheets()
-        .add(getClass().getResource("stylesheets/style.css").toExternalForm());
-    newStage.setScene(newScene);
-    newStage.show();
-    this.stage.close();
-    this.stage = newStage;
-    this.scene = newScene;
-    if (style == StageStyle.UNDECORATED) {
-      this.stage.setResizable(false);
-    }
+  public void switchScene(String scenePath, boolean maximize) {
+    Parent newNode = loader.load(getClass().getResource(scenePath));
+    scene.setRoot(newNode);
     if (maximize) {
       maximize();
     } else {
@@ -136,9 +104,5 @@ public class SceneTransition {
   public void sizeToScene() {
     this.stage.sizeToScene();
     this.stage.centerOnScreen();
-  }
-
-  public Stage getStage() {
-    return stage;
   }
 }

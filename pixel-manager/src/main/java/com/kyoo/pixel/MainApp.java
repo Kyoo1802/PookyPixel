@@ -6,6 +6,7 @@ import com.kyoo.pixel.fixtures.FixtureModule;
 import com.kyoo.pixel.visualizer.VisualizerModule;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -22,22 +23,17 @@ public class MainApp extends Application {
 
   @Override
   public void start(Stage stage) {
-    SceneTransition sceneTransition = injector.getInstance(SceneTransition.class);
-    sceneTransition.init(injector, stage, "ui/splashUI.fxml");
-
     log.info("Starting your application.");
-    stage.setTitle("Pixelandia");
-    stage.setScene(sceneTransition.getScene());
 
-//    stage.setMinWidth(750);
-//    stage.setMinHeight(500);
-    stage.centerOnScreen();
+    // Create initial scene
+    SceneTransition sceneTransition = injector.getInstance(SceneTransition.class);
+    sceneTransition.init(injector, stage, StageStyle.UNDECORATED, "ui/SplashUI.fxml");
     stage.show();
   }
 
   @Override
   public void stop() throws Exception {
-    super.stop(); // To change body of generated methods, choose Tools | Templates.
+    super.stop();
     System.exit(0);
   }
 

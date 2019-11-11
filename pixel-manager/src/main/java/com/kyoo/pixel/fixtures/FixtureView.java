@@ -48,6 +48,10 @@ public final class FixtureView implements Initializable, EventHandler<KeyEvent> 
   @FXML
   private Canvas canvas;
   @FXML
+  private Canvas canvas2;
+  @FXML
+  private Canvas canvas3;
+  @FXML
   private ScrollPane canvasScroll;
   @FXML
   private TreeView<String> elements;
@@ -87,9 +91,9 @@ public final class FixtureView implements Initializable, EventHandler<KeyEvent> 
 
     canvasScroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
     canvasScroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-    canvasScroll.setContent(canvas);
 
     // Initialize event listeners
+
     canvas.onMouseMovedProperty().set(e -> handleMouseInteraction(e, PositionState.MOVED));
     canvas.onMouseClickedProperty().set(e -> handleMouseInteraction(e, PositionState.CLICKED));
     canvas.onMousePressedProperty().set(e -> handleMouseInteraction(e, PositionState.PRESSED));
@@ -114,11 +118,13 @@ public final class FixtureView implements Initializable, EventHandler<KeyEvent> 
 
     // Initialize animation
     viewModel.startConsumingInteraction();
-    canvasRenderer.render(canvas);
+
+    canvasRenderer.drawBackground(canvas2.getGraphicsContext2D());
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(long now) {
         if (viewModel.needsRender(false)) {
+          canvasRenderer.drawCreatedComponents(canvas3);
           canvasRenderer.render(canvas);
         }
       }

@@ -27,7 +27,12 @@ public final class DrawComponentUtils {
 
   public static void getBackground(GraphicsContext gc, Dimension size,
       FixtureProperties properties) {
-    Image img = DrawUtils.OBJECTS_CACHE.get("Background-" + size, o -> {
+    // Draw cached Image
+    gc.drawImage(loadBackground(size, properties), 0, 0);
+  }
+
+  public static Image loadBackground(Dimension size, FixtureProperties properties) {
+    return DrawUtils.OBJECTS_CACHE.get("Background-" + size, o -> {
 
       Dimension canvasDimension = PositionUtils.toCanvasDimension(size);
       BufferedImage bufferedImage =
@@ -52,8 +57,6 @@ public final class DrawComponentUtils {
       g2d.dispose();
       return SwingFXUtils.toFXImage(bufferedImage, null);
     });
-    // Draw cached Image
-    gc.drawImage(img, 0, 0);
   }
 
   public static void drawLedComponent(GraphicsContext gc, FixtureProperties properties,

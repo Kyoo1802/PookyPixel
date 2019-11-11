@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
 <AnchorPane
   xmlns:fx="http://javafx.com/fxml/1"
   maxHeight="1.7976931348623157E308"
@@ -55,7 +56,13 @@
       fitToHeight="true" fitToWidth="true"
       fx:id="canvasScroll">
       <content>
-        <Canvas height="2000.0" width="2000.0" fx:id="canvas"/>
+        <Pane prefHeight="2000" prefWidth="2000">
+          <children>
+            <Canvas height="2000.0" width="2000.0" fx:id="canvas2"/>
+            <Canvas height="2000.0" width="2000.0" fx:id="canvas3"/>
+            <Canvas height="2000.0" width="2000.0" fx:id="canvas"/>
+          </children>
+        </Pane>
       </content>
     </ScrollPane>
     <ScrollPane styleClass="../stylesheets/style.css../stylesheets/style.css">

@@ -38,7 +38,7 @@ public final class FixtureViewModel {
       while (true) {
         consumeInteractions();
         try {
-          Thread.sleep(5);
+          Thread.sleep(20);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }

@@ -1,9 +1,13 @@
 package com.kyoo.pixel.inject;
 
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.kyoo.pixel.utils.ControllerRequest;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,12 +31,30 @@ public class GuiceFXMLLoader {
   // Load some FXML file, using the supplied Controller, and return the
   // instance of the initialized controller...?
   public Parent load(URL url) {
+    return load(url, Maps.newHashMap());
+  }
+
+  // Load some FXML file, using the supplied Controller, and return the
+  // instance of the initialized controller...?
+  public Parent load(URL url, Map<String, Object> parameters) {
+    return load(url, parameters, Optional.empty());
+  }
+
+  // Load some FXML file, using the supplied Controller, and return the
+  // instance of the initialized controller...?
+  public <T> Parent load(URL url, Map<String, Object> parameters, Optional<T> request) {
     FXMLLoader loader = new FXMLLoader(url, injector.getInstance(ResourceBundle.class));
+    parameters.entrySet()
+        .forEach(entry -> loader.getNamespace().put(entry.getKey(), entry.getValue()));
+
     loader.setControllerFactory(controllerClass -> {
       if (controllerClass == null) {
         return null;
       }
       Object instance = this.injector.getInstance(controllerClass);
+      if (request.isPresent() && instance instanceof ControllerRequest) {
+        ((ControllerRequest<T>) instance).setRequest(request.get());
+      }
       loader.getNamespace().put("controller", instance);
       return instance;
     });

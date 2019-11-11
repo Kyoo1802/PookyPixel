@@ -25,11 +25,9 @@ public final class FixtureCanvasRenderer {
   public void render(Canvas connectionCanvas) {
     GraphicsContext gc = connectionCanvas.getGraphicsContext2D();
     Stopwatch sc = Stopwatch.createStarted();
-    drawBackground(gc);
     print("A: ", sc);
     sc.reset();
     sc.start();
-    drawCreatedComponents(gc);
     print("B: ", sc);
     sc.reset();
     sc.start();
@@ -45,16 +43,18 @@ public final class FixtureCanvasRenderer {
 
   private void print(String txt, Stopwatch sc) {
     long a2 = sc.elapsed(TimeUnit.MILLISECONDS);
-    if (a2 > 10) {
+    if (a2 > 1) {
       log.debug(txt + a2);
     }
   }
 
-  private void drawBackground(GraphicsContext gc) {
+  public void drawBackground(GraphicsContext gc) {
     DrawComponentUtils.getBackground(gc, model.getDimension(), properties);
   }
 
-  private void drawCreatedComponents(GraphicsContext gc) {
+  public void drawCreatedComponents(Canvas c) {
+    GraphicsContext gc = c.getGraphicsContext2D();
+    gc.clearRect(0, 0, c.getWidth(), c.getHeight());
     for (InteractiveComponentUnit component :
         model.getInteractiveComponentManager().getInteractiveComponents()) {
       component.draw(gc, properties);

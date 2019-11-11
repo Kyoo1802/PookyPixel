@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.SceneTransition;
+import com.kyoo.pixel.utils.ControllerRequest;
+import com.kyoo.pixel.utils.ProjectUtils.ProjectMeta;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -13,7 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 
 @Singleton
-public final class MainStageView implements Initializable {
+public final class MainStageView implements Initializable, ControllerRequest<ProjectMeta> {
 
   private static final Map<String, String> previousPaneMapping = Maps.newHashMap();
   private static final Map<String, String> nextPaneMapping = Maps.newHashMap();
@@ -28,6 +30,8 @@ public final class MainStageView implements Initializable {
   }
 
   private final SceneTransition sceneTransition;
+  private ProjectMeta request;
+
   @FXML
   private StackPane stageStackPane;
 
@@ -51,5 +55,10 @@ public final class MainStageView implements Initializable {
     Node currentElement = SceneTransition.getCurrentElement(stageStackPane);
     SceneTransition
         .switchStackPane(stageStackPane, previousPaneMapping.get(currentElement.getId()));
+  }
+
+  @Override
+  public void setRequest(ProjectMeta request) {
+    this.request = request;
   }
 }
