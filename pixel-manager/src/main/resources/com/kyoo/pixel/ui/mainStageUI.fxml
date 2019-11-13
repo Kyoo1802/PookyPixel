@@ -23,7 +23,7 @@
       <center>
         <HBox BorderPane.alignment="CENTER" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
           <children>
-            <Label styleClass="primary-font" text="Cabinas 3x3"/>
+            <Label styleClass="primary-font" fx:id="metaStageTitle"/>
           </children>
         </HBox>
       </center>

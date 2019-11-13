@@ -2,8 +2,8 @@ package com.kyoo.pixel.project;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.SceneTransition;
-import com.kyoo.pixel.utils.ProjectUtils;
-import com.kyoo.pixel.utils.ProjectUtils.ProjectMeta;
+import com.kyoo.pixel.utils.ProjectMetaUtils;
+import com.kyoo.pixel.utils.ProjectMetaUtils.ProjectMeta;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,12 +39,12 @@ public class CreateProjectView implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    this.projectPath.setText(ProjectUtils.getHomeDir());
+    this.projectPath.setText(ProjectMetaUtils.getHomeDir());
 
   }
 
   @FXML
-  public void loadMetaStage() {
+  public void createProjectMeta() {
     if (projectName.getText().isEmpty()) {
       error.setVisible(true);
       error.setText(resources.getString("createproject.error.empty"));
@@ -57,7 +57,7 @@ public class CreateProjectView implements Initializable {
     } else {
       ProjectMeta projectMeta =
           ProjectMeta.builder().name(projectName.getText()).path(getProjectPath()).build();
-      ProjectUtils.createProject(projectMeta);
+      ProjectMetaUtils.appendProject(projectMeta);
       createProjectBtn.setDisable(true);
       sceneTransition.switchStage(
           "ui/mainStageUI.fxml",
@@ -74,7 +74,7 @@ public class CreateProjectView implements Initializable {
   }
 
   private String getProjectPath() {
-    return ProjectUtils.getHomeDir() + "/" + projectName.getText();
+    return ProjectMetaUtils.getHomeDir() + "/" + projectName.getText();
   }
 }
 

@@ -65,10 +65,9 @@
         </Pane>
       </content>
     </ScrollPane>
-    <ScrollPane styleClass="../stylesheets/style.css../stylesheets/style.css">
+    <ScrollPane>
       <content>
-        <TreeView prefHeight="252.0" prefWidth="134.0" styleClass="../stylesheets/style.css"
-          fx:id="elements"/>
+        <TreeView prefHeight="252.0" prefWidth="134.0" fx:id="elements"/>
       </content>
     </ScrollPane>
   </children>

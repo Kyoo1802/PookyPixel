@@ -13,14 +13,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class ProjectUtils {
+public final class ProjectMetaUtils {
 
-  public static List<ProjectMeta> listProjectMetas() {
+  public static List<ProjectMeta> listProjectMetas(boolean orderedByLastOpened) {
     Optional<Path> appDirPath = getAppDirPath();
 
     // There is no home app path
@@ -41,11 +42,15 @@ public final class ProjectUtils {
               .filter(p -> p.toFile().exists())
               .findFirst();
       if (pathsPath.isPresent()) {
-        return Files
+        Stream<ProjectMeta> projects = Files
             .readAllLines(pathsPath.get())
             .stream()
-            .map(l -> ProjectMeta.decode(l))
-            .collect(Collectors.toList());
+            .map(l -> ProjectMeta.decode(l));
+        if (orderedByLastOpened) {
+          return projects.collect(CollectionsUtil.inReverse());
+        } else {
+          return projects.collect(Collectors.toList());
+        }
       }
     } catch (IOException e) {
       log.error(e);
@@ -74,13 +79,14 @@ public final class ProjectUtils {
     if (OSValidator.isWindows()) {
       log.info("This is Windows");
       path =
-          Paths.get(System.getenv("APPDATA") + File.separator + "TargetApp" + File.separator);
+          Paths.get(System.getenv("APPDATA") + File.separator + "TargetApp" + File.separator
+              + "Pixelandia" + File.separator);
     } else if (OSValidator.isMac()) {
       log.info("This is MAC");
       path =
-          Paths.get(getHomeDir() + File.separator + "Library" + File.separator
+          Paths.get(System.getProperty("user.home") + File.separator + "Library" + File.separator
               + "Application Support"
-              + File.separator);
+              + File.separator + "Pixelandia" + File.separator);
     }
 
     return Optional.ofNullable(path);
@@ -90,31 +96,78 @@ public final class ProjectUtils {
     return System.getProperty("user.home") + File.separator + "Pixelandia";
   }
 
-  public static void createProject(ProjectMeta projectMeta) {
+  public static void appendProject(ProjectMeta projectMeta) {
     Optional<Path> appPath = getAppDirPath();
 
     // There is no home app path
     if (appPath.isEmpty()) {
       return;
     }
-    if (createDirPath(appPath.get())) {
-      File file = appPath.get().toFile();
-      try {
-        file.createNewFile();
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write(projectMeta.encode());
-      } catch (IOException e) {
-        log.error(e);
-        return;
-      }
+
+    // Verify path exists
+    Path pathFile = appPath.get().resolve(pathsFileName());
+    if (!pathFile.toFile().exists()) {
+      createDirPath(appPath.get());
     }
 
+    // Add projectMeta info to paths file
+    File file = pathFile.toFile();
+    try {
+      FileWriter fileWriter = file.exists()
+          ? new FileWriter(file, /* append */ true)
+          : new FileWriter(file);
+      fileWriter.write(projectMeta.encode() + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      log.error(e);
+      return;
+    }
   }
 
+  public static void removeProject(ProjectMeta project) {
+    List<ProjectMeta> newListedProjects = listProjectMetas(false)
+        .stream()
+        .filter(listedProject -> !listedProject.equals(project))
+        .collect(Collectors.toList());
+    if (newListedProjects.isEmpty()) {
+      return;
+    }
+
+    Optional<Path> appPath = getAppDirPath();
+    if (appPath.isEmpty()) {
+      return;
+    }
+
+    // Add projectMeta info to paths file
+    File file = appPath.get().resolve(pathsFileName()).toFile();
+    try {
+      FileWriter fileWriter = new FileWriter(file);
+      newListedProjects
+          .stream()
+          .forEach(projectMeta -> {
+            try {
+              fileWriter.write(projectMeta.encode() + "\n");
+            } catch (IOException e) {
+              log.error(e);
+            }
+          });
+      fileWriter.close();
+    } catch (IOException e) {
+      log.error(e);
+      return;
+    }
+  }
+
+  public static void openProject(ProjectMeta projectMeta) {
+    removeProject(projectMeta);
+    appendProject(projectMeta);
+
+  }
 
   @Getter
   @Builder
   @ToString
+  @EqualsAndHashCode
   public static class ProjectMeta {
 
     private static final String SPLITTER = ";";
@@ -136,6 +189,10 @@ public final class ProjectUtils {
 
     public String encode() {
       return name + SPLITTER + path;
+    }
+
+    public boolean exists() {
+      return Paths.get(path).toFile().exists();
     }
   }
 }

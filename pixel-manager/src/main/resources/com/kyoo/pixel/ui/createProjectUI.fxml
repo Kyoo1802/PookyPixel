@@ -59,14 +59,14 @@
     <AnchorPane prefHeight="38.0" prefWidth="600.0">
       <children>
         <Button layoutX="252.0" layoutY="6.0" mnemonicParsing="false"
-          onMouseClicked="#loadMetaStage"
+          onMouseClicked="#createProjectMeta"
           prefHeight="27.0" prefWidth="97.0" text="Crear" fx:id="createProjectBtn"/>
       </children>
     </AnchorPane>
     <VBox alignment="CENTER" prefHeight="45.0" prefWidth="600.0">
       <children>
         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="350.0"
-          textFill="#d73636" visible="false" fx:id="error"/>
+          styleClass="text-error" visible="false" fx:id="error"/>
       </children>
     </VBox>
   </children>

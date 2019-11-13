@@ -5,13 +5,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.SceneTransition;
 import com.kyoo.pixel.utils.ControllerRequest;
-import com.kyoo.pixel.utils.ProjectUtils.ProjectMeta;
+import com.kyoo.pixel.utils.ProjectMetaUtils.ProjectMeta;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
 @Singleton
@@ -35,6 +36,9 @@ public final class MainStageView implements Initializable, ControllerRequest<Pro
   @FXML
   private StackPane stageStackPane;
 
+  @FXML
+  private Label metaStageTitle;
+
   @Inject
   public MainStageView(SceneTransition sceneTransition) {
     this.sceneTransition = sceneTransition;
@@ -42,6 +46,7 @@ public final class MainStageView implements Initializable, ControllerRequest<Pro
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+    metaStageTitle.setText(request.getName());
   }
 
   @FXML

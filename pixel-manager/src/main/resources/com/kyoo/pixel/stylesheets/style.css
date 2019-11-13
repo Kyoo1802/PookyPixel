@@ -95,8 +95,6 @@
   -fx-text-fill: -primary-text-color;
 }
 
-
-
 .toggle-button {
   -fx-background-color: -secondary-background-color;
   -fx-text-fill: -primary-text-color;
@@ -119,4 +117,8 @@
   -fx-background-color: #ffffff88, #ffffff44, #ffffff22, -secondary-background-color;
   -fx-background-insets: -2, -0.3, 1, 2;
   -fx-background-radius: 7, 6, 4, 3;
+}
+
+.text-error {
+  -fx-text-fill: #ff3333;
 }
