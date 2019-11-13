@@ -2,8 +2,10 @@ package com.kyoo.pixel.project;
 
 import com.google.inject.Inject;
 import com.kyoo.pixel.SceneTransition;
-import com.kyoo.pixel.utils.ProjectMetaUtils;
-import com.kyoo.pixel.utils.ProjectMetaUtils.ProjectMeta;
+import com.kyoo.pixel.utils.files.PixelandiaPaths;
+import com.kyoo.pixel.utils.files.ProjectMetaUtils;
+import com.kyoo.pixel.utils.files.ProjectMetaUtils.ProjectMeta;
+import com.kyoo.pixel.utils.files.StageMetaUtils;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,7 +41,7 @@ public class CreateProjectView implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    this.projectPath.setText(ProjectMetaUtils.getHomeDir());
+    this.projectPath.setText(PixelandiaPaths.getHomeDir());
 
   }
 
@@ -57,6 +59,7 @@ public class CreateProjectView implements Initializable {
     } else {
       ProjectMeta projectMeta =
           ProjectMeta.builder().name(projectName.getText()).path(getProjectPath()).build();
+      StageMetaUtils.createStage(projectMeta);
       ProjectMetaUtils.appendProject(projectMeta);
       createProjectBtn.setDisable(true);
       sceneTransition.switchStage(
@@ -74,7 +77,7 @@ public class CreateProjectView implements Initializable {
   }
 
   private String getProjectPath() {
-    return ProjectMetaUtils.getHomeDir() + "/" + projectName.getText();
+    return PixelandiaPaths.getHomeDir() + "/" + projectName.getText();
   }
 }
 

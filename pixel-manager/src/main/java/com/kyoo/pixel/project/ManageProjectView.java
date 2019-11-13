@@ -3,8 +3,9 @@ package com.kyoo.pixel.project;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.kyoo.pixel.SceneTransition;
-import com.kyoo.pixel.utils.ProjectMetaUtils;
-import com.kyoo.pixel.utils.ProjectMetaUtils.ProjectMeta;
+import com.kyoo.pixel.utils.files.PixelandiaPaths;
+import com.kyoo.pixel.utils.files.ProjectMetaUtils;
+import com.kyoo.pixel.utils.files.ProjectMetaUtils.ProjectMeta;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -86,7 +87,7 @@ public class ManageProjectView implements Initializable {
   @FXML
   public void chooserProject() {
     FileChooser fileChooser = new FileChooser();
-    fileChooser.setInitialDirectory(Paths.get(ProjectMetaUtils.getHomeDir()).toFile());
+    fileChooser.setInitialDirectory(Paths.get(PixelandiaPaths.getHomeDir()).toFile());
     fileChooser
         .getExtensionFilters()
         .addAll(

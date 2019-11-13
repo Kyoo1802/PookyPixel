@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.kyoo.pixel.SceneTransition;
 import com.kyoo.pixel.utils.ControllerRequest;
-import com.kyoo.pixel.utils.ProjectMetaUtils.ProjectMeta;
+import com.kyoo.pixel.utils.files.ProjectMetaUtils.ProjectMeta;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;

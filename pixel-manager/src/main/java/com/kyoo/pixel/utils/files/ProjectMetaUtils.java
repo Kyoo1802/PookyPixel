@@ -1,7 +1,8 @@
-package com.kyoo.pixel.utils;
+package com.kyoo.pixel.utils.files;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.kyoo.pixel.utils.CollectionsUtil;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 public final class ProjectMetaUtils {
 
   public static List<ProjectMeta> listProjectMetas(boolean orderedByLastOpened) {
-    Optional<Path> appDirPath = getAppDirPath();
+    Optional<Path> appDirPath = PixelandiaPaths.getAppDirPath();
 
     // There is no home app path
     if (appDirPath.isEmpty()) {
@@ -30,7 +31,8 @@ public final class ProjectMetaUtils {
     }
 
     // Just create the app directory
-    if (createDirPath(appDirPath.get())) {
+    if (!appDirPath.get().toFile().exists()) {
+      PixelandiaPaths.createDirPath(appDirPath.get());
       return Lists.newArrayList();
     }
 
@@ -38,7 +40,7 @@ public final class ProjectMetaUtils {
     try (Stream<Path> walk = Files.list(appDirPath.get())) {
       Optional<Path> pathsPath =
           walk
-              .filter(p -> p.getFileName().endsWith(pathsFileName()))
+              .filter(p -> p.getFileName().endsWith(PixelandiaPaths.pathsFileName()))
               .filter(p -> p.toFile().exists())
               .findFirst();
       if (pathsPath.isPresent()) {
@@ -58,56 +60,17 @@ public final class ProjectMetaUtils {
     return Lists.newArrayList();
   }
 
-  private static boolean createDirPath(Path path) {
-    if (!path.toFile().exists()) {
-      try {
-        Files.createDirectories(path);
-        return true;
-      } catch (IOException e) {
-        log.error(e);
-      }
-    }
-    return false;
-  }
-
-  private static String pathsFileName() {
-    return "pixelandia.paths";
-  }
-
-  private static Optional<Path> getAppDirPath() {
-    Path path = null;
-    if (OSValidator.isWindows()) {
-      log.info("This is Windows");
-      path =
-          Paths.get(System.getenv("APPDATA") + File.separator + "TargetApp" + File.separator
-              + "Pixelandia" + File.separator);
-    } else if (OSValidator.isMac()) {
-      log.info("This is MAC");
-      path =
-          Paths.get(System.getProperty("user.home") + File.separator + "Library" + File.separator
-              + "Application Support"
-              + File.separator + "Pixelandia" + File.separator);
-    }
-
-    return Optional.ofNullable(path);
-  }
-
-  public static String getHomeDir() {
-    return System.getProperty("user.home") + File.separator + "Pixelandia";
-  }
-
   public static void appendProject(ProjectMeta projectMeta) {
-    Optional<Path> appPath = getAppDirPath();
-
+    Optional<Path> appPath = PixelandiaPaths.getAppDirPath();
     // There is no home app path
     if (appPath.isEmpty()) {
       return;
     }
 
     // Verify path exists
-    Path pathFile = appPath.get().resolve(pathsFileName());
+    Path pathFile = appPath.get().resolve(PixelandiaPaths.pathsFileName());
     if (!pathFile.toFile().exists()) {
-      createDirPath(appPath.get());
+      PixelandiaPaths.createDirPath(pathFile.getParent());
     }
 
     // Add projectMeta info to paths file
@@ -133,13 +96,13 @@ public final class ProjectMetaUtils {
       return;
     }
 
-    Optional<Path> appPath = getAppDirPath();
+    Optional<Path> appPath = PixelandiaPaths.getAppDirPath();
     if (appPath.isEmpty()) {
       return;
     }
 
     // Add projectMeta info to paths file
-    File file = appPath.get().resolve(pathsFileName()).toFile();
+    File file = appPath.get().resolve(PixelandiaPaths.pathsFileName()).toFile();
     try {
       FileWriter fileWriter = new FileWriter(file);
       newListedProjects
@@ -193,6 +156,10 @@ public final class ProjectMetaUtils {
 
     public boolean exists() {
       return Paths.get(path).toFile().exists();
+    }
+
+    public Path getFilePath() {
+      return Paths.get(path).resolve(name + PixelandiaPaths.EXTENSION);
     }
   }
 }
