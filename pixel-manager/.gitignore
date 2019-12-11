@@ -4,3 +4,5 @@
 /.DS_Store
 /gradle/
 /log/
+gradlew
+gradlew.bat
