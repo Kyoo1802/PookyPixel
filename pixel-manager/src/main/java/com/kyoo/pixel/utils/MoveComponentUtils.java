@@ -1,6 +1,6 @@
 package com.kyoo.pixel.utils;
 
-import java.awt.Point;
+import java.awt.*;
 
 public final class MoveComponentUtils {
 

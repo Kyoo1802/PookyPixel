@@ -1,9 +1,10 @@
 package com.kyoo.pixel;
 
 import com.google.inject.Singleton;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Singleton
 public class MainKeyHandler implements EventHandler<KeyEvent> {
@@ -23,6 +24,5 @@ public class MainKeyHandler implements EventHandler<KeyEvent> {
 
   public void attachListener(EventHandler<KeyEvent> handler) {
     concurrentLinkedQueue.add(handler);
-
   }
 }

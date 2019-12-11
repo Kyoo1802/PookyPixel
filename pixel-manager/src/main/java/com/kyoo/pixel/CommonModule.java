@@ -2,8 +2,9 @@ package com.kyoo.pixel;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import java.util.ResourceBundle;
 import lombok.extern.log4j.Log4j2;
+
+import java.util.ResourceBundle;
 
 @Log4j2
 public class CommonModule extends AbstractModule {

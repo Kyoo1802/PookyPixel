@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<HBox xmlns:fx="http://javafx.com/fxml" alignment="TOP_CENTER"
+      styleClass="secondary-background"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="com.kyoo.pixel.views.stage.metastage.MetaStageView"
+      fx:id="metaStagePane">
+    <children>
+        <AnchorPane>
+            <children>
+                <Button fx:id="customDisplayBtn" layoutX="2.0" layoutY="246.0" mnemonicParsing="false">
+                    <graphic>
+                        <VBox alignment="CENTER">
+                            <children>
+                                <ImageView fitHeight="122.0" fitWidth="200.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <Image url="@/assets/images/plantilla_pixel.png"/>
+                                </ImageView>
+                                <Label text="Plantilla personalizada"/>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                      text="Crea tu propia plantilla de leds personalizados"/>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <VBox alignment="CENTER" layoutX="10.0" layoutY="14.0">
+                    <children>
+                        <Label text="Plantillas disponibles"/>
+                        <ListView prefHeight="200.0" prefWidth="200.0"/>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+        <AnchorPane HBox.hgrow="ALWAYS" prefHeight="400.0" prefWidth="490.0">
+            <children>
+                <VBox layoutX="3.0" layoutY="14.0" prefHeight="400.0" prefWidth="484.0">
+                    <children>
+                        <Label text="Universos DMX"/>
+                        <Pane VBox.vgrow="ALWAYS" prefHeight="233.0" prefWidth="484.0">
+                            <children>
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="65.0"
+                                           layoutX="1.0" layoutY="14.0" stroke="RED" strokeType="INSIDE" width="478.0"/>
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="37.0"
+                                           layoutX="56.0" layoutY="28.0" stroke="BLACK" strokeType="INSIDE"
+                                           width="34.0"/>
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="37.0"
+                                           layoutX="8.0" layoutY="28.0" stroke="BLACK" strokeType="INSIDE"
+                                           width="34.0"/>
+                            </children>
+                        </Pane>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+    </children>
+</HBox>

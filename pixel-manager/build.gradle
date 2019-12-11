@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id "org.openjfx.javafxplugin" version "0.0.8"
 }
+
 group 'com.pooky.pixel'
 version '1.0-SNAPSHOT'
 
@@ -30,6 +31,3 @@ javafx {
 }
 
 mainClassName = 'com.kyoo.pixel.MainApp'
-
-// Avoids the Guice warning https://github.com/google/guice/issues/1133
-applicationDefaultJvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']

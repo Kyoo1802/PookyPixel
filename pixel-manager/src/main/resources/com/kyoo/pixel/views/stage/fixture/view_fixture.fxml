@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane
+        xmlns:fx="http://javafx.com/fxml"
+        maxHeight="1.7976931348623157E308"
+        maxWidth="1.7976931348623157E308"
+        xmlns="http://javafx.com/javafx"
+        fx:controller="com.kyoo.pixel.views.stage.fixture.FixtureView"
+        fx:id="fixturePane">
+    <children>
+        <BorderPane AnchorPane.topAnchor="0.0" fx:id="fixtureBtns">
+            <center>
+                <FlowPane alignment="CENTER" maxWidth="200.0">
+                    <ToggleButton fx:id="createSquarePanelBtn">
+                        <graphic>
+                            <ImageView fitHeight="32.0" fitWidth="32.0">
+                                <Image url="@/assets/images/led_matrix.png"/>
+                            </ImageView>
+                        </graphic>
+                        <toggleGroup>
+                            <ToggleGroup fx:id="fixtureActions"/>
+                        </toggleGroup>
+                    </ToggleButton>
+                    <ToggleButton toggleGroup="$fixtureActions"
+                                  fx:id="createLedPathBtn">
+                        <graphic>
+                            <ImageView fitHeight="32.0" fitWidth="32.0">
+                                <Image url="@/assets/images/led_strip.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                    <ToggleButton toggleGroup="$fixtureActions"
+                                  fx:id="createBridgeBtn">
+                        <graphic>
+                            <ImageView fitHeight="32.0" fitWidth="32.0">
+                                <Image url="@/assets/images/bridge.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                </FlowPane>
+            </center>
+        </BorderPane>
+        <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+                    fitToHeight="true" fitToWidth="true"
+                    fx:id="canvasScroll">
+            <content>
+                <Pane prefHeight="2000" prefWidth="2000">
+                    <children>
+                        <Canvas height="2000.0" width="2000.0" fx:id="canvas2"/>
+                        <Canvas height="2000.0" width="2000.0" fx:id="canvas3"/>
+                        <Canvas height="2000.0" width="2000.0" fx:id="canvas"/>
+                    </children>
+                </Pane>
+            </content>
+        </ScrollPane>
+        <ScrollPane>
+            <content>
+                <TreeView prefHeight="252.0" prefWidth="134.0" fx:id="elements"/>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

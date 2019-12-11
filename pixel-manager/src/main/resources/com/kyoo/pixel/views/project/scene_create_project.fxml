@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml" maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+      styleClass="primary-background" xmlns="http://javafx.com/javafx"
+      fx:controller="com.kyoo.pixel.views.project.CreateProjectScene">
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="600.0">
+            <children>
+                <ImageView fitHeight="158.0" fitWidth="242.0" layoutX="185.0" layoutY="14.0"
+                           pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/assets/images/pixelandia.png"/>
+                    </image>
+                </ImageView>
+                <Label layoutX="255.0" layoutY="120.0" text="Pixelandia">
+                    <font>
+                        <Font name="Verdana" size="20.0"/>
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="85.0" prefWidth="600.0">
+            <children>
+                <VBox layoutX="91.0" prefHeight="79.0" prefWidth="419.0">
+                    <children>
+                        <HBox prefHeight="28.0" prefWidth="377.0">
+                            <VBox.margin>
+                                <Insets bottom="10.0"/>
+                            </VBox.margin>
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="164.0" text="Nombre del proyecto"/>
+                                <TextField prefHeight="27.0" prefWidth="248.0"
+                                           promptText="Nombre de tu proyecto (ejemplo: 3x3)" fx:id="projectNameTf"/>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="28.0" prefWidth="377.0">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="164.0" text="Ubicacion del proyecto"/>
+                                <TextField editable="false" prefHeight="27.0" prefWidth="248.0"
+                                           fx:id="projectPathTf"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="38.0" prefWidth="600.0">
+            <children>
+                <Button fx:id="createProjectBtn" layoutX="252.0" layoutY="6.0" mnemonicParsing="false"
+                        prefHeight="27.0" prefWidth="97.0" text="Crear"/>
+            </children>
+        </AnchorPane>
+        <VBox alignment="CENTER" prefHeight="45.0" prefWidth="600.0">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="350.0"
+                       styleClass="text-error" visible="false" fx:id="errorLbl"/>
+            </children>
+        </VBox>
+    </children>
+</VBox>

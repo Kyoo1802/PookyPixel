@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx" fx:controller="com.kyoo.pixel.views.stage.MainStage">
+    <center>
+        <StackPane fx:id="mainPane"></StackPane>
+    </center>
+    <top>
+        <BorderPane BorderPane.alignment="CENTER" maxHeight="42.0" styleClass="primary-background">
+            <center>
+                <HBox BorderPane.alignment="CENTER" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Label styleClass="primary-font" fx:id="metaStageTitle"/>
+                    </children>
+                </HBox>
+            </center>
+            <left>
+                <HBox BorderPane.alignment="CENTER" alignment="CENTER_LEFT" prefHeight="100.0"
+                      prefWidth="200.0">
+                    <children>
+                        <ImageView fitHeight="33.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/assets/images/pixelandia.png"/>
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
+            </left>
+            <right>
+                <HBox BorderPane.alignment="CENTER" alignment="CENTER_RIGHT" prefHeight="100.0"
+                      prefWidth="200.0" spacing="5">
+                    <children>
+                        <Button fx:id="previousSceneBtn" mnemonicParsing="false" text="&lt;-"/>
+                        <Button fx:id="nextSceneBtn" mnemonicParsing="false" text="-&gt;"/>
+                        <Button mnemonicParsing="false" text="/" visible="false"/>
+                        <Button mnemonicParsing="false" text="C" visible="false"/>
+                    </children>
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+</BorderPane>

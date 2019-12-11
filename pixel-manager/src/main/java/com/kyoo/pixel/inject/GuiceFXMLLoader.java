@@ -3,15 +3,16 @@ package com.kyoo.pixel.inject;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.kyoo.pixel.utils.ControllerRequest;
-import java.io.IOException;
+import com.google.inject.Singleton;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import lombok.extern.log4j.Log4j2;
+
+import javax.annotation.Nullable;
 import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Uses Guice to inject model actionState. Basically you create an instance of GuiceFXMLLoader
@@ -19,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
  * controller to create and associate with the FXML file.
  */
 @Log4j2
+@Singleton
 public class GuiceFXMLLoader {
 
   private final Injector injector;
@@ -30,37 +32,42 @@ public class GuiceFXMLLoader {
 
   // Load some FXML file, using the supplied Controller, and return the
   // instance of the initialized controller...?
-  public Parent load(URL url) {
-    return load(url, Maps.newHashMap());
+  public Parent load(URL url, @Nullable Controller parent) {
+    return load(url, parent, Maps.newHashMap());
   }
 
   // Load some FXML file, using the supplied Controller, and return the
   // instance of the initialized controller...?
-  public Parent load(URL url, Map<String, Object> parameters) {
-    return load(url, parameters, Optional.empty());
+  public Parent load(URL url, @Nullable Controller parent, Map<String, Object> parameters) {
+    return load(url, parent, parameters, Optional.empty());
   }
 
   // Load some FXML file, using the supplied Controller, and return the
   // instance of the initialized controller...?
-  public <T> Parent load(URL url, Map<String, Object> parameters, Optional<T> request) {
+  @SuppressWarnings("unchecked")
+  public <T> Parent load(
+      URL url, @Nullable Controller parent, Map<String, Object> parameters, Optional<T> request) {
     FXMLLoader loader = new FXMLLoader(url, injector.getInstance(ResourceBundle.class));
-    parameters.entrySet()
+    parameters
+        .entrySet()
         .forEach(entry -> loader.getNamespace().put(entry.getKey(), entry.getValue()));
 
-    loader.setControllerFactory(controllerClass -> {
-      if (controllerClass == null) {
-        return null;
-      }
-      Object instance = this.injector.getInstance(controllerClass);
-      if (request.isPresent() && instance instanceof ControllerRequest) {
-        ((ControllerRequest<T>) instance).setRequest(request.get());
-      }
-      loader.getNamespace().put("controller", instance);
-      return instance;
-    });
+    loader.setControllerFactory(
+        controllerClass -> {
+          if (controllerClass == null) {
+            return null;
+          }
+          Controller instance = (Controller) this.injector.getInstance(controllerClass);
+          instance.setParent(parent);
+          if (request.isPresent() && instance instanceof ControllerRequest) {
+            ((ControllerRequest<T>) instance).setRequest(request.get());
+          }
+          loader.getNamespace().put("controller", instance);
+          return instance;
+        });
     try {
       return (Parent) loader.load();
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.error(e);
       e.printStackTrace();
       return null;

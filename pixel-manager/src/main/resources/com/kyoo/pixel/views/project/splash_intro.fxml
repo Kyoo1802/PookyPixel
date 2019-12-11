@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane
+        xmlns:fx="http://javafx.com/fxml"
+        prefHeight="280.0" prefWidth="400.0"
+        styleClass="primary-background"
+        xmlns="http://javafx.com/javafx"
+        fx:controller="com.kyoo.pixel.views.project.IntroSplash">
+    <children>
+        <ImageView AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0"
+                   AnchorPane.topAnchor="40.0" fitHeight="160.0" fitWidth="160.0"
+                   layoutX="65.0" layoutY="44.0" preserveRatio="true">
+            <Image url="@/assets/images/pixelandia.png"/>
+        </ImageView>
+        <Label alignment="CENTER" layoutX="160.0" layoutY="115.0" text="Pixelandia">
+            <font>
+                <Font name="Verdana" size="16.0"/>
+            </font>
+        </Label>
+        <Label AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="40.0" text="%splash.status"/>
+        <Label AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="150.0" fx:id="splashValue"/>
+        <ProgressBar AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+                     AnchorPane.rightAnchor="10.0"
+                     progress="0.0" fx:id="progressBar"/>
+    </children>
+</AnchorPane>

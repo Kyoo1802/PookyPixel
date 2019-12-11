@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            styleClass="secondary-background"
+            xmlns="http://javafx.com/javafx" fx:controller="com.kyoo.pixel.views.stage.visualizer.VisualizerView"
+            fx:id="stagePane">
+    <bottom>
+        <StackPane BorderPane.alignment="CENTER" fx:id="propertyBtns">
+            <children>
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                            <graphic>
+                                <ImageView fitHeight="32.0" fitWidth="32.0">
+                                    <Image url="@/assets/images/color_picker.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                            <graphic>
+                                <ImageView fitHeight="32.0" fitWidth="32.0">
+                                    <Image url="@/assets/images/live.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                            <graphic>
+                                <ImageView fitHeight="32.0" fitWidth="32.0">
+                                    <Image url="@/assets/images/animation.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </StackPane>
+    </bottom>
+    <center>
+        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <children>
+                <BorderPane AnchorPane.topAnchor="0.0" fx:id="createBtns">
+                    <center>
+                        <FlowPane alignment="CENTER" maxWidth="200.0">
+                            <ToggleButton fx:id="createDJBtn">
+                                <graphic>
+                                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                                        <Image url="@/assets/images/dj.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <toggleGroup>
+                                    <ToggleGroup fx:id="stageActions"/>
+                                </toggleGroup>
+                            </ToggleButton>
+                            <ToggleButton toggleGroup="$stageActions" fx:id="createStageBtn">
+                                <graphic>
+                                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                                        <Image url="@/assets/images/stage_steel.png"/>
+                                    </ImageView>
+                                </graphic>
+                            </ToggleButton>
+                            <ToggleButton toggleGroup="$stageActions" fx:id="createTxtBtn">
+                                <graphic>
+                                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                                        <Image url="@/assets/images/text.png"/>
+                                    </ImageView>
+                                </graphic>
+                            </ToggleButton>
+                        </FlowPane>
+                    </center>
+                </BorderPane>
+                <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                            AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="0.0" fitToHeight="true" fitToWidth="true"
+                            fx:id="canvasStageScroll">
+                    <content>
+                        <Canvas height="2000.0" width="2000.0" fx:id="canvasStage"/>
+                    </content>
+                </ScrollPane>
+                <ScrollPane>
+                    <content>
+                        <TreeView prefHeight="252.0" prefWidth="134.0" fx:id="stageElements"/>
+                    </content>
+                </ScrollPane>
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

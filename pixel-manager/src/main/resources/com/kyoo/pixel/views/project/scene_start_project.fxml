@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<HBox xmlns:fx="http://javafx.com/fxml" maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="400.0"
+      minWidth="600.0" prefHeight="400.0" prefWidth="600.0"
+      styleClass="primary-background" xmlns="http://javafx.com/javafx"
+      fx:controller="com.kyoo.pixel.views.project.StartProjectScene">
+    <children>
+        <VBox prefHeight="400.0" prefWidth="304.0">
+            <children>
+                <AnchorPane prefHeight="190.0" prefWidth="321.0">
+                    <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="34.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/assets/images/pixelandia.png"/>
+                            </image>
+                        </ImageView>
+                        <Label alignment="CENTER" layoutX="102.0" layoutY="120.0" text="Pixelandia">
+                            <font>
+                                <Font name="Verdana" size="16.0"/>
+                            </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="121.0" layoutY="140.0" text="Version 1.0">
+                            <font>
+                                <Font size="10.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                    <children>
+                        <VBox layoutX="78.0" prefHeight="200.0" prefWidth="141.0" spacing="10.0">
+                            <children>
+                                <Button fx:id="createProjectBtn" mnemonicParsing="false" prefHeight="27.0"
+                                        prefWidth="144.0" text="+ Nuevo proyecto" textFill="#efefef"/>
+                                <Button fx:id="openProjectBtn" mnemonicParsing="false" prefHeight="27.0"
+                                        prefWidth="144.0" text="\@ Abrir proyecto" textFill="#efefef"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </children>
+        </VBox>
+        <VBox fx:id="openedProjectsView" prefHeight="400.0" prefWidth="311.0" styleClass="secondary-background"></VBox>
+    </children>
+</HBox>

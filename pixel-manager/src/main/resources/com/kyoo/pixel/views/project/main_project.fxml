@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx" fx:controller="com.kyoo.pixel.views.project.MainProject">
+    <center>
+        <StackPane fx:id="projectPane"></StackPane>
+    </center>
+</BorderPane>
