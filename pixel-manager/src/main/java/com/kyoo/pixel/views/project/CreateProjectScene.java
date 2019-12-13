@@ -1,6 +1,7 @@
 package com.kyoo.pixel.views.project;
 
 import com.google.inject.Inject;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.model.ProjectMeta;
 import com.kyoo.pixel.utils.fx.SceneTransition;
@@ -30,8 +31,9 @@ public class CreateProjectScene extends Controller {
   private ResourceBundle resources;
 
   @Inject
-  public CreateProjectScene(SceneTransition sceneTransition, ResourceBundle resources) {
-    super(sceneTransition);
+  public CreateProjectScene(
+      ResourceBundle resources, SceneTransition sceneTransition, KeyboardHandler keyboardHandler) {
+    super(sceneTransition, keyboardHandler);
     this.resources = resources;
   }
 

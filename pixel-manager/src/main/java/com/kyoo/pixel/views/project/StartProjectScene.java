@@ -2,6 +2,7 @@ package com.kyoo.pixel.views.project;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.model.ProjectMeta;
 import com.kyoo.pixel.utils.fx.SceneTransition;
@@ -30,8 +31,8 @@ public class StartProjectScene extends Controller {
   @FXML private VBox openedProjectsView;
 
   @Inject
-  public StartProjectScene(SceneTransition sceneTransition) {
-    super(sceneTransition);
+  public StartProjectScene(SceneTransition sceneTransition, KeyboardHandler keyboardHandler) {
+    super(sceneTransition, keyboardHandler);
   }
 
   @Override

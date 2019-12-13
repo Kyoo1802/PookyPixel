@@ -63,10 +63,6 @@ public final class FixtureModel {
     getInteractiveComponentManager().toggleSelect(key);
   }
 
-  public void moveSelectedComponent(Point movement) {
-    getInteractiveComponentManager().moveSelectedComponents(movement);
-  }
-
   public void joinComponents(InteractiveBridge bridge) {
     Optional<InteractiveComponent> componentA =
         getInteractiveComponentManager()
@@ -136,11 +132,5 @@ public final class FixtureModel {
     CREATE_SQUARE_PANEL,
     CREATE_LED_PATH,
     CREATE_LED_BRIDGE,
-  }
-
-  public enum TransformationAction {
-    UNSET,
-    MOVE,
-    SCALE,
   }
 }

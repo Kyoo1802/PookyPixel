@@ -11,7 +11,7 @@ public class CommonModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(MainKeyHandler.class);
+    bind(KeyboardHandler.class);
   }
 
   @Provides

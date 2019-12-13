@@ -2,6 +2,7 @@ package com.kyoo.pixel.views.stage;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.inject.ControllerRequest;
 import com.kyoo.pixel.model.ProjectMeta;
@@ -61,8 +62,8 @@ public final class MainStage extends Controller implements ControllerRequest<Pro
   @FXML private Label metaStageTitle;
 
   @Inject
-  public MainStage(SceneTransition sceneTransition) {
-    super(sceneTransition);
+  public MainStage(SceneTransition sceneTransition, KeyboardHandler keyboardHandler) {
+    super(sceneTransition, keyboardHandler);
   }
 
   @Override

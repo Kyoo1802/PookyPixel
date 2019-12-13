@@ -2,6 +2,7 @@ package com.kyoo.pixel.views.stage.visualizer;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.utils.fx.SceneTransition;
 import javafx.fxml.FXML;
@@ -30,8 +31,8 @@ public class VisualizerView extends Controller {
   @FXML private BorderPane stagePane;
 
   @Inject
-  public VisualizerView(SceneTransition sceneTransition) {
-    super(sceneTransition);
+  public VisualizerView(SceneTransition sceneTransition, KeyboardHandler keyboardHandler) {
+    super(sceneTransition, keyboardHandler);
   }
 
   @Override

@@ -3,8 +3,8 @@ package com.kyoo.pixel.utils.fx;
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.MainApp;
-import com.kyoo.pixel.MainKeyHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.inject.GuiceFXMLLoader;
 import javafx.animation.FadeTransition;
@@ -29,6 +29,7 @@ public final class SceneTransition {
 
   private GuiceFXMLLoader loader;
   private Stage stage;
+  private Injector injector;
 
   public static Node getCurrentElement(Pane stageStackPane) {
     return stageStackPane
@@ -59,15 +60,12 @@ public final class SceneTransition {
   }
 
   public void init(Injector injector, Stage stage, StageStyle style, URL sceneUrl) {
-    this.stage = stage;
+    this.injector = injector;
     this.loader = new GuiceFXMLLoader(injector);
 
-    Scene scene = new Scene(loadFragment(sceneUrl));
-    scene.getStylesheets().add(MainApp.class.getResource("stylesheets/style.css").toExternalForm());
-    scene.setOnKeyReleased(injector.getInstance(MainKeyHandler.class));
-
+    this.stage = stage;
     this.stage.setTitle("Pixelandia");
-    this.stage.setScene(scene);
+    this.stage.setScene(newScene(loadFragment(sceneUrl)));
     this.stage.initStyle(style);
     this.stage.centerOnScreen();
   }
@@ -131,11 +129,24 @@ public final class SceneTransition {
   }
 
   public <T> void switchStage(URL stagePath, StageProperties stageProperties, Optional<T> request) {
-    Stage newStage = new Stage(stageProperties.getStyle());
-    Scene newScene = new Scene(loadFragment(stagePath, null, Maps.newHashMap(), request));
+    Scene newScene = newScene(loadFragment(stagePath, null, Maps.newHashMap(), request));
+    Stage newStage = newStage(newScene, stageProperties);
+    newStage.show();
+    this.stage.close();
+    this.stage = newStage;
+  }
+
+  private Scene newScene(Parent parent) {
+    Scene newScene = new Scene(parent);
     newScene
         .getStylesheets()
         .add(MainApp.class.getResource("stylesheets/style.css").toExternalForm());
+    newScene.onKeyReleasedProperty().set(injector.getInstance(KeyboardHandler.class));
+    return newScene;
+  }
+
+  private Stage newStage(Scene newScene, StageProperties stageProperties) {
+    Stage newStage = new Stage(stageProperties.getStyle());
     newStage.setScene(newScene);
     newStage.setResizable(stageProperties.isResizable());
     newStage.setMaximized(stageProperties.isMaximized());
@@ -145,9 +156,7 @@ public final class SceneTransition {
     if (stageProperties.isCenterToScreen()) {
       newStage.centerOnScreen();
     }
-    newStage.show();
-    this.stage.close();
-    this.stage = newStage;
+    return newStage;
   }
 
   public Stage getStage() {

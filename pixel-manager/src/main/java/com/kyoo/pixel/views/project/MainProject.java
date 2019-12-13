@@ -1,6 +1,7 @@
 package com.kyoo.pixel.views.project;
 
 import com.google.inject.Inject;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.utils.fx.SceneTransition;
 import javafx.fxml.FXML;
@@ -15,8 +16,8 @@ public class MainProject extends Controller {
   @FXML private StackPane projectPane;
 
   @Inject
-  public MainProject(SceneTransition sceneTransition) {
-    super(sceneTransition);
+  public MainProject(SceneTransition sceneTransition, KeyboardHandler keyboardHandler) {
+    super(sceneTransition, keyboardHandler);
   }
 
   @Override

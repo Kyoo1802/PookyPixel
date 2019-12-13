@@ -1,6 +1,7 @@
 package com.kyoo.pixel.views.project;
 
 import com.google.inject.Inject;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.utils.ImageResourceLoader;
 import com.kyoo.pixel.utils.fx.SceneTransition;
@@ -22,8 +23,11 @@ public final class IntroSplash extends Controller {
   @FXML private ProgressBar progressBar;
 
   @Inject
-  public IntroSplash(SceneTransition sceneTransition, FixtureProperties properties) {
-    super(sceneTransition);
+  public IntroSplash(
+      FixtureProperties properties,
+      SceneTransition sceneTransition,
+      KeyboardHandler keyboardHandler) {
+    super(sceneTransition, keyboardHandler);
     this.properties = properties;
     this.progressBarTask = progressBarTask();
   }

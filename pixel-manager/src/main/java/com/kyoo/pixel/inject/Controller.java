@@ -1,6 +1,6 @@
 package com.kyoo.pixel.inject;
 
-import com.google.inject.Inject;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.utils.fx.SceneTransition;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
@@ -12,11 +12,12 @@ import java.net.URL;
 
 public abstract class Controller implements Initializable {
   protected final SceneTransition sceneTransition;
+  protected final KeyboardHandler keyboardHandler;
   @Getter @Setter @Nullable protected Controller parent;
 
-  @Inject
-  public Controller(SceneTransition sceneTransition) {
+  public Controller(SceneTransition sceneTransition, KeyboardHandler keyboardHandler) {
     this.sceneTransition = sceneTransition;
+    this.keyboardHandler = keyboardHandler;
   }
 
   protected void switchScene(Pane containerId, String newChildId, URL childUrl) {

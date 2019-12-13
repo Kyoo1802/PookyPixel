@@ -1,6 +1,7 @@
 package com.kyoo.pixel.views.stage.metastage;
 
 import com.google.inject.Inject;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.utils.fx.SceneTransition;
 import com.kyoo.pixel.views.stage.MainStage;
@@ -15,8 +16,8 @@ public class MetaStageView extends Controller {
   @FXML private Button customDisplayBtn;
 
   @Inject
-  public MetaStageView(SceneTransition sceneTransition) {
-    super(sceneTransition);
+  public MetaStageView(SceneTransition sceneTransition, KeyboardHandler keyboardHandler) {
+    super(sceneTransition, keyboardHandler);
   }
 
   @Override

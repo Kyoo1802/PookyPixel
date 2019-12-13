@@ -3,7 +3,7 @@ package com.kyoo.pixel;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.kyoo.pixel.utils.fx.SceneTransition;
-import com.kyoo.pixel.views.project.IntroSplash;
+import com.kyoo.pixel.views.stage.TestView;
 import com.kyoo.pixel.views.stage.fixture.FixtureModule;
 import com.kyoo.pixel.views.stage.visualizer.VisualizerModule;
 import javafx.application.Application;
@@ -26,11 +26,14 @@ public class MainApp extends Application {
 
     // Create initial scene
     SceneTransition sceneTransition = injector.getInstance(SceneTransition.class);
+    //    sceneTransition.init(
+    //        injector,
+    //        stage,
+    //        StageStyle.UNDECORATED,
+    //        IntroSplash.class.getResource("splash_intro.fxml"));
+
     sceneTransition.init(
-        injector,
-        stage,
-        StageStyle.UNDECORATED,
-        IntroSplash.class.getResource("splash_intro.fxml"));
+        injector, stage, StageStyle.DECORATED, TestView.class.getResource("test_view.fxml"));
     stage.show();
   }
 

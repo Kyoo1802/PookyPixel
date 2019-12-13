@@ -2,7 +2,7 @@ package com.kyoo.pixel.views.stage.fixture;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.kyoo.pixel.MainKeyHandler;
+import com.kyoo.pixel.KeyboardHandler;
 import com.kyoo.pixel.inject.Controller;
 import com.kyoo.pixel.utils.fx.SceneTransition;
 import com.kyoo.pixel.views.stage.fixture.interactions.InteractionRequest;
@@ -40,7 +40,7 @@ public final class FixtureView extends Controller implements EventHandler<KeyEve
 
   private final FixtureViewModel viewModel;
   private final FixtureCanvasRenderer canvasRenderer;
-  private final MainKeyHandler keyboardHandler;
+  private final KeyboardHandler keyboardHandler;
   @FXML private ToggleButton createSquarePanelBtn;
   @FXML private ToggleButton createLedPathBtn;
   @FXML private ToggleButton createBridgeBtn;
@@ -55,10 +55,10 @@ public final class FixtureView extends Controller implements EventHandler<KeyEve
   @Inject
   public FixtureView(
       SceneTransition sceneTransition,
+      KeyboardHandler keyboardHandler,
       FixtureViewModel viewModel,
-      FixtureCanvasRenderer canvasRenderer,
-      MainKeyHandler keyboardHandler) {
-    super(sceneTransition);
+      FixtureCanvasRenderer canvasRenderer) {
+    super(sceneTransition, keyboardHandler);
     this.viewModel = viewModel;
     this.canvasRenderer = canvasRenderer;
     this.keyboardHandler = keyboardHandler;
@@ -75,16 +75,16 @@ public final class FixtureView extends Controller implements EventHandler<KeyEve
                     fixtureBtns, fixturePane.getWidth() / 2 - fixtureBtns.getWidth() / 2));
 
     TreeItem<String> rootItem = new TreeItem<>("Pantalla");
-    TreeItem<String> efectos = new TreeItem<>("Elementos");
-    efectos.getChildren().add(new TreeItem<>("Matriz 10x20"));
-    efectos.getChildren().add(new TreeItem<>("Matriz 30x40"));
-    efectos.getChildren().add(new TreeItem<>("Matriz 10x10"));
-    efectos.getChildren().add(new TreeItem<>("Tira Leds 30"));
-    efectos.getChildren().add(new TreeItem<>("Tira Leds 45"));
-    efectos.getChildren().add(new TreeItem<>("Tira Leds 23"));
-    efectos.getChildren().add(new TreeItem<>("Estrella 3"));
-    efectos.getChildren().add(new TreeItem<>("Esfera"));
-    rootItem.getChildren().add(efectos);
+    TreeItem<String> effects = new TreeItem<>("Elementos");
+    effects.getChildren().add(new TreeItem<>("Matriz 10x20"));
+    effects.getChildren().add(new TreeItem<>("Matriz 30x40"));
+    effects.getChildren().add(new TreeItem<>("Matriz 10x10"));
+    effects.getChildren().add(new TreeItem<>("Tira Leds 30"));
+    effects.getChildren().add(new TreeItem<>("Tira Leds 45"));
+    effects.getChildren().add(new TreeItem<>("Tira Leds 23"));
+    effects.getChildren().add(new TreeItem<>("Estrella 3"));
+    effects.getChildren().add(new TreeItem<>("Esfera"));
+    rootItem.getChildren().add(effects);
     rootItem.setExpanded(true);
     elements.setShowRoot(true);
     elements.setRoot(rootItem);
@@ -104,7 +104,6 @@ public final class FixtureView extends Controller implements EventHandler<KeyEve
     handleStateInteraction(createSquarePanelBtn.isSelected(), ActionState.DRAW_SQUARE_PANEL);
     handleStateInteraction(createLedPathBtn.isSelected(), ActionState.DRAW_LED_PATH);
     handleStateInteraction(createBridgeBtn.isSelected(), ActionState.DRAW_CONNECTOR_PORT);
-
     // Initialize property listeners
     createSquarePanelBtn
         .selectedProperty()

@@ -7,11 +7,11 @@ import javafx.scene.input.KeyEvent;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Singleton
-public class MainKeyHandler implements EventHandler<KeyEvent> {
+public class KeyboardHandler implements EventHandler<KeyEvent> {
 
   private ConcurrentLinkedQueue<EventHandler<KeyEvent>> concurrentLinkedQueue;
 
-  public MainKeyHandler() {
+  public KeyboardHandler() {
     concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
   }
 
